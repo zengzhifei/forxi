@@ -123,6 +123,18 @@
         />
       </svg>
     </div>
+
+    <!-- ICP 备案号 -->
+    <div class="absolute bottom-4 left-0 right-0 flex justify-center items-center z-10">
+      <a 
+        href="https://beian.miit.gov.cn" 
+        target="_blank" 
+        class="text-xs text-gray-400 hover:text-white transition-colors duration-300"
+        :style="{ textShadow: `0 0 10px ${theme.accent}30` }"
+      >
+        陕ICP备2026004216号
+      </a>
+    </div>
   </div>
 </template>
 
