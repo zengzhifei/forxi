@@ -4,13 +4,58 @@
       <stop offset="0%" style="stop-color:#f0f9ff;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#e6f7ff;stop-opacity:1" />
     </linearGradient>
+    <linearGradient id="bamboo" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#27ae60;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2ecc71;stop-opacity:1" />
+    </linearGradient>
   </defs>
   <rect width="200" height="200" fill="url(#bg)" rx="20" ry="20" />
-  <circle cx="100" cy="80" r="40" fill="#ffeaa7" stroke="#fab1a0" stroke-width="2" />
-  <path d="M80 70 Q100 50 120 70" stroke="#e17055" stroke-width="2" fill="none" />
-  <circle cx="90" cy="75" r="3" fill="#2d3436" />
-  <circle cx="110" cy="75" r="3" fill="#2d3436" />
-  <path d="M90 90 Q100 100 110 90" stroke="#e17055" stroke-width="2" fill="none" />
-  <path d="M60 140 Q100 120 140 140" stroke="#a29bfe" stroke-width="3" fill="none" />
-  <text x="100" y="170" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#636e72">Forxi</text>
+  
+  <!-- Panda body (sitting) -->
+  <ellipse cx="100" cy="115" rx="40" ry="35" fill="#ffffff" stroke="#2d3436" stroke-width="2"/>
+  
+  <!-- Panda head -->
+  <circle cx="100" cy="65" r="35" fill="#ffffff" stroke="#2d3436" stroke-width="2"/>
+  
+  <!-- Panda ears -->
+  <circle cx="70" cy="38" r="10" fill="#2d3436"/>
+  <circle cx="130" cy="38" r="10" fill="#2d3436"/>
+  
+  <!-- Panda eye patches -->
+  <ellipse cx="85" cy="60" rx="12" ry="14" fill="#2d3436" transform="rotate(-10 85 60)"/>
+  <ellipse cx="115" cy="60" rx="12" ry="14" fill="#2d3436" transform="rotate(10 115 60)"/>
+  
+  <!-- Panda eyes -->
+  <circle cx="88" cy="57" r="4" fill="#ffffff"/>
+  <circle cx="112" cy="57" r="4" fill="#ffffff"/>
+  <circle cx="88" cy="57" r="2" fill="#000000"/>
+  <circle cx="112" cy="57" r="2" fill="#000000"/>
+  
+  <!-- Panda nose -->
+  <ellipse cx="100" cy="72" rx="5" ry="3" fill="#2d3436"/>
+  
+  <!-- Panda mouth -->
+  <path d="M93 80 Q100 86 107 80" stroke="#2d3436" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  
+  <!-- Left arm holding bamboo -->
+  <ellipse cx="60" cy="100" rx="12" ry="20" fill="#ffffff" stroke="#2d3436" stroke-width="2" transform="rotate(20 60 100)"/>
+  
+  <!-- Right arm holding bamboo -->
+  <ellipse cx="140" cy="100" rx="12" ry="20" fill="#ffffff" stroke="#2d3436" stroke-width="2" transform="rotate(-20 140 100)"/>
+  
+  <!-- Bamboo in hands -->
+  <rect x="70" y="70" width="5" height="80" rx="2" fill="url(#bamboo)" transform="rotate(-15 72 110)"/>
+  
+  <!-- Bamboo leaves -->
+  <path d="M68 90 Q55 82 50 90 Q55 95 68 92" fill="#27ae60"/>
+  <path d="M75 110 Q90 102 95 110 Q90 115 75 113" fill="#27ae60"/>
+  <path d="M72 130 Q58 122 53 130 Q58 135 72 132" fill="#27ae60"/>
+  
+  <!-- Left foot -->
+  <ellipse cx="75" cy="145" rx="18" ry="12" fill="#ffffff" stroke="#2d3436" stroke-width="2"/>
+  <text x="75" y="150" font-family="Microsoft YaHei, SimHei, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#e74c3c">佛</text>
+  
+  <!-- Right foot -->
+  <ellipse cx="125" cy="145" rx="18" ry="12" fill="#ffffff" stroke="#2d3436" stroke-width="2"/>
+  <text x="125" y="150" font-family="Microsoft YaHei, SimHei, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#3498db">系</text>
 </svg>
