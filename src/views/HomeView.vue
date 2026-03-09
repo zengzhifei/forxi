@@ -49,6 +49,7 @@
           <p class="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto">选择适合您的工具，开始使用</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-4xl mx-auto">
+          <!-- 在线文件预览 -->
           <div class="bg-white shadow-lg rounded-lg overflow-hidden transition-transform hover:transform hover:scale-105 cursor-pointer" @click="navigateToFilePreview">
             <div class="h-40 sm:h-48 bg-blue-100 flex items-center justify-center">
               <svg class="h-12 sm:h-16 w-12 sm:w-16 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
@@ -59,12 +60,26 @@
               <span class="inline-flex items-center text-sm font-medium text-blue-600">立即使用 →</span>
             </div>
           </div>
-          <div class="bg-white shadow-lg rounded-lg overflow-hidden transition-transform hover:transform hover:scale-105">
+          
+          <!-- IT 工具集合 -->
+          <div class="bg-white shadow-lg rounded-lg overflow-hidden transition-transform hover:transform hover:scale-105 cursor-pointer" @click="navigateToItTools">
+            <div class="h-40 sm:h-48 bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center">
+              <svg class="h-12 sm:h-16 w-12 sm:w-16 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+            </div>
+            <div class="p-4 sm:p-6">
+              <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">IT 工具集合</h3>
+              <p class="text-sm sm:text-base text-gray-600 mb-4">Base64、JSON、URL 编码、颜色转换、UUID 生成等多种实用工具</p>
+              <span class="inline-flex items-center text-sm font-medium text-purple-600">立即使用 →</span>
+            </div>
+          </div>
+          
+          <!-- 更多工具开发中 -->
+          <div class="bg-white shadow-lg rounded-lg overflow-hidden">
             <div class="h-40 sm:h-48 bg-gray-100 flex items-center justify-center">
               <svg class="h-12 sm:h-16 w-12 sm:w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
             </div>
             <div class="p-4 sm:p-6">
-              <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">工具开发中</h3>
+              <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">更多工具开发中</h3>
               <p class="text-sm sm:text-base text-gray-600 mb-4">新工具正在开发中，敬请期待</p>
               <span class="inline-flex items-center text-sm font-medium text-gray-400">即将上线 →</span>
             </div>
@@ -78,14 +93,27 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
 
 const router = useRouter()
 
+onMounted(() => {
+  window.scrollTo(0, 0)
+})
+
 const navigateToFilePreview = () => {
-  router.push('/file-preview')
+  router.push('/file-preview').then(() => {
+    window.scrollTo(0, 0)
+  })
+}
+
+const navigateToItTools = () => {
+  router.push('/it-tools').then(() => {
+    window.scrollTo(0, 0)
+  })
 }
 
 const scrollToTools = () => {

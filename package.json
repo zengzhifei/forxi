@@ -9,12 +9,21 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vueuse/core": "^14.2.1",
+    "colord": "^2.9.3",
+    "crypto-js": "^4.2.0",
+    "js-base64": "^3.7.8",
+    "json5": "^2.2.3",
+    "lodash": "^4.17.23",
+    "qrcode": "^1.5.4",
+    "uuid": "^13.0.0",
     "vue": "^3.4.0",
     "vue-router": "^5.0.3"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.0",
     "autoprefixer": "^10.4.16",
+    "less": "^4.5.1",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.5",
     "vite": "^5.0.0"

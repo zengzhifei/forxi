@@ -114,10 +114,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, inject } from 'vue'
 import { base64Encode } from '../utils/encoders'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
+
+const toast = inject('toast')
 
 const isDev = import.meta.env.DEV
 const currentDomain = window.location.origin
@@ -280,7 +282,7 @@ const uploadAndPreview = async () => {
 
 const previewByUrl = () => {
   if (!fileUrl.value) {
-    alert('请输入文件URL')
+    toast.warning('请输入文件URL')
     return
   }
   try {
@@ -289,7 +291,7 @@ const previewByUrl = () => {
     window.open(previewUrl, '_blank')
   } catch (error) {
     console.error('预览失败:', error)
-    alert('预览失败，请检查URL是否正确')
+    toast.error('预览失败，请检查URL是否正确')
   }
 }
 </script>

@@ -7,6 +7,8 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 // 懒加载页面组件
 const HomeView = () => import('../views/HomeView.vue')
 const FilePreviewView = () => import('../views/FilePreviewView.vue')
+const ItToolsView = () => import('../views/ItToolsView.vue')
+const NotFoundView = () => import('../views/NotFoundView.vue')
 
 // 路由配置
 const routes = [
@@ -24,6 +26,22 @@ const routes = [
     component: FilePreviewView,
     meta: {
       title: 'Forxi - 在线文件预览'
+    }
+  },
+  {
+    path: '/it-tools',
+    name: 'it-tools',
+    component: ItToolsView,
+    meta: {
+      title: 'Forxi - IT 工具集合'
+    }
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: NotFoundView,
+    meta: {
+      title: 'Forxi - 页面未找到'
     }
   }
 ]
