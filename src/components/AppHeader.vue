@@ -11,7 +11,7 @@
         </div>
 
         <!-- PC端菜单 -->
-        <nav v-if="!isMobile" class="flex space-x-8 items-center absolute left-1/2 transform -translate-x-1/2">
+        <nav v-if="!isMobile" class="flex space-x-6 items-center absolute left-1/2 transform -translate-x-1/2">
           <router-link 
             v-for="item in menuItems" 
             :key="item.path" 
@@ -72,6 +72,7 @@ const { isMobile } = useBreakpoint()
 const menuItems = [
   { name: '首页', path: '/' },
   { name: '在线文件预览', path: '/file-preview' },
+  { name: '在线图片处理', path: '/image-processing' },
   { name: 'IT 工具集合', path: '/it-tools' }
 ]
 

@@ -7,6 +7,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 // 懒加载页面组件
 const HomeView = () => import('../views/HomeView.vue')
 const FilePreviewView = () => import('../views/FilePreviewView.vue')
+const ImageProcessingView = () => import('../views/ImageProcessingView.vue')
 const ItToolsView = () => import('../views/ItToolsView.vue')
 const NotFoundView = () => import('../views/NotFoundView.vue')
 
@@ -26,6 +27,14 @@ const routes = [
     component: FilePreviewView,
     meta: {
       title: 'Forxi - 在线文件预览'
+    }
+  },
+  {
+    path: '/image-processing',
+    name: 'image-processing',
+    component: ImageProcessingView,
+    meta: {
+      title: 'Forxi - 在线图片处理'
     }
   },
   {

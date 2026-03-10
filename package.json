@@ -1,7 +1,7 @@
 {
-  "name": "vue-api-demo",
+  "name": "forxi",
   "private": true,
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@vueuse/core": "^14.2.1",
+    "browser-image-compression": "^2.0.2",
     "colord": "^2.9.3",
+    "cropperjs": "^2.1.0",
     "crypto-js": "^4.2.0",
     "js-base64": "^3.7.8",
     "json5": "^2.2.3",
