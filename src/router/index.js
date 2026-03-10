@@ -2,7 +2,7 @@
  * 路由配置文件
  * 定义应用的所有路由
  */
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 // 懒加载页面组件
 const HomeView = () => import('../views/HomeView.vue')
@@ -57,7 +57,7 @@ const routes = [
 
 // 创建路由实例
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 })
 

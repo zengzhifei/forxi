@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 
-const text = ref('https://it-tools.tech')
+const text = ref('https://forxi.cn')
 const foreground = ref('#000000')
 const background = ref('#ffffff')
 const errorCorrectionLevel = ref('medium')
