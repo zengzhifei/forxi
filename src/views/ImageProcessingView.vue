@@ -6,7 +6,15 @@
       <div class="max-w-7xl mx-auto py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-6 sm:mb-8">
           <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2">在线图片处理</h2>
-          <p class="text-sm sm:text-base text-gray-600">调整下方参数实时预览效果，支持多种图片处理功能</p>
+          <p class="text-sm sm:text-base text-gray-600">支持图片压缩、裁剪、滤镜、拼接等多种处理功能</p>
+        </div>
+
+        <!-- 隐私提示 -->
+        <div class="bg-green-50 border border-green-200 rounded-lg p-3 mb-6 max-w-2xl mx-auto flex items-center justify-center">
+          <svg class="w-5 h-5 text-green-600 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          <span class="text-sm text-green-700">所有图片处理在本地浏览器完成，不会上传至服务器</span>
         </div>
 
         <div v-if="!selectedImage" class="max-w-xl mx-auto">
@@ -324,15 +332,96 @@
           </div>
         </div>
 
-        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-5 mt-6 max-w-3xl mx-auto">
-          <div class="flex">
-            <div class="flex-shrink-0">
-              <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 mt-6 max-w-4xl mx-auto">
+          <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            功能说明
+          </h3>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div class="flex items-start">
+              <span class="text-xl mr-2">📦</span>
+              <div>
+                <div class="font-medium text-gray-800 text-sm">图片压缩</div>
+                <div class="text-xs text-gray-500">调整压缩质量，减小文件大小</div>
+              </div>
             </div>
-            <div class="ml-3">
-              <h3 class="text-sm font-medium text-blue-800">功能说明</h3>
-              <div class="mt-2 text-sm text-blue-700">
-                <p>所有图片处理在客户端完成，保护您的隐私安全</p>
+            <div class="flex items-start">
+              <span class="text-xl mr-2">🔄</span>
+              <div>
+                <div class="font-medium text-gray-800 text-sm">旋转翻转</div>
+                <div class="text-xs text-gray-500">任意角度旋转，支持水平/垂直翻转</div>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <span class="text-xl mr-2">📐</span>
+              <div>
+                <div class="font-medium text-gray-800 text-sm">尺寸调整</div>
+                <div class="text-xs text-gray-500">自由调整宽高，支持保持比例</div>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <span class="text-xl mr-2">💧</span>
+              <div>
+                <div class="font-medium text-gray-800 text-sm">添加水印</div>
+                <div class="text-xs text-gray-500">自定义文字、位置和透明度</div>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <span class="text-xl mr-2">🔤</span>
+              <div>
+                <div class="font-medium text-gray-800 text-sm">添加文字</div>
+                <div class="text-xs text-gray-500">在图片上添加文字说明</div>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <span class="text-xl mr-2">🖼️</span>
+              <div>
+                <div class="font-medium text-gray-800 text-sm">图片拼接</div>
+                <div class="text-xs text-gray-500">水平或垂直拼接多张图片</div>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <span class="text-xl mr-2">⬜</span>
+              <div>
+                <div class="font-medium text-gray-800 text-sm">九宫格</div>
+                <div class="text-xs text-gray-500">将图片分割成多宫格形式</div>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <span class="text-xl mr-2">⭕</span>
+              <div>
+                <div class="font-medium text-gray-800 text-sm">圆形裁剪</div>
+                <div class="text-xs text-gray-500">将图片裁剪为圆形形状</div>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <span class="text-xl mr-2">📇</span>
+              <div>
+                <div class="font-medium text-gray-800 text-sm">证件照</div>
+                <div class="text-xs text-gray-500">标准证件照尺寸，蓝/白/红底色</div>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <span class="text-xl mr-2">🎨</span>
+              <div>
+                <div class="font-medium text-gray-800 text-sm">图片滤镜</div>
+                <div class="text-xs text-gray-500">灰度、复古、提亮、对比、模糊</div>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <span class="text-xl mr-2">🎯</span>
+              <div>
+                <div class="font-medium text-gray-800 text-sm">马赛克</div>
+                <div class="text-xs text-gray-500">调整马赛克强度，保护隐私</div>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <span class="text-xl mr-2">🔃</span>
+              <div>
+                <div class="font-medium text-gray-800 text-sm">格式转换</div>
+                <div class="text-xs text-gray-500">支持 JPG、PNG、WebP 格式互转</div>
               </div>
             </div>
           </div>
