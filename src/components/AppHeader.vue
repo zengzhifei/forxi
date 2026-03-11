@@ -24,6 +24,11 @@
           <span class="inline-flex items-center px-1 py-1 border-b-2 border-transparent text-sm font-medium text-gray-400">敬请期待</span>
         </nav>
 
+        <!-- 用户菜单 -->
+        <div class="flex items-center">
+          <UserMenu />
+        </div>
+
         <!-- 移动端菜单按钮 -->
         <div v-if="isMobile" class="flex items-center">
           <button 
@@ -66,6 +71,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useBreakpoint } from '../composable/useBreakpoint'
+import UserMenu from './UserMenu.vue'
 
 const { isMobile } = useBreakpoint()
 

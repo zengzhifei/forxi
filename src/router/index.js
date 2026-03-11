@@ -10,6 +10,10 @@ const FilePreviewView = () => import('../views/FilePreviewView.vue')
 const ImageProcessingView = () => import('../views/ImageProcessingView.vue')
 const ItToolsView = () => import('../views/ItToolsView.vue')
 const NotFoundView = () => import('../views/NotFoundView.vue')
+const AuthView = () => import('../views/AuthView.vue')
+const ProfileView = () => import('../views/ProfileView.vue')
+const ResetPasswordView = () => import('../views/ResetPasswordView.vue')
+const GithubCallbackView = () => import('../views/GithubCallbackView.vue')
 
 // 路由配置
 const routes = [
@@ -19,6 +23,39 @@ const routes = [
     component: HomeView,
     meta: {
       title: 'Forxi - 首页'
+    }
+  },
+  {
+    path: '/auth',
+    name: 'auth',
+    component: AuthView,
+    meta: {
+      title: 'Forxi - 登录注册'
+    }
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: ProfileView,
+    meta: {
+      title: 'Forxi - 用户中心',
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/reset-password',
+    name: 'reset-password',
+    component: ResetPasswordView,
+    meta: {
+      title: 'Forxi - 重置密码'
+    }
+  },
+  {
+    path: '/oauth/github/callback',
+    name: 'github-callback',
+    component: GithubCallbackView,
+    meta: {
+      title: 'Forxi - GitHub登录中'
     }
   },
   {
@@ -61,11 +98,19 @@ const router = createRouter({
   routes
 })
 
-// 路由守卫，设置页面标题
-router.beforeEach((to, from) => {
+// 路由守卫，设置页面标题和登录验证
+router.beforeEach((to) => {
   // 设置页面标题
   document.title = to.meta.title || 'Forxi - 工具集合'
-  // 返回true允许导航
+  
+  // 检查是否需要登录
+  if (to.meta.requiresAuth) {
+    const token = localStorage.getItem('access_token')
+    if (!token) {
+      return { path: '/auth', query: { redirect: to.fullPath } }
+    }
+  }
+  
   return true
 })
 
