@@ -13,7 +13,7 @@ const NotFoundView = () => import('../views/NotFoundView.vue')
 const AuthView = () => import('../views/AuthView.vue')
 const ProfileView = () => import('../views/ProfileView.vue')
 const ResetPasswordView = () => import('../views/ResetPasswordView.vue')
-const GithubCallbackView = () => import('../views/GithubCallbackView.vue')
+const GithubCallbackView = () => import('../views/OauthCallbackView.vue')
 
 // 路由配置
 const routes = [
@@ -51,11 +51,11 @@ const routes = [
     }
   },
   {
-    path: '/oauth/github/callback',
-    name: 'github-callback',
+    path: '/oauth/callback',
+    name: 'oauth-callback',
     component: GithubCallbackView,
     meta: {
-      title: 'Forxi - GitHub登录中'
+      title: 'Forxi - 登录中'
     }
   },
   {

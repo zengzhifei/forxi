@@ -1,165 +1,312 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-8 px-4">
-    <div class="max-w-4xl mx-auto">
-      <h1 class="text-2xl font-bold text-gray-900 mb-8">用户中心</h1>
+  <div class="min-h-screen bg-gray-50">
+    <AppHeader />
+    
+    <div class="max-w-4xl mx-auto py-8 px-4">
+      <h1 class="text-2xl font-bold text-gray-900 mb-8">个人中心</h1>
       
-      <div class="space-y-6">
-        <!-- 用户信息 -->
-        <div class="bg-white rounded-xl shadow-sm p-6">
-          <h2 class="text-lg font-semibold text-gray-900 mb-4">基本信息</h2>
-          
-          <div class="flex items-center gap-4 mb-6">
-            <div class="w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold">
-              {{ userInitial }}
-            </div>
-            <div>
-              <p class="font-medium text-gray-900">{{ user?.nickname || '未设置昵称' }}</p>
-              <p class="text-sm text-gray-500">{{ user?.email }}</p>
-            </div>
+      <!-- 用户信息卡片 -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+        <div class="flex items-center gap-4 mb-6">
+          <img
+            v-if="currentAvatar"
+            :src="currentAvatar"
+            class="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
+            @error="handleAvatarError"
+          />
+          <div v-else class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-2xl font-bold">
+            {{ userInfo.nickname?.charAt(0)?.toUpperCase() || 'U' }}
           </div>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <h2 class="text-xl font-semibold text-gray-900">{{ userInfo.nickname }}</h2>
+            <p class="text-gray-500">{{ userInfo.email }}</p>
+            <span 
+              class="inline-block mt-1 px-2 py-0.5 text-xs rounded-full"
+              :class="{
+                'bg-green-100 text-green-700': userInfo.role === 'user',
+                'bg-blue-100 text-blue-700': userInfo.role === 'admin',
+                'bg-purple-100 text-purple-700': userInfo.role === 'super_admin'
+              }"
+            >
+              {{ userInfo.role === 'user' ? '普通用户' : userInfo.role === 'admin' ? '管理员' : '超级管理员' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 标签页 -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="border-b border-gray-200">
+          <nav class="flex -mb-px">
+            <button
+              v-for="tab in tabs"
+              :key="tab.id"
+              @click="activeTab = tab.id"
+              class="py-4 px-6 text-sm font-medium border-b-2 transition-colors"
+              :class="activeTab === tab.id 
+                ? 'border-blue-500 text-blue-600' 
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+            >
+              {{ tab.name }}
+            </button>
+          </nav>
+        </div>
+
+        <!-- 基本资料 -->
+        <div v-if="activeTab === 'profile'" class="p-6">
+          <form @submit.prevent="handleUpdateProfile" class="space-y-6">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">昵称</label>
+              <label class="block text-sm font-medium text-gray-700 mb-2">昵称</label>
               <input
                 v-model="profileForm.nickname"
                 type="text"
-                class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="请输入昵称"
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">个人简介</label>
-              <input
+              <label class="block text-sm font-medium text-gray-700 mb-2">头像</label>
+              <div class="flex items-center gap-4">
+                <div class="relative">
+                  <img 
+                    v-if="currentAvatar" 
+                    :src="currentAvatar" 
+                    class="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
+                    @error="handleAvatarError"
+                  />
+                  <div v-else class="w-20 h-20 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white text-2xl font-bold">
+                    {{ userInitial }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">个人简介</label>
+              <textarea
                 v-model="profileForm.bio"
-                type="text"
-                placeholder="介绍一下自己"
-                class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
+                rows="3"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="介绍一下你自己..."
+                maxlength="500"
+              ></textarea>
+              <p class="mt-1 text-xs text-gray-500">{{ profileForm.bio?.length || 0 }}/500</p>
             </div>
-          </div>
-          
-          <button
-            @click="handleUpdateProfile"
-            :disabled="loading"
-            class="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
-          >
-            {{ loading ? '保存中...' : '保存修改' }}
-          </button>
+            <button
+              type="submit"
+              :disabled="loading"
+              class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            >
+              {{ loading ? '保存中...' : '保存修改' }}
+            </button>
+          </form>
         </div>
-        
+
         <!-- 修改密码 -->
-        <div class="bg-white rounded-xl shadow-sm p-6">
-          <h2 class="text-lg font-semibold text-gray-900 mb-4">修改密码</h2>
-          
-          <div class="space-y-4 max-w-md">
+        <div v-if="activeTab === 'password'" class="p-6">
+          <form @submit.prevent="handleChangePassword" class="space-y-6 max-w-md">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">当前密码</label>
+              <label class="block text-sm font-medium text-gray-700 mb-2">当前密码</label>
               <input
                 v-model="passwordForm.oldPassword"
                 type="password"
-                class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="请输入当前密码"
+                required
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">新密码</label>
+              <label class="block text-sm font-medium text-gray-700 mb-2">新密码</label>
               <input
                 v-model="passwordForm.newPassword"
                 type="password"
-                class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="请输入新密码"
+                required
+                @focus="showPasswordRules = true"
+                @blur="showPasswordRules = false"
               />
-              <p class="text-xs text-gray-500 mt-1">密码长度8-20位，需包含大写、小写、数字、特殊符号中至少3种</p>
+              <!-- 密码强度 -->
+              <div v-if="passwordForm.newPassword" class="mt-2">
+                <div class="flex gap-1 mb-1">
+                  <div 
+                    v-for="i in 4" 
+                    :key="i" 
+                    class="h-1 flex-1 rounded-full transition-colors"
+                    :class="i <= passwordStrength.level ? passwordStrength.color : 'bg-gray-200'"
+                  ></div>
+                </div>
+                <p class="text-xs" :class="{
+                  'text-red-500': passwordStrength.level === 1,
+                  'text-yellow-500': passwordStrength.level === 2,
+                  'text-green-500': passwordStrength.level >= 3
+                }">{{ passwordStrength.text }}</p>
+              </div>
+              <!-- 密码规则提示 -->
+              <div v-if="showPasswordRules" class="mt-2 p-3 bg-gray-50 rounded-lg">
+                <p class="text-xs text-gray-500 mb-1">密码要求：{{ PASSWORD_RULES.description }}</p>
+                <div class="flex flex-wrap gap-2 mt-2">
+                  <span class="text-xs px-2 py-0.5 rounded" :class="passwordForm.newPassword.length >= 8 && passwordForm.newPassword.length <= 20 ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-500'">8-20位</span>
+                  <span class="text-xs px-2 py-0.5 rounded" :class="/[A-Z]/.test(passwordForm.newPassword) ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-500'">大写字母</span>
+                  <span class="text-xs px-2 py-0.5 rounded" :class="/[a-z]/.test(passwordForm.newPassword) ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-500'">小写字母</span>
+                  <span class="text-xs px-2 py-0.5 rounded" :class="/[0-9]/.test(passwordForm.newPassword) ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-500'">数字</span>
+                  <span class="text-xs px-2 py-0.5 rounded" :class="/[^a-zA-Z0-9]/.test(passwordForm.newPassword) ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-500'">特殊符号</span>
+                </div>
+              </div>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">确认新密码</label>
+              <label class="block text-sm font-medium text-gray-700 mb-2">确认新密码</label>
               <input
                 v-model="passwordForm.confirmPassword"
                 type="password"
-                class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="请再次输入新密码"
+                required
               />
             </div>
-            
             <button
-              @click="handleChangePassword"
-              :disabled="loading"
-              class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              type="submit"
+              :disabled="loading || passwordForm.newPassword !== passwordForm.confirmPassword"
+              class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
             >
               {{ loading ? '修改中...' : '修改密码' }}
             </button>
+          </form>
+        </div>
+
+        <!-- 第三方账号绑定 -->
+        <div v-if="activeTab === 'oauth'" class="p-6">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div class="flex items-center gap-3">
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                <div>
+                  <div class="font-medium text-gray-900">GitHub</div>
+                  <div class="text-sm text-gray-500">
+                    {{ oauthAccounts.some(a => a.provider === 'github') ? '已绑定' : '未绑定' }}
+                  </div>
+                </div>
+              </div>
+              <button
+                v-if="!oauthAccounts.some(a => a.provider === 'github')"
+                @click="handleBindGithub"
+                class="px-4 py-2 bg-gray-900 text-white text-sm rounded-lg hover:bg-gray-800"
+              >
+                绑定
+              </button>
+              <span
+                v-else
+                class="px-4 py-2 text-green-600 text-sm"
+              >
+                已绑定
+              </span>
+            </div>
           </div>
         </div>
-        
+
         <!-- 登录日志 -->
-        <div class="bg-white rounded-xl shadow-sm p-6">
-          <h2 class="text-lg font-semibold text-gray-900 mb-4">登录日志</h2>
-          
-          <div v-if="loginLogs.length === 0" class="text-gray-500 text-center py-4">
+        <div v-if="activeTab === 'logs'" class="p-6">
+          <div v-if="loginLogs.length === 0" class="text-center py-8 text-gray-500">
             暂无登录记录
           </div>
-          
           <div v-else class="space-y-3">
             <div
-              v-for="log in loginLogs"
-              :key="log.id"
-              class="flex items-center justify-between py-3 border-b border-gray-100 last:border-0"
+              v-for="(log, index) in loginLogs"
+              :key="index"
+              class="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
             >
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                  <svg v-if="log.status === 'success'" class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center"
+                  :class="log.status === 'success' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'"
+                >
+                  <svg v-if="log.status === 'success'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                   </svg>
-                  <svg v-else class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </div>
                 <div>
-                  <p class="text-sm font-medium text-gray-900">{{ log.device_type || '未知设备' }}</p>
-                  <p class="text-xs text-gray-500">{{ log.ip_address || '未知IP' }}</p>
+                  <div class="text-sm font-medium text-gray-900">
+                    {{ log.login_method === 'email' ? '邮箱登录' : 'GitHub 登录' }}
+                  </div>
+                  <div class="text-xs text-gray-500">
+                    {{ log.ip_address }} · {{ log.device_type }} · {{ formatDate(log.login_at) }}
+                  </div>
                 </div>
               </div>
-              <div class="text-right">
-                <p class="text-sm text-gray-900">{{ formatDate(log.login_at) }}</p>
-                <p class="text-xs text-gray-500">{{ log.login_method || '邮箱' }}</p>
-              </div>
+              <span 
+                class="px-2 py-1 text-xs rounded-full"
+                :class="log.status === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
+              >
+                {{ log.status === 'success' ? '成功' : '失败' }}
+              </span>
             </div>
           </div>
+          
+          <!-- 分页 -->
+          <div v-if="logsMeta.total > logsMeta.pageSize" class="flex justify-center mt-6 gap-2">
+            <button
+              @click="fetchLoginLogs(logsMeta.page - 1)"
+              :disabled="logsMeta.page <= 1"
+              class="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50"
+            >
+              上一页
+            </button>
+            <span class="px-4 py-2 text-gray-600">
+              {{ logsMeta.page }} / {{ logsMeta.totalPages }}
+            </span>
+            <button
+              @click="fetchLoginLogs(logsMeta.page + 1)"
+              :disabled="logsMeta.page >= logsMeta.totalPages"
+              class="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50"
+            >
+              下一页
+            </button>
+          </div>
         </div>
-        
-        <!-- 退出登录 -->
-        <div class="bg-white rounded-xl shadow-sm p-6">
-          <button
-            @click="handleLogout"
-            class="px-6 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors"
-          >
-            退出登录
-          </button>
-        </div>
-      </div>
-      
-      <!-- 消息提示 -->
-      <div
-        v-if="message"
-        :class="['fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg', messageType === 'success' ? 'bg-green-500' : 'bg-red-500']"
-      >
-        <p class="text-white">{{ message }}</p>
       </div>
     </div>
+
+    <AppFooter />
   </div>
 </template>
 
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAuth } from '../composable/useAuth'
+import authApi from '../utils/auth'
+import { validatePassword, PASSWORD_RULES, getPasswordStrength } from '../utils/validate'
+import AppHeader from '../components/AppHeader.vue'
+import AppFooter from '../components/AppFooter.vue'
 
-const router = useRouter()
-const { user, fetchProfile, updateProfile, changePassword, logout, getLoginLogs, loading } = useAuth()
+const { user, fetchUserInfo, loading: authLoading } = useAuth()
 
-const message = ref('')
-const messageType = ref('success')
-const loginLogs = ref([])
+const activeTab = ref('profile')
+const loading = ref(false)
+
+const tabs = [
+  { id: 'profile', name: '基本资料' },
+  { id: 'password', name: '修改密码' },
+  { id: 'oauth', name: '账号绑定' },
+  { id: 'logs', name: '登录日志' }
+]
+
+const userInfo = ref({
+  user_id: '',
+  email: '',
+  nickname: '',
+  avatar: '',
+  bio: '',
+  role: 'user',
+  email_verified: false,
+  status: 'active'
+})
 
 const profileForm = reactive({
   nickname: '',
+  avatar: '',
   bio: ''
 })
 
@@ -169,19 +316,120 @@ const passwordForm = reactive({
   confirmPassword: ''
 })
 
+const showPasswordRules = ref(false)
+
+const currentAvatar = computed(() => {
+  const avatar = user.value?.avatar || profileForm.avatar || ''
+  return avatar.trim().replace(/`/g, '')
+})
+
+const passwordStrength = computed(() => getPasswordStrength(passwordForm.newPassword))
+
 const userInitial = computed(() => {
-  if (!user.value) return '?'
-  if (user.value.nickname) return user.value.nickname.charAt(0).toUpperCase()
-  if (user.value.email) return user.value.email.charAt(0).toUpperCase()
+  const nickname = profileForm.nickname || user.value?.nickname || ''
+  if (nickname) return nickname.charAt(0).toUpperCase()
+  const email = user.value?.email || ''
+  if (email) return email.charAt(0).toUpperCase()
   return '?'
 })
 
-const showMessage = (msg, type = 'success') => {
-  message.value = msg
-  messageType.value = type
-  setTimeout(() => {
-    message.value = ''
-  }, 3000)
+const handleAvatarError = (e) => {
+  e.target.style.display = 'none'
+}
+
+const oauthAccounts = ref([])
+const loginLogs = ref([])
+const logsMeta = ref({
+  page: 1,
+  pageSize: 10,
+  total: 0,
+  totalPages: 0
+})
+
+onMounted(async () => {
+  await fetchUserInfo()
+  if (user.value) {
+    userInfo.value = { ...user.value }
+    profileForm.nickname = user.value.nickname || ''
+    profileForm.avatar = user.value.avatar ? user.value.avatar.trim() : ''
+    profileForm.bio = user.value.bio || ''
+  }
+  await fetchOauthAccounts()
+  await fetchLoginLogs(1)
+})
+
+const fetchOauthAccounts = async () => {
+  try {
+    const res = await authApi.getOauthAccounts()
+    oauthAccounts.value = Array.isArray(res) ? res : (res.data || [])
+  } catch (err) {
+    console.error('获取OAuth账号失败:', err)
+  }
+}
+
+const fetchLoginLogs = async (page) => {
+  try {
+    const res = await authApi.getLoginLogs(page, logsMeta.value.pageSize)
+    const logs = Array.isArray(res) ? res : (res.data || [])
+    loginLogs.value = logs
+    logsMeta.value = { page, pageSize: logsMeta.value.pageSize, total: logs.length, totalPages: 1 }
+  } catch (err) {
+    console.error('获取登录日志失败:', err)
+  }
+}
+
+const handleUpdateProfile = async () => {
+  loading.value = true
+  try {
+    const res = await authApi.updateProfile({
+      nickname: profileForm.nickname,
+      avatar: profileForm.avatar,
+      bio: profileForm.bio
+    })
+    userInfo.value = { ...res.data }
+    alert('资料更新成功')
+  } catch (err) {
+    alert(err.message || '更新失败')
+  } finally {
+    loading.value = false
+  }
+}
+
+const handleChangePassword = async () => {
+  if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+    alert('两次输入的密码不一致')
+    return
+  }
+  
+  const pwdValidation = validatePassword(passwordForm.newPassword)
+  if (!pwdValidation.valid) {
+    alert(pwdValidation.message)
+    return
+  }
+  
+  loading.value = true
+  try {
+    await authApi.changePassword(passwordForm.oldPassword, passwordForm.newPassword)
+    alert('密码修改成功')
+    passwordForm.oldPassword = ''
+    passwordForm.newPassword = ''
+    passwordForm.confirmPassword = ''
+  } catch (err) {
+    alert(err.message || '修改失败')
+  } finally {
+    loading.value = false
+  }
+}
+
+const handleBindGithub = async () => {
+  try {
+    const res = await authApi.getGithubAuthUrl()
+    if (res.data?.auth_url) {
+      window.location.href = res.data.auth_url
+    }
+  } catch (err) {
+    alert('获取授权链接失败')
+  }
 }
 
 const formatDate = (dateStr) => {
@@ -195,83 +443,4 @@ const formatDate = (dateStr) => {
     minute: '2-digit'
   })
 }
-
-const validatePassword = (pwd) => {
-  if (pwd.length < 8 || pwd.length > 20) {
-    return '密码长度需在8-20位之间'
-  }
-  const hasLower = /[a-z]/.test(pwd)
-  const hasUpper = /[A-Z]/.test(pwd)
-  const hasNumber = /[0-9]/.test(pwd)
-  const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd)
-  const types = [hasLower, hasUpper, hasNumber, hasSpecial].filter(Boolean).length
-  if (types < 3) {
-    return '密码需包含大写、小写、数字、特殊符号中至少3种'
-  }
-  return ''
-}
-
-const handleUpdateProfile = async () => {
-  try {
-    await updateProfile({
-      nickname: profileForm.nickname,
-      bio: profileForm.bio
-    })
-    showMessage('个人信息更新成功')
-    await fetchProfile()
-  } catch (err) {
-    showMessage(err.message, 'error')
-  }
-}
-
-const handleChangePassword = async () => {
-  if (!passwordForm.oldPassword) {
-    showMessage('请输入当前密码', 'error')
-    return
-  }
-  if (!passwordForm.newPassword) {
-    showMessage('请输入新密码', 'error')
-    return
-  }
-  if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-    showMessage('两次输入的密码不一致', 'error')
-    return
-  }
-  
-  const pwdError = validatePassword(passwordForm.newPassword)
-  if (pwdError) {
-    showMessage(pwdError, 'error')
-    return
-  }
-  
-  try {
-    await changePassword(passwordForm.oldPassword, passwordForm.newPassword)
-    showMessage('密码修改成功')
-    passwordForm.oldPassword = ''
-    passwordForm.newPassword = ''
-    passwordForm.confirmPassword = ''
-  } catch (err) {
-    showMessage(err.message, 'error')
-  }
-}
-
-const handleLogout = async () => {
-  await logout()
-  router.push('/')
-}
-
-onMounted(async () => {
-  await fetchProfile()
-  if (user.value) {
-    profileForm.nickname = user.value.nickname || ''
-    profileForm.bio = user.value.bio || ''
-  }
-  
-  try {
-    const logs = await getLoginLogs(1, 10)
-    loginLogs.value = logs || []
-  } catch (err) {
-    console.error('获取登录日志失败:', err)
-  }
-})
 </script>

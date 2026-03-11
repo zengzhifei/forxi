@@ -125,6 +125,7 @@ export function useAuth() {
     login,
     register,
     fetchProfile,
+    fetchUserInfo: fetchProfile,
     logout,
     updateProfile,
     changePassword,

@@ -129,6 +129,8 @@
                 placeholder="请输入密码"
                 class="w-full pl-12 pr-14 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all"
                 required
+                @focus="showPasswordRules = true"
+                @blur="showPasswordRules = false"
               />
               <button
                 type="button"
@@ -143,6 +145,33 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                 </svg>
               </button>
+            </div>
+            <!-- 密码强度 -->
+            <div v-if="activeTab === 'register' && form.password" class="mt-2">
+              <div class="flex gap-1 mb-1">
+                <div 
+                  v-for="i in 4" 
+                  :key="i" 
+                  class="h-1 flex-1 rounded-full transition-colors"
+                  :class="i <= passwordStrength.level ? passwordStrength.color : 'bg-gray-200'"
+                ></div>
+              </div>
+              <p class="text-xs" :class="{
+                'text-red-500': passwordStrength.level === 1,
+                'text-yellow-500': passwordStrength.level === 2,
+                'text-green-500': passwordStrength.level >= 3
+              }">{{ passwordStrength.text }}</p>
+            </div>
+            <!-- 密码规则提示 -->
+            <div v-if="showPasswordRules && activeTab === 'register'" class="mt-2 p-3 bg-gray-50 rounded-lg">
+              <p class="text-xs text-gray-500 mb-1">密码要求：{{ PASSWORD_RULES.description }}</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="text-xs px-2 py-0.5 rounded" :class="form.password.length >= 8 && form.password.length <= 20 ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-500'">8-20位</span>
+                <span class="text-xs px-2 py-0.5 rounded" :class="/[A-Z]/.test(form.password) ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-500'">大写字母</span>
+                <span class="text-xs px-2 py-0.5 rounded" :class="/[a-z]/.test(form.password) ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-500'">小写字母</span>
+                <span class="text-xs px-2 py-0.5 rounded" :class="/[0-9]/.test(form.password) ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-500'">数字</span>
+                <span class="text-xs px-2 py-0.5 rounded" :class="/[^a-zA-Z0-9]/.test(form.password) ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-500'">特殊符号</span>
+              </div>
             </div>
           </div>
 
@@ -203,32 +232,16 @@
           </div>
         </form>
 
-        <!-- 分割线 -->
-        <div class="relative my-8">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-gray-200"></div>
-          </div>
-          <div class="relative flex justify-center text-sm">
-            <span class="px-4 bg-white text-gray-400">或</span>
-          </div>
-        </div>
-
-        <!-- 社交登录 -->
-        <div class="grid grid-cols-2 gap-3">
+        <div class="mt-6 pt-6 border-t border-gray-200">
+          <p class="text-center text-sm text-gray-500 mb-4">没有账号？</p>
           <button
             @click="handleGithubLogin"
-            class="flex items-center justify-center gap-2 py-3 px-4 bg-gray-50 border border-gray-200 rounded-xl hover:bg-gray-100 hover:border-gray-300 transition-all group"
+            class="w-full py-3.5 px-4 bg-gray-900 text-white font-semibold rounded-xl hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 flex items-center justify-center gap-2 shadow-lg"
           >
-            <svg class="h-5 w-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
             </svg>
-            <span class="text-sm font-medium text-gray-700">GitHub</span>
-          </button>
-          <button class="flex items-center justify-center gap-2 py-3 px-4 bg-gray-50 border border-gray-200 rounded-xl hover:bg-gray-100 hover:border-gray-300 transition-all group">
-            <svg class="h-5 w-5 text-green-500 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M9.5 3h5c.83 0 1.5.67 1.5 1.5v3.267c1.822.423 3.197 1.778 3.9 3.233h-2.8c-.4 1.2-1.6 2-2.9 2s-2.5-.8-2.9-2H3.6c.703-1.455 2.078-2.81 3.9-3.233V4.5c0-.83.67-1.5 1.5-1.5zm0 6h4c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-4c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5zM4 14.5c0 .83.67 1.5 1.5 1.5h13c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5h-13c-.83 0-1.5.67-1.5 1.5z"/>
-            </svg>
-            <span class="text-sm font-medium text-gray-700">微信</span>
+            GitHub 快捷登录
           </button>
         </div>
 
@@ -254,10 +267,11 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuth } from '../composable/useAuth'
 import authApi from '../utils/auth'
+import { validatePassword, PASSWORD_RULES, getPasswordStrength } from '../utils/validate'
 
 const router = useRouter()
 const route = useRoute()
@@ -286,8 +300,12 @@ const tabs = [
 
 const activeTab = ref('login')
 const showPassword = ref(false)
+const showPasswordRules = ref(false)
 const error = ref('')
 const countdown = ref(0)
+
+const passwordStrength = computed(() => getPasswordStrength(form.password))
+
 let countdownTimer = null
 
 const form = reactive({
@@ -346,21 +364,6 @@ const handleSendCode = async () => {
 
 const handleSubmit = async () => {
   error.value = ''
-  
-  const validatePassword = (pwd) => {
-    if (pwd.length < 8 || pwd.length > 20) {
-      return '密码长度需在8-20位之间'
-    }
-    const hasLower = /[a-z]/.test(pwd)
-    const hasUpper = /[A-Z]/.test(pwd)
-    const hasNumber = /[0-9]/.test(pwd)
-    const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd)
-    const types = [hasLower, hasUpper, hasNumber, hasSpecial].filter(Boolean).length
-    if (types < 3) {
-      return '密码需包含大写、小写、数字、特殊符号中至少3种'
-    }
-    return ''
-  }
   
   try {
     if (activeTab.value === 'login') {

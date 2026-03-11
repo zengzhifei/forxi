@@ -4,7 +4,14 @@
       @click="showDropdown = !showDropdown"
       class="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-gray-100 transition-colors"
     >
-      <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white font-medium text-sm">
+      <img
+        v-if="userAvatar"
+        :src="userAvatar"
+        :alt="user.nickname || user.email"
+        class="w-8 h-8 rounded-full object-cover"
+        @error="handleAvatarError"
+      />
+      <div v-else class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white font-medium text-sm">
         {{ userInitial }}
       </div>
       <span class="text-sm font-medium text-gray-700 hidden sm:inline">{{ user?.nickname || user?.email }}</span>
@@ -79,6 +86,15 @@ const userInitial = computed(() => {
   if (user.value.email) return user.value.email.charAt(0).toUpperCase()
   return '?'
 })
+
+const userAvatar = computed(() => {
+  const avatar = user.value?.avatar || ''
+  return avatar.trim().replace(/`/g, '')
+})
+
+const handleAvatarError = (e) => {
+  e.target.style.display = 'none'
+}
 
 const handleLogout = async () => {
   await logout()
