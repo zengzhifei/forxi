@@ -69,7 +69,7 @@
             <div class="p-4 sm:p-6">
               <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">在线图片处理</h3>
               <p class="text-sm sm:text-base text-gray-600 mb-4">支持图片压缩、裁剪、尺寸修改、格式转换，纯前端处理保护隐私</p>
-              <span class="inline-flex items-center text-sm font-medium text-green-600">立即使用 →</span>
+              <span class="inline-flex items-center text-sm font-medium text-blue-600">立即使用 →</span>
             </div>
           </div>
           
@@ -81,7 +81,7 @@
             <div class="p-4 sm:p-6">
               <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">IT 工具集合</h3>
               <p class="text-sm sm:text-base text-gray-600 mb-4">Base64、JSON、URL 编码、颜色转换、UUID 生成等多种实用工具</p>
-              <span class="inline-flex items-center text-sm font-medium text-purple-600">立即使用 →</span>
+              <span class="inline-flex items-center text-sm font-medium text-blue-600">立即使用 →</span>
             </div>
           </div>
           
