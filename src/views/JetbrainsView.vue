@@ -2,7 +2,12 @@
   <div class="jetbrains-page">
     <AppHeader />
     <div class="jetbrains-container">
-      <iframe src="/jetbrains/index.html" frameborder="0" class="jetbrains-iframe"></iframe>
+      <iframe 
+        src="/jetbrains/index.html" 
+        frameborder="0" 
+        class="jetbrains-iframe"
+        sandbox="allow-scripts"
+      ></iframe>
     </div>
   </div>
 </template>
@@ -27,5 +32,6 @@ import AppHeader from '../components/AppHeader.vue'
   width: 100%;
   height: 100%;
   border: none;
+  background: #fff;
 }
 </style>

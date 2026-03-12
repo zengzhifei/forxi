@@ -84,7 +84,7 @@ const routes = [
     }
   },
   {
-    path: '/jetbrains',
+    path: '/jetbra',
     name: 'jetbrains',
     component: JetbrainsView,
     meta: {
