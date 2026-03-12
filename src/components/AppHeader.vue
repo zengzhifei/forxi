@@ -87,7 +87,8 @@ const menuItems = [
   { name: '首页', path: '/' },
   { name: '在线文件预览', path: '/file-preview' },
   { name: '在线图片处理', path: '/image-processing' },
-  { name: 'IT 工具集合', path: '/it-tools' }
+  { name: 'IT 工具集合', path: '/it-tools' },
+  { name: 'JetBrains', path: '/jetbrains' }
 ]
 
 const menuOpen = ref(false)

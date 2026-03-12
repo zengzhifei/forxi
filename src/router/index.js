@@ -9,6 +9,7 @@ const HomeView = () => import('../views/HomeView.vue')
 const FilePreviewView = () => import('../views/FilePreviewView.vue')
 const ImageProcessingView = () => import('../views/ImageProcessingView.vue')
 const ItToolsView = () => import('../views/ItToolsView.vue')
+const JetbrainsView = () => import('../views/JetbrainsView.vue')
 const NotFoundView = () => import('../views/NotFoundView.vue')
 const AuthView = () => import('../views/AuthView.vue')
 const ProfileView = () => import('../views/ProfileView.vue')
@@ -80,6 +81,14 @@ const routes = [
     component: ItToolsView,
     meta: {
       title: 'Forxi - IT 工具集合'
+    }
+  },
+  {
+    path: '/jetbrains',
+    name: 'jetbrains',
+    component: JetbrainsView,
+    meta: {
+      title: 'Forxi - JetBrains 激活'
     }
   },
   {
