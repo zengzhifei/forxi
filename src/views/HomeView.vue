@@ -85,6 +85,18 @@
             </div>
           </div>
           
+          <!-- JetBrains 工具 -->
+          <div class="bg-white shadow-lg rounded-lg overflow-hidden transition-transform hover:transform hover:scale-105 cursor-pointer" @click="navigateToJetbrains">
+            <div class="h-40 sm:h-48 bg-gradient-to-br from-yellow-50 to-orange-50 flex items-center justify-center p-4">
+              <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgZmlsbD0ibm9uZSIgdmlld0JveD0iMCAwIDMyIDMyIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYSIgeDE9Ii40MjUiIHgyPSIzMS4zMSIgeTE9IjMxLjM2IiB5Mj0iLjkwNSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjRkY5NDE5Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjQzIiBzdG9wLWNvbG9yPSIjRkYwMjFEIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjk5IiBzdG9wLWNvbG9yPSIjRTYwMEZGIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cGF0aCBmaWxsPSJ1cmwoI2EpIiBkPSJtMTAuMTcgMS44My04LjM0IDguMzRDLjY2IDExLjM0IDAgMTIuOTMgMCAxNC41OVYyOS41QzAgMzAuODggMS4xMiAzMiAyLjUgMzJoMTQuOTFjMS42NiAwIDMuMjQ1LS42NiA0LjQyLTEuODNsOC4zNC04LjM0YzEuMTctMS4xNyAxLjgzLTIuNzYgMS44My00LjQyVjIuNUMzMiAxLjEyIDMwLjg4IDAgMjkuNSAwSDE0LjU5Yy0xLjY2IDAtMy4yNDUuNjYtNC40MiAxLjgzWiIvPgogIDxwYXRoIGZpbGw9IiMwMDAiIGQ9Ik0yNCA4SDR2MjBoMjBWOFoiLz4KICA8cGF0aCBmaWxsPSIjZmZmIiBkPSJNMTUgMjRINnYyaDl2LTJaIi8+Cjwvc3ZnPg==" alt="JetBrains" class="w-16 sm:w-20 h-16 sm:h-20" />
+            </div>
+            <div class="p-4 sm:p-6">
+              <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">JetBrains 工具</h3>
+              <p class="text-sm sm:text-base text-gray-600 mb-4">技术人你懂的 😏</p>
+              <span class="inline-flex items-center text-sm font-medium text-blue-600">立即使用 →</span>
+            </div>
+          </div>
+          
           <!-- 更多工具开发中 -->
           <div class="bg-white shadow-lg rounded-lg overflow-hidden">
             <div class="h-40 sm:h-48 bg-gray-100 flex items-center justify-center">
@@ -156,6 +168,12 @@ const navigateToImageProcessing = () => {
 
 const navigateToItTools = () => {
   router.push('/it-tools').then(() => {
+    window.scrollTo(0, 0)
+  })
+}
+
+const navigateToJetbrains = () => {
+  router.push('/jetbra').then(() => {
     window.scrollTo(0, 0)
   })
 }

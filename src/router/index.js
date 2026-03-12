@@ -88,7 +88,7 @@ const routes = [
     name: 'jetbrains',
     component: JetbrainsView,
     meta: {
-      title: 'Forxi - JetBrains 激活'
+      title: 'Forxi - JetBrains 工具'
     }
   },
   {
