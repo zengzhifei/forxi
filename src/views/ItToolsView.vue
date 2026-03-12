@@ -199,15 +199,20 @@
           <div v-if="selectedTool" class="space-y-4 lg:space-y-6">
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 lg:p-6">
               <div class="flex items-center justify-between gap-3 lg:gap-4">
-                <div class="flex items-center gap-3 lg:gap-4 min-w-0">
+                <div class="flex items-center gap-3 lg:gap-4 min-w-0 flex-1">
                   <div class="w-10 lg:w-12 rounded-lg lg:rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30 text-xl lg:text-2xl flex-shrink-0">
                     {{ selectedTool.icon }}
                   </div>
-                  <div class="min-w-0">
+                  <div class="min-w-0 flex-1">
                     <h1 class="text-lg lg:text-2xl font-bold text-gray-900 truncate">{{ selectedTool.name }}</h1>
                     <p class="text-gray-500 text-sm lg:text-base mt-0.5 lg:mt-1 truncate">{{ selectedTool.description }}</p>
                   </div>
                 </div>
+                <button @click="closeTool" class="flex-shrink-0 p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600">
+                  <svg class="w-5 h-5 lg:w-6 lg:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
                 <button
                   @click="toggleFav(selectedTool.id)"
                   class="flex-shrink-0 p-2 rounded-lg transition-colors"
@@ -249,7 +254,7 @@
 </template>
 
 <script setup>
-import { ref, computed, inject, markRaw } from 'vue'
+import { ref, computed, inject, markRaw, onMounted, onUnmounted, watch } from 'vue'
 import { categories, tools } from '../modules/it-tools/index.js'
 import { useBreakpoint } from '../composable/useBreakpoint'
 import { useFavorites } from '../composable/useFavorites'
@@ -261,6 +266,36 @@ const { favorites, isFavorite, toggleFavorite: toggleFav } = useFavorites()
 const toast = inject('toast')
 
 const selectedTool = ref(null)
+let isInitializing = true
+
+const updateHash = () => {
+  const hash = location.hash.slice(1)
+  if (hash && tools[hash]) {
+    const tool = tools[hash]
+    selectedTool.value = markRaw({ id: hash, ...tool })
+  }
+}
+
+onMounted(() => {
+  updateHash()
+  isInitializing = false
+  window.addEventListener('hashchange', updateHash)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('hashchange', updateHash)
+})
+
+watch(selectedTool, (val) => {
+  if (isInitializing) return
+  if (val && val.id) {
+    location.hash = val.id
+  } else if (val) {
+    selectedTool.value = null
+  } else {
+    history.replaceState(null, '', location.pathname)
+  }
+})
 const menuOpen = ref(false)
 const searchQuery = ref('')
 
@@ -308,6 +343,10 @@ function selectTool(tool) {
     selectedTool.value = markRaw(tool)
   }
   menuOpen.value = false
+}
+
+function closeTool() {
+  selectedTool.value = null
 }
 
 function isSelected(toolId) {

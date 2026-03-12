@@ -1,6 +1,8 @@
-const BASE_URL = 'http://localhost:8080/api'
+const BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080') + '/api'
 
-const request = async (endpoint, options = {}) => {
+let isRefreshing = false
+
+const request = async (endpoint, options = {}, retry = true) => {
   const token = localStorage.getItem('access_token')
   
   const config = {
@@ -13,6 +15,22 @@ const request = async (endpoint, options = {}) => {
   }
 
   const response = await fetch(`${BASE_URL}${endpoint}`, config)
+  
+  if (response.status === 401 && retry && !isRefreshing) {
+    isRefreshing = true
+    try {
+      await authApi.refreshToken()
+      isRefreshing = false
+      return request(endpoint, options, false)
+    } catch (err) {
+      isRefreshing = false
+      localStorage.removeItem('access_token')
+      localStorage.removeItem('refresh_token')
+      window.location.href = '/auth'
+      throw err
+    }
+  }
+
   const data = await response.json()
 
   if (data.code !== 0) {
@@ -207,9 +225,6 @@ export const authApi = {
    */
   async getGithubAuthUrl() {
     const data = await request('/oauth/github/authorize')
-    if (data.data.state) {
-      localStorage.setItem('oauth_state', data.data.state)
-    }
     return data.data.auth_url
   },
 
@@ -243,24 +258,6 @@ export const authApi = {
   },
 
   /**
-   * 绑定第三方账号
-   * 场景：已登录用户绑定 GitHub 或微信账号
-   * 路由：POST /api/oauth/bind
-   */
-  async bindOAuth(provider, providerUserId, accessToken, refreshToken) {
-    const data = await request('/oauth/bind', {
-      method: 'POST',
-      body: JSON.stringify({ 
-        provider, 
-        provider_user_id: providerUserId,
-        access_token: accessToken,
-        refresh_token: refreshToken
-      })
-    })
-    return data.data
-  },
-
-  /**
    * 解绑第三方账号
    * 场景：已登录用户解绑 GitHub 或微信账号
    * 路由：POST /api/oauth/unbind
@@ -274,23 +271,6 @@ export const authApi = {
   },
 
   // ==================== 工具方法 ====================
-
-  getSavedState() {
-    return localStorage.getItem('oauth_state')
-  },
-
-  clearOAuthState() {
-    localStorage.removeItem('oauth_state')
-  },
-
-  saveTokens(tokens) {
-    if (tokens.access_token) {
-      localStorage.setItem('access_token', tokens.access_token)
-    }
-    if (tokens.refresh_token) {
-      localStorage.setItem('refresh_token', tokens.refresh_token)
-    }
-  },
 
   isAuthenticated() {
     return !!localStorage.getItem('access_token')

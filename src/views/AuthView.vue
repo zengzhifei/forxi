@@ -279,16 +279,13 @@ const { login, register, sendVerificationCode, loading } = useAuth()
 
 const handleGithubLogin = async () => {
   try {
-    console.log('开始获取GitHub授权链接...')
     const authUrl = await authApi.getGithubAuthUrl()
-    console.log('获取到的授权链接:', authUrl)
     if (authUrl) {
       window.location.href = authUrl
     } else {
       error.value = '获取授权链接失败'
     }
   } catch (err) {
-    console.error('获取GitHub授权链接失败:', err)
     error.value = '获取GitHub授权链接失败: ' + err.message
   }
 }
@@ -382,9 +379,9 @@ const handleSubmit = async () => {
         error.value = '请输入6位验证码'
         return
       }
-      const pwdError = validatePassword(form.password)
-      if (pwdError) {
-        error.value = pwdError
+      const pwdValidation = validatePassword(form.password)
+      if (!pwdValidation.valid) {
+        error.value = pwdValidation.message
         return
       }
       

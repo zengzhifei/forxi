@@ -1,7 +1,30 @@
 <template>
   <header class="bg-white shadow-sm relative">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16 items-center">
+      <!-- 移动端：左侧菜单 + 中间Logo + 右侧用户菜单 -->
+      <div v-if="isMobile" class="flex justify-between h-16 items-center">
+        <button 
+          @click="toggleMenu"
+          class="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
+        >
+          <svg v-if="!menuOpen" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg v-else class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <router-link to="/" class="flex items-center">
+          <img src="/logo.svg" alt="Forxi Logo" class="h-8 w-8" />
+          <h1 class="ml-2 text-lg font-semibold text-gray-900">Forxi</h1>
+        </router-link>
+
+        <UserMenu />
+      </div>
+
+      <!-- PC端 -->
+      <div v-else class="flex justify-between h-16 items-center">
         <!-- Logo 和标题 -->
         <div class="flex items-center">
           <router-link to="/" class="flex items-center">
@@ -11,7 +34,7 @@
         </div>
 
         <!-- PC端菜单 -->
-        <nav v-if="!isMobile" class="flex space-x-6 items-center absolute left-1/2 transform -translate-x-1/2">
+        <nav class="flex-1 flex justify-center space-x-6 items-center">
           <router-link 
             v-for="item in menuItems" 
             :key="item.path" 
@@ -27,21 +50,6 @@
         <!-- 用户菜单 -->
         <div class="flex items-center">
           <UserMenu />
-        </div>
-
-        <!-- 移动端菜单按钮 -->
-        <div v-if="isMobile" class="flex items-center">
-          <button 
-            @click="toggleMenu"
-            class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
-          >
-            <svg v-if="!menuOpen" class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-            <svg v-else class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
         </div>
       </div>
     </div>

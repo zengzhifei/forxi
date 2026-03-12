@@ -1,16 +1,17 @@
 <template>
   <router-view />
   <Toast ref="toastRef" />
+  <ConfirmDialog ref="confirmRef" />
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import Toast from './components/Toast.vue'
+import ConfirmDialog from './components/ConfirmDialog.vue'
+import { provide } from 'vue'
 
 const toastRef = ref(null)
-
-// 提供全局 toast 方法
-import { provide } from 'vue'
+const confirmRef = ref(null)
 
 function showToast(message, type = 'info', duration = 3000) {
   if (toastRef.value) {
@@ -24,6 +25,15 @@ provide('toast', {
   error: (msg, dur) => showToast(msg, 'error', dur),
   warning: (msg, dur) => showToast(msg, 'warning', dur),
   info: (msg, dur) => showToast(msg, 'info', dur)
+})
+
+provide('confirm', {
+  show: (message, confirmText, cancelText, title) => {
+    if (confirmRef.value) {
+      return confirmRef.value.show(message, confirmText, cancelText, title)
+    }
+    return Promise.resolve(false)
+  }
 })
 </script>
 

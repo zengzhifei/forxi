@@ -106,25 +106,55 @@
           <form @submit.prevent="handleChangePassword" class="space-y-6 max-w-md">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">当前密码</label>
-              <input
-                v-model="passwordForm.oldPassword"
-                type="password"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="请输入当前密码"
-                required
-              />
+              <div class="relative">
+                <input
+                  v-model="passwordForm.oldPassword"
+                  :type="showOldPassword ? 'text' : 'password'"
+                  class="w-full px-4 py-2 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="请输入当前密码"
+                  required
+                />
+                <button
+                  type="button"
+                  @click="showOldPassword = !showOldPassword"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  <svg v-if="!showOldPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                  <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                  </svg>
+                </button>
+              </div>
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">新密码</label>
-              <input
-                v-model="passwordForm.newPassword"
-                type="password"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="请输入新密码"
-                required
-                @focus="showPasswordRules = true"
-                @blur="showPasswordRules = false"
-              />
+              <div class="relative">
+                <input
+                  v-model="passwordForm.newPassword"
+                  :type="showNewPassword ? 'text' : 'password'"
+                  class="w-full px-4 py-2 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="请输入新密码"
+                  required
+                  @focus="showPasswordRules = true"
+                  @blur="showPasswordRules = false"
+                />
+                <button
+                  type="button"
+                  @click="showNewPassword = !showNewPassword"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  <svg v-if="!showNewPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                  <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                  </svg>
+                </button>
+              </div>
               <!-- 密码强度 -->
               <div v-if="passwordForm.newPassword" class="mt-2">
                 <div class="flex gap-1 mb-1">
@@ -155,13 +185,28 @@
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">确认新密码</label>
-              <input
-                v-model="passwordForm.confirmPassword"
-                type="password"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="请再次输入新密码"
-                required
-              />
+              <div class="relative">
+                <input
+                  v-model="passwordForm.confirmPassword"
+                  :type="showConfirmPassword ? 'text' : 'password'"
+                  class="w-full px-4 py-2 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="请再次输入新密码"
+                  required
+                />
+                <button
+                  type="button"
+                  @click="showConfirmPassword = !showConfirmPassword"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  <svg v-if="!showConfirmPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                  <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                  </svg>
+                </button>
+              </div>
             </div>
             <button
               type="submit"
@@ -177,7 +222,7 @@
         <div v-if="activeTab === 'oauth'" class="p-6">
           <div class="space-y-4">
             <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-              <div class="flex items-center gap-3">
+              <div class="flex items-start gap-3 group relative">
                 <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                 </svg>
@@ -187,6 +232,10 @@
                     {{ oauthAccounts.some(a => a.provider === 'github') ? '已绑定' : '未绑定' }}
                   </div>
                 </div>
+                <div v-if="githubAccount" class="absolute left-full top-0 ml-2 p-3 bg-gray-800 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-10 whitespace-nowrap">
+                  <div class="font-medium">{{ githubAccount.name }}</div>
+                  <a v-if="githubAccount.html_url" :href="githubAccount.html_url" target="_blank" class="text-blue-300 hover:text-blue-200" @click.stop>主页</a>
+                </div>
               </div>
               <button
                 v-if="!oauthAccounts.some(a => a.provider === 'github')"
@@ -195,12 +244,13 @@
               >
                 绑定
               </button>
-              <span
+              <button
                 v-else
-                class="px-4 py-2 text-green-600 text-sm"
+                @click="handleUnbindGithub"
+                class="px-4 py-2 text-red-600 text-sm hover:text-red-700"
               >
-                已绑定
-              </span>
+                解绑
+              </button>
             </div>
           </div>
         </div>
@@ -274,16 +324,53 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, inject, watch, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useAuth } from '../composable/useAuth'
 import authApi from '../utils/auth'
 import { validatePassword, PASSWORD_RULES, getPasswordStrength } from '../utils/validate'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
 
+const toast = inject('toast')
+const confirm = inject('confirm')
 const { user, fetchUserInfo, loading: authLoading } = useAuth()
+const route = useRoute()
 
 const activeTab = ref('profile')
+
+const updateHash = () => {
+  if (location.hash) {
+    activeTab.value = location.hash.slice(1)
+  }
+}
+
+onMounted(async () => {
+  updateHash()
+  window.addEventListener('hashchange', updateHash)
+  await fetchUserInfo()
+  if (user.value) {
+    userInfo.value = { ...user.value }
+    profileForm.nickname = user.value.nickname || ''
+    profileForm.avatar = user.value.avatar ? user.value.avatar.trim() : ''
+    profileForm.bio = user.value.bio || ''
+  }
+  await fetchOauthAccounts()
+  await fetchLoginLogs(1)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('hashchange', updateHash)
+})
+
+watch(activeTab, (val) => {
+  if (val !== 'profile') {
+    location.hash = val
+  } else {
+    history.replaceState(null, '', location.pathname)
+  }
+})
+
 const loading = ref(false)
 
 const tabs = [
@@ -316,6 +403,9 @@ const passwordForm = reactive({
   confirmPassword: ''
 })
 
+const showOldPassword = ref(false)
+const showNewPassword = ref(false)
+const showConfirmPassword = ref(false)
 const showPasswordRules = ref(false)
 
 const currentAvatar = computed(() => {
@@ -338,24 +428,15 @@ const handleAvatarError = (e) => {
 }
 
 const oauthAccounts = ref([])
+
+const githubAccount = computed(() => oauthAccounts.value.find(a => a.provider === 'github'))
+
 const loginLogs = ref([])
 const logsMeta = ref({
   page: 1,
   pageSize: 10,
   total: 0,
   totalPages: 0
-})
-
-onMounted(async () => {
-  await fetchUserInfo()
-  if (user.value) {
-    userInfo.value = { ...user.value }
-    profileForm.nickname = user.value.nickname || ''
-    profileForm.avatar = user.value.avatar ? user.value.avatar.trim() : ''
-    profileForm.bio = user.value.bio || ''
-  }
-  await fetchOauthAccounts()
-  await fetchLoginLogs(1)
 })
 
 const fetchOauthAccounts = async () => {
@@ -381,15 +462,16 @@ const fetchLoginLogs = async (page) => {
 const handleUpdateProfile = async () => {
   loading.value = true
   try {
-    const res = await authApi.updateProfile({
+    await authApi.updateProfile({
       nickname: profileForm.nickname,
       avatar: profileForm.avatar,
       bio: profileForm.bio
     })
-    userInfo.value = { ...res.data }
-    alert('资料更新成功')
+    await fetchUserInfo()
+    userInfo.value = { ...user.value }
+    toast.success('资料更新成功')
   } catch (err) {
-    alert(err.message || '更新失败')
+    toast.error(err.message || '更新失败')
   } finally {
     loading.value = false
   }
@@ -397,25 +479,25 @@ const handleUpdateProfile = async () => {
 
 const handleChangePassword = async () => {
   if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-    alert('两次输入的密码不一致')
+    toast.error('两次输入的密码不一致')
     return
   }
   
   const pwdValidation = validatePassword(passwordForm.newPassword)
   if (!pwdValidation.valid) {
-    alert(pwdValidation.message)
+    toast.error(pwdValidation.message)
     return
   }
   
   loading.value = true
   try {
     await authApi.changePassword(passwordForm.oldPassword, passwordForm.newPassword)
-    alert('密码修改成功')
+    toast.success('密码修改成功')
     passwordForm.oldPassword = ''
     passwordForm.newPassword = ''
     passwordForm.confirmPassword = ''
   } catch (err) {
-    alert(err.message || '修改失败')
+    toast.error(err.message || '修改失败')
   } finally {
     loading.value = false
   }
@@ -423,12 +505,25 @@ const handleChangePassword = async () => {
 
 const handleBindGithub = async () => {
   try {
-    const res = await authApi.getGithubAuthUrl()
-    if (res.data?.auth_url) {
-      window.location.href = res.data.auth_url
+    const authUrl = await authApi.getGithubAuthUrl()
+    if (authUrl) {
+      window.location.href = authUrl
     }
   } catch (err) {
-    alert('获取授权链接失败')
+    toast.error('获取授权链接失败')
+  }
+}
+
+const handleUnbindGithub = async () => {
+  const ok = await confirm.show('确定要解绑GitHub账号吗？解绑后将无法通过GitHub登录。', '确认解绑', '取消', '确认解绑')
+  if (!ok) return
+  
+  try {
+    await authApi.unbindOAuth('github')
+    toast.success('解绑成功')
+    fetchOauthAccounts()
+  } catch (err) {
+    toast.error(err.message || '解绑失败')
   }
 }
 

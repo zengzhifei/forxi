@@ -121,9 +121,7 @@ import AppFooter from '../components/AppFooter.vue'
 
 const toast = inject('toast')
 
-const isDev = import.meta.env.DEV
-const currentDomain = window.location.origin
-const FILE_PREVIEW_DOMAIN = isDev ? 'https://test.forxi.cn' : currentDomain + '/filepreview'
+const FILE_PREVIEW_DOMAIN = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080') + '/filepreview'
 
 const fileUrl = ref('')
 const selectedFile = ref(null)

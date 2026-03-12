@@ -59,15 +59,30 @@
 
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">登录密码</label>
-          <input
-            v-model="password"
-            type="password"
-            required
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="请输入密码"
-            @focus="showPasswordRules = true"
-            @blur="showPasswordRules = false"
-          />
+          <div class="relative">
+            <input
+              v-model="password"
+              :type="showPassword ? 'text' : 'password'"
+              required
+              class="w-full px-4 py-2 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="请输入密码"
+              @focus="showPasswordRules = true"
+              @blur="showPasswordRules = false"
+            />
+            <button
+              type="button"
+              @click="showPassword = !showPassword"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              <svg v-if="!showPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+              </svg>
+            </button>
+          </div>
           <!-- 密码强度 -->
           <div v-if="password" class="mt-2">
             <div class="flex gap-1 mb-1">
@@ -99,13 +114,28 @@
 
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">确认密码</label>
-          <input
-            v-model="confirmPassword"
-            type="password"
-            required
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="请再次输入密码"
-          />
+          <div class="relative">
+            <input
+              v-model="confirmPassword"
+              :type="showConfirmPassword ? 'text' : 'password'"
+              required
+              class="w-full px-4 py-2 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="请再次输入密码"
+            />
+            <button
+              type="button"
+              @click="showConfirmPassword = !showConfirmPassword"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              <svg v-if="!showConfirmPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <div v-if="bindError" class="text-red-500 text-sm text-center">
@@ -154,8 +184,7 @@ const needsEmailBind = ref(false)
 const error = ref(false)
 const errorMessage = ref('')
 
-const provider = ref('')
-
+const bindToken = ref('')
 const email = ref('')
 const emailCode = ref('')
 const password = ref('')
@@ -164,51 +193,31 @@ const binding = ref(false)
 const bindError = ref('')
 const sendingCode = ref(false)
 const countdown = ref(0)
+const showPassword = ref(false)
+const showConfirmPassword = ref(false)
 const showPasswordRules = ref(false)
 
 const passwordStrength = computed(() => getPasswordStrength(password.value))
 
-const providerName = computed(() => {
-  const names = {
-    github: 'GitHub'
-  }
-  return names[provider.value] || '第三方'
-})
+const providerName = 'GitHub'
 
 onMounted(async () => {
-  provider.value = route.query.provider || 'github'
-  
   const accessToken = route.query.access_token
   const refreshToken = route.query.refresh_token
   const errorParam = route.query.error
   const needsBind = route.query.needs_email_bind
-  const providerUserId = route.query.provider_user_id
-  const bindToken = route.query.bind_token
+  const bindType = route.query.bind_type
+  bindToken.value = route.query.bind_token || ''
 
-  console.log('OAuth回调参数:', { provider: provider.value, accessToken: !!accessToken, refreshToken: !!refreshToken, error: errorParam, needsBind, providerUserId, bindToken })
-
-  if (needsBind === 'true') {
-    if (accessToken) {
-      localStorage.setItem('access_token', accessToken)
-    }
-    if (refreshToken) {
-      localStorage.setItem('refresh_token', refreshToken)
-    }
-    if (providerUserId) {
-      localStorage.setItem('oauth_provider_user_id', providerUserId)
-    }
-    if (bindToken) {
-      localStorage.setItem('oauth_bind_token', bindToken)
-    }
-    localStorage.setItem('oauth_provider', provider.value)
-    needsEmailBind.value = true
+  if (errorParam) {
+    error.value = true
+    errorMessage.value = '授权失败'
     loading.value = false
     return
   }
 
-  if (errorParam) {
-    error.value = true
-    errorMessage.value = errorParam === 'auth_failed' ? '授权失败' : '登录失败'
+  if (needsBind === 'true' && bindToken.value) {
+    needsEmailBind.value = true
     loading.value = false
     return
   }
@@ -218,16 +227,15 @@ onMounted(async () => {
     if (refreshToken) {
       localStorage.setItem('refresh_token', refreshToken)
     }
-    console.log('Tokens已保存')
 
     try {
-      const user = await authApi.getProfile()
-      console.log('用户信息:', user)
-      authApi.clearOAuthState()
-      localStorage.removeItem('oauth_provider')
-      localStorage.removeItem('oauth_provider_user_id')
-      localStorage.removeItem('oauth_bind_token')
-      router.push('/')
+      await authApi.getProfile()
+
+      if (bindType === 'bind') {
+        router.push('/profile')
+      } else {
+        router.push('/')
+      }
     } catch (err) {
       console.error('获取用户信息失败:', err)
       error.value = true
@@ -270,20 +278,14 @@ const handleBindEmail = async () => {
   bindError.value = ''
 
   try {
-    const bindToken = localStorage.getItem('oauth_bind_token')
-    const currentProvider = localStorage.getItem('oauth_provider') || 'github'
-
     await authApi.bindEmail({
-      bind_token: bindToken,
+      bind_token: bindToken.value,
       email: email.value,
       email_code: emailCode.value,
       password: password.value,
       confirm_password: confirmPassword.value
     })
 
-    localStorage.removeItem('oauth_bind_token')
-    localStorage.removeItem('oauth_provider_user_id')
-    localStorage.removeItem('oauth_provider')
     router.push('/')
   } catch (err) {
     bindError.value = err.message || '绑定失败，请重试'
