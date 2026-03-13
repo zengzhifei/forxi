@@ -18,7 +18,18 @@
                   <div>
                     <label for="fileUrl" class="block text-sm font-medium text-gray-700 mb-2">远程文件</label>
                     <div class="flex flex-col space-y-2">
-                      <input id="fileUrl" v-model="fileUrl" type="url" class="flex-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-4 py-3" placeholder="请输入可访问的文件地址（http://或https://开头）" />
+                      <div class="relative">
+                        <input id="fileUrl" v-model="fileUrl" @input="previewData = null" type="url" class="flex-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-4 py-3 pr-10" placeholder="请输入可访问的文件地址（http://或https://开头）" />
+                        <button 
+                          v-if="fileUrl" 
+                          @click="fileUrl = ''; previewData = null" 
+                          class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
+                        >
+                          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
                       <button @click="previewByUrl" :disabled="loading" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 whitespace-nowrap disabled:opacity-50">
                         {{ loading ? '预览中...' : '预览' }}
                       </button>
@@ -113,7 +124,7 @@
           </div>
 
           <!-- 右侧：预览区域 -->
-          <div class="w-full lg:w-7/12">
+          <div id="preview-area" class="w-full lg:w-7/12">
             <div class="bg-white shadow-xl rounded-lg overflow-hidden h-[600px] lg:h-[calc(100vh-200px)] flex flex-col">
               <!-- 文件信息栏 -->
               <div v-if="processedPreviewData" class="flex items-center justify-between px-4 py-3 border-b bg-gray-50">
@@ -134,8 +145,19 @@
                 </button>
               </div>
               <!-- 预览内容区域 -->
+              <!-- 加载状态 -->
+              <div v-if="loading && !processedPreviewData" class="h-full flex items-center justify-center text-gray-500">
+                <div class="text-center">
+                  <svg class="animate-spin mx-auto h-12 w-12 text-blue-500 mb-4" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  <p class="text-lg font-medium">预览资源正在加载中...</p>
+                </div>
+              </div>
+
               <!-- 空状态 -->
-              <div v-if="!processedPreviewData" class="h-full flex items-center justify-center text-gray-400">
+              <div v-else-if="!processedPreviewData" class="h-full flex items-center justify-center text-gray-400">
                 <div class="text-center">
                   <svg class="mx-auto h-16 w-16 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -167,7 +189,7 @@
               <!-- Office预览 -->
               <div v-else-if="processedPreviewData.type === 'office'" class="h-full">
                 <iframe 
-                  :src="'https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent(API_DOMAIN_CONST + '/api/filereview/cache?file=' + processedPreviewData.file)" 
+                  :src="'https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent(processedPreviewData.file)" 
                   class="w-full h-full border-0"
                 ></iframe>
               </div>
@@ -177,12 +199,24 @@
       </div>
     </main>
 
+    <!-- 回到顶部按钮 -->
+    <button 
+      v-show="showBackToTop" 
+      @click="scrollToTop" 
+      class="fixed bottom-8 right-8 z-50 p-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300"
+      :class="{ 'opacity-0 translate-y-4': !showBackToTop, 'opacity-100 translate-y-0': showBackToTop }"
+    >
+      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+      </svg>
+    </button>
+
     <AppFooter />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, inject } from 'vue'
+import { ref, computed, inject, onMounted, onUnmounted } from 'vue'
 import api, { API_DOMAIN_CONST } from '../utils/api'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
@@ -196,8 +230,27 @@ const loading = ref(false)
 const uploadStatus = ref(null)
 const isDragging = ref(false)
 const previewData = ref(null)
+const showBackToTop = ref(false)
 
 // API_DOMAIN 从 api.js 导入
+
+// 回到顶部功能
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+// 监听滚动事件
+const handleScroll = () => {
+  showBackToTop.value = window.scrollY > 300
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 
 const processedPreviewData = computed(() => {
   if (!previewData.value) return null
@@ -259,7 +312,7 @@ const downloadFile = () => {
       link.click()
     } else if (type === 'office' && file) {
       const link = document.createElement('a')
-      link.href = API_DOMAIN_CONST + '/api/filereview/cache?file=' + file
+      link.href = file
       link.download = fileName
       link.click()
     } else {
@@ -276,6 +329,7 @@ const handleFileSelect = (event) => {
   if (!file) return
   selectedFile.value = file
   uploadStatus.value = null
+  previewData.value = null
 }
 
 const handleFileDrop = (event) => {
@@ -284,11 +338,13 @@ const handleFileDrop = (event) => {
   if (!file) return
   selectedFile.value = file
   uploadStatus.value = null
+  previewData.value = null
 }
 
 const cancelFileSelect = () => {
   selectedFile.value = null
   uploadStatus.value = null
+  previewData.value = null
   const fileInput = document.getElementById('file-upload')
   if (fileInput) {
     fileInput.value = ''
@@ -301,8 +357,18 @@ const uploadAndPreview = async () => {
   uploading.value = true
   uploadStatus.value = { type: 'info', message: '正在上传文件...' }
   
+  // 立即滚动到预览区域并显示加载状态
+  const previewArea = document.getElementById('preview-area')
+  if (previewArea) {
+    previewArea.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+  
   try {
     const result = await api.previewLocal(selectedFile.value)
+    // local接口返回的file字段需要拼接域名
+    if (result.file && !result.file.startsWith('http')) {
+      result.file = API_DOMAIN_CONST + '/api/filereview/cache?file=' + result.file
+    }
     previewData.value = result
     uploadStatus.value = { type: 'success', message: '预览已显示' }
   } catch (error) {
@@ -320,8 +386,16 @@ const previewByUrl = async () => {
   }
   
   loading.value = true
+  
+  // 立即滚动到预览区域并显示加载状态
+  const previewArea = document.getElementById('preview-area')
+  if (previewArea) {
+    previewArea.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+  
   try {
     const result = await api.previewOnline(fileUrl.value)
+    // online接口返回的file字段已经是完整URL，不需要拼接
     previewData.value = result
   } catch (error) {
     console.error('预览失败:', error)
