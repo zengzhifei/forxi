@@ -11,13 +11,13 @@
 
         <div class="flex flex-col lg:flex-row gap-6">
           <!-- 左侧：上传表单 -->
-          <div class="w-full lg:w-1/2">
-            <div class="bg-white shadow-xl rounded-lg overflow-hidden">
-              <div class="p-4 sm:p-6 md:p-8">
+          <div class="w-full lg:w-5/12">
+            <div class="bg-white shadow-xl rounded-lg overflow-hidden h-[600px] lg:h-[calc(100vh-200px)] flex flex-col">
+              <div class="p-4 sm:p-6 md:p-8 overflow-y-auto">
                 <div class="space-y-8">
                   <div>
                     <label for="fileUrl" class="block text-sm font-medium text-gray-700 mb-2">远程文件</label>
-                    <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                    <div class="flex flex-col space-y-2">
                       <input id="fileUrl" v-model="fileUrl" type="url" class="flex-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-4 py-3" placeholder="请输入可访问的文件地址（http://或https://开头）" />
                       <button @click="previewByUrl" :disabled="loading" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 whitespace-nowrap disabled:opacity-50">
                         {{ loading ? '预览中...' : '预览' }}
@@ -113,8 +113,27 @@
           </div>
 
           <!-- 右侧：预览区域 -->
-          <div class="w-full lg:w-1/2">
-            <div class="bg-white shadow-xl rounded-lg overflow-hidden h-[600px] lg:h-[calc(100vh-200px)]">
+          <div class="w-full lg:w-7/12">
+            <div class="bg-white shadow-xl rounded-lg overflow-hidden h-[600px] lg:h-[calc(100vh-200px)] flex flex-col">
+              <!-- 文件信息栏 -->
+              <div v-if="processedPreviewData" class="flex items-center justify-between px-4 py-3 border-b bg-gray-50">
+                <div class="flex items-center space-x-3 min-w-0">
+                  <div class="flex-shrink-0">
+                    <span :class="getFileTypeClass(processedPreviewData.type)" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
+                      {{ getFileTypeText(processedPreviewData.type) }}
+                    </span>
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-sm font-medium text-gray-900 truncate">{{ processedPreviewData.name || '未知文件' }}</p>
+                    <p v-if="processedPreviewData.size" class="text-xs text-gray-500">{{ formatFileSize(processedPreviewData.size) }}</p>
+                  </div>
+                </div>
+                <button @click="downloadFile" class="flex-shrink-0 ml-2 px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 flex items-center space-x-1">
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                  <span>下载</span>
+                </button>
+              </div>
+              <!-- 预览内容区域 -->
               <!-- 空状态 -->
               <div v-if="!processedPreviewData" class="h-full flex items-center justify-center text-gray-400">
                 <div class="text-center">
@@ -128,11 +147,6 @@
               <!-- 图片预览（Base64） -->
               <div v-else-if="processedPreviewData.type === 'image'" class="h-full overflow-auto p-4 flex items-center justify-center">
                 <img :src="processedPreviewData.content" class="max-w-full max-h-full object-contain" alt="预览图片" />
-              </div>
-
-              <!-- 图片预览（URL） -->
-              <div v-else-if="processedPreviewData.type === 'image_url'" class="h-full overflow-auto p-4 flex items-center justify-center">
-                <img :src="processedPreviewData.url || processedPreviewData.content" class="max-w-full max-h-full object-contain" alt="预览图片" />
               </div>
 
               <!-- 文本预览 -->
@@ -153,7 +167,7 @@
               <!-- Office预览 -->
               <div v-else-if="processedPreviewData.type === 'office'" class="h-full">
                 <iframe 
-                  :src="'https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent(processedPreviewData.url)" 
+                  :src="'https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent(API_DOMAIN_CONST + '/api/filereview/cache?file=' + processedPreviewData.file)" 
                   class="w-full h-full border-0"
                 ></iframe>
               </div>
@@ -169,7 +183,7 @@
 
 <script setup>
 import { ref, computed, inject } from 'vue'
-import api from '../utils/api'
+import api, { API_DOMAIN_CONST } from '../utils/api'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
 
@@ -183,9 +197,12 @@ const uploadStatus = ref(null)
 const isDragging = ref(false)
 const previewData = ref(null)
 
+// API_DOMAIN 从 api.js 导入
+
 const processedPreviewData = computed(() => {
   if (!previewData.value) return null
   const data = { ...previewData.value }
+  
   if (data.type === 'image' && data.content && !data.content.startsWith('data:')) {
     const mime = data.mime || 'image/png'
     data.content = `data:${mime};base64,${data.content}`
@@ -202,6 +219,56 @@ const formatFileSize = (bytes) => {
   const sizes = ['B', 'KB', 'MB', 'GB']
   const i = Math.floor(Math.log(bytes) / Math.log(k))
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+}
+
+const getFileTypeClass = (type) => {
+  const typeClasses = {
+    image: 'bg-green-100 text-green-800',
+    image_url: 'bg-green-100 text-green-800',
+    text: 'bg-blue-100 text-blue-800',
+    pdf: 'bg-red-100 text-red-800',
+    video: 'bg-purple-100 text-purple-800',
+    office: 'bg-orange-100 text-orange-800'
+  }
+  return typeClasses[type] || 'bg-gray-100 text-gray-800'
+}
+
+const getFileTypeText = (type) => {
+  const typeTexts = {
+    image: '图片',
+    image_url: '图片',
+    text: '文本',
+    pdf: 'PDF',
+    video: '视频',
+    office: 'Office文档'
+  }
+  return typeTexts[type] || '未知类型'
+}
+
+const downloadFile = () => {
+  if (!processedPreviewData.value) return
+  
+  const { name, content, file, type } = processedPreviewData.value
+  const fileName = name || 'downloaded_file'
+  
+  try {
+    if (type === 'image' || type === 'text' || type === 'pdf' || type === 'video') {
+      const link = document.createElement('a')
+      link.href = content
+      link.download = fileName
+      link.click()
+    } else if (type === 'office' && file) {
+      const link = document.createElement('a')
+      link.href = API_DOMAIN_CONST + '/api/filereview/cache?file=' + file
+      link.download = fileName
+      link.click()
+    } else {
+      toast.error('无法下载该文件')
+    }
+  } catch (error) {
+    console.error('下载失败:', error)
+    toast.error('下载失败，请重试')
+  }
 }
 
 const handleFileSelect = (event) => {

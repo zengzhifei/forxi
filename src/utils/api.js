@@ -1,14 +1,19 @@
-const BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080') + '/api'
+const API_DOMAIN = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
+const BASE_URL = API_DOMAIN + '/api'
+
+export const API_DOMAIN_CONST = API_DOMAIN
 
 let isRefreshing = false
 
 const request = async (endpoint, options = {}, retry = true) => {
   const token = localStorage.getItem('access_token')
   
+  const isFormData = options.body instanceof FormData
+  
   const config = {
     ...options,
     headers: {
-      'Content-Type': 'application/json',
+      ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options.headers
     }
