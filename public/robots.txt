@@ -1,0 +1,31 @@
+# robots.txt for Forxi
+
+User-agent: *
+Allow: /
+
+# 允许所有爬虫访问所有页面
+
+# Sitemap 位置
+Sitemap: https://forxi.cn/sitemap.xml
+
+# 禁止访问的路径（根据需要添加）
+# Disallow: /admin/
+# Disallow: /private/
+
+# 百度爬虫特殊配置
+User-agent: Baiduspider
+Allow: /
+
+# Google 爬虫特殊配置
+User-agent: Googlebot
+Allow: /
+
+# 其他搜索引擎爬虫
+User-agent: Bingbot
+Allow: /
+
+User-agent: Sogou
+Allow: /
+
+User-agent: 360Spider
+Allow: /
