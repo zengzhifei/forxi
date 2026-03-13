@@ -173,7 +173,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import authApi from '../utils/auth'
+import api from '../utils/api'
 import { validatePassword, PASSWORD_RULES, getPasswordStrength } from '../utils/validate'
 
 const router = useRouter()
@@ -229,7 +229,7 @@ onMounted(async () => {
     }
 
     try {
-      await authApi.getProfile()
+      await api.getProfile()
 
       if (bindType === 'bind') {
         router.push('/profile')
@@ -278,7 +278,7 @@ const handleBindEmail = async () => {
   bindError.value = ''
 
   try {
-    await authApi.bindEmail({
+    await api.bindEmail({
       bind_token: bindToken.value,
       email: email.value,
       email_code: emailCode.value,
@@ -304,7 +304,7 @@ const sendEmailCode = async () => {
   bindError.value = ''
 
   try {
-    await authApi.sendVerificationCode(email.value)
+    await api.sendVerificationCode(email.value)
     countdown.value = 60
     const timer = setInterval(() => {
       countdown.value--

@@ -19,7 +19,7 @@ const request = async (endpoint, options = {}, retry = true) => {
   if (response.status === 401 && retry && !isRefreshing) {
     isRefreshing = true
     try {
-      await authApi.refreshToken()
+      await api.refreshToken()
       isRefreshing = false
       return request(endpoint, options, false)
     } catch (err) {
@@ -40,7 +40,7 @@ const request = async (endpoint, options = {}, retry = true) => {
   return data
 }
 
-export const authApi = {
+export const api = {
   // ==================== 用户接口 ====================
   
   /**
@@ -270,15 +270,42 @@ export const authApi = {
     return data.data
   },
 
+  // ==================== 文件预览接口 ====================
+
+  /**
+   * 在线预览文件
+   * 场景：通过URL在线预览文件
+   * 路由：GET /api/filereview/online
+   */
+  async previewOnline(fileUrl) {
+    const data = await request(`/filereview/online?url=${encodeURIComponent(fileUrl)}`, {
+      method: 'GET'
+    })
+    return data.data
+  },
+
+  /**
+   * 本地预览文件
+   * 场景：上传本地文件进行预览
+   * 路由：POST /api/filereview/local
+   */
+  async previewLocal(file) {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    const data = await request('/filereview/local', {
+      method: 'POST',
+      body: formData,
+      headers: {}
+    })
+    return data.data
+  },
+
   // ==================== 工具方法 ====================
 
   isAuthenticated() {
     return !!localStorage.getItem('access_token')
-  },
-
-  getToken() {
-    return localStorage.getItem('access_token')
   }
 }
 
-export default authApi
+export default api

@@ -270,7 +270,7 @@
 import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuth } from '../composable/useAuth'
-import authApi from '../utils/auth'
+import api from '../utils/api'
 import { validatePassword, PASSWORD_RULES, getPasswordStrength } from '../utils/validate'
 
 const router = useRouter()
@@ -279,7 +279,7 @@ const { login, register, sendVerificationCode, loading } = useAuth()
 
 const handleGithubLogin = async () => {
   try {
-    const authUrl = await authApi.getGithubAuthUrl()
+    const authUrl = await api.getGithubAuthUrl()
     if (authUrl) {
       window.location.href = authUrl
     } else {

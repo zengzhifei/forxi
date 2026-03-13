@@ -30,8 +30,8 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
             <p class="mt-4 text-lg font-medium text-gray-900">点击或拖拽图片到此处</p>
-            <p class="mt-2 text-sm text-gray-500">支持 JPG、PNG、WebP、GIF 等常见格式</p>
-            <input ref="fileInput" type="file" class="hidden" accept="image/*" @change="handleFileSelect">
+            <p class="mt-2 text-sm text-gray-500">支持 JPG、PNG、GIF、WebP、BMP 等常见格式</p>
+            <input ref="fileInput" type="file" class="hidden" accept="image/jpeg,image/png,image/gif,image/webp,image/bmp" @change="handleFileSelect">
           </div>
         </div>
 
@@ -40,10 +40,9 @@
             <div class="p-3 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
               <div class="flex items-center space-x-2">
                 <span class="text-sm font-medium text-gray-700">预览</span>
-                <span v-if="hasModifications" class="text-xs text-gray-500">(已修改)</span>
               </div>
               <div class="flex items-center space-x-2">
-                <button @click="showDownloadModal = true" :disabled="!previewUrl" class="px-3 py-1.5 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 disabled:opacity-50 flex items-center space-x-1">
+                <button @click="openDownloadModal" :disabled="!previewUrl" class="px-3 py-1.5 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 disabled:opacity-50 flex items-center space-x-1">
                   <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                   <span>下载</span>
                 </button>
@@ -142,21 +141,17 @@
                 </button>
               </div>
 
-              <!-- 格式转换 -->
-              <div v-if="activeTab === 'convert'" class="space-y-4">
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">目标格式</label>
-                  <div class="grid grid-cols-3 gap-2">
-                    <button v-for="format in outputFormats" :key="format" @click="targetFormat = format; applyAllEffects()" class="py-2 px-2 text-sm font-medium border rounded-lg" :class="targetFormat === format ? 'border-blue-500 bg-blue-50 text-blue-600' : 'border-gray-300'">{{ format.toUpperCase() }}</button>
-                  </div>
-                </div>
-              </div>
-
               <!-- 水印 -->
               <div v-if="activeTab === 'watermark'" class="space-y-4">
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">水印文字</label>
-                  <input type="text" v-model="watermarkText" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="输入水印文字" @input="applyAllEffects">
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">水印文字</label>
+                    <input type="text" v-model="watermarkText" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="输入水印文字" @input="applyAllEffects">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">颜色</label>
+                    <input type="color" v-model="watermarkColor" class="w-full h-10 border border-gray-300 rounded-lg cursor-pointer" @input="applyAllEffects">
+                  </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                   <div>
@@ -183,37 +178,6 @@
                 </button>
               </div>
 
-              <!-- 文字 -->
-              <div v-if="activeTab === 'text'" class="space-y-4">
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">文字内容</label>
-                  <input type="text" v-model="imageText" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="输入文字" @input="applyAllEffects">
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">字体大小</label>
-                    <input type="number" v-model.number="textSize" min="12" max="200" class="w-full px-3 py-2 border border-gray-300 rounded-lg" @input="applyAllEffects">
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">颜色</label>
-                    <input type="color" v-model="textColor" class="w-full h-10 border border-gray-300 rounded-lg">
-                  </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">X位置 (%)</label>
-                    <input type="number" v-model.number="textX" min="0" max="100" class="w-full px-3 py-2 border border-gray-300 rounded-lg" @input="applyAllEffects">
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Y位置 (%)</label>
-                    <input type="number" v-model.number="textY" min="0" max="100" class="w-full px-3 py-2 border border-gray-300 rounded-lg" @input="applyAllEffects">
-                  </div>
-                </div>
-                <button @click="resetText" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
-                  清除文字
-                </button>
-              </div>
-
               <!-- 拼接 -->
               <div v-if="activeTab === 'merge'" class="space-y-4">
                 <div>
@@ -230,7 +194,7 @@
                     @click="triggerSecondFileInput"
                   >
                     <p class="text-sm text-gray-500">点击选择第二张图片</p>
-                    <input ref="secondFileInput" type="file" class="hidden" accept="image/*" @change="handleSecondFileSelect">
+                    <input ref="secondFileInput" type="file" class="hidden" accept="image/jpeg,image/png,image/gif,image/webp,image/bmp,image/x-icon" @change="handleSecondFileSelect">
                   </div>
                 </div>
                 <div v-else class="space-y-2">
@@ -365,14 +329,7 @@
               <span class="text-xl mr-2">💧</span>
               <div>
                 <div class="font-medium text-gray-800 text-sm">添加水印</div>
-                <div class="text-xs text-gray-500">自定义文字、位置和透明度</div>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <span class="text-xl mr-2">🔤</span>
-              <div>
-                <div class="font-medium text-gray-800 text-sm">添加文字</div>
-                <div class="text-xs text-gray-500">在图片上添加文字说明</div>
+                <div class="text-xs text-gray-500">自定义文字、颜色、位置和透明度</div>
               </div>
             </div>
             <div class="flex items-start">
@@ -436,14 +393,14 @@
         <h3 class="text-lg font-semibold text-gray-900 mb-4">下载图片</h3>
         <div class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">保存格式</label>
-            <div class="grid grid-cols-3 gap-2">
-              <button v-for="fmt in downloadFormats" :key="fmt" @click="downloadFormat = fmt" class="py-2 px-2 text-sm font-medium border rounded-lg" :class="downloadFormat === fmt ? 'border-blue-500 bg-blue-50 text-blue-600' : 'border-gray-300'">{{ fmt.toUpperCase() }}</button>
-            </div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">文件名</label>
+            <input type="text" v-model="downloadFileName" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="图片名称_processed">
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">文件名</label>
-            <input type="text" v-model="downloadFileName" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="输入文件名">
+            <label class="block text-sm font-medium text-gray-700 mb-2">保存格式</label>
+            <select v-model="downloadFormat" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+              <option v-for="fmt in downloadFormats" :key="fmt" :value="fmt">{{ fmt.toUpperCase() }}</option>
+            </select>
           </div>
         </div>
         <div class="flex space-x-3 mt-6">
@@ -492,6 +449,8 @@ const displayFileSize = ref(0)
 const displayWidth = ref(0)
 const displayHeight = ref(0)
 const originalFileSize = ref(0)
+const originalFileType = ref('')
+const originalFileName = ref('')
 const originalWidth = ref(0)
 const originalHeight = ref(0)
 const processing = ref(false)
@@ -511,7 +470,6 @@ const tabs = [
   { id: 'rotate', name: '旋转' },
   { id: 'resize', name: '尺寸' },
   { id: 'watermark', name: '水印' },
-  { id: 'text', name: '文字' },
   { id: 'merge', name: '拼接' },
   { id: 'grid', name: '九宫格' },
   { id: 'circle', name: '圆形' },
@@ -539,14 +497,9 @@ const maintainAspectRatio = ref(true)
 const watermarkText = ref('')
 const watermarkSize = ref(24)
 const watermarkOpacity = ref(0.5)
+const watermarkColor = ref('#ffffff')
 const watermarkX = ref(50)
 const watermarkY = ref(50)
-
-const imageText = ref('')
-const textSize = ref(32)
-const textColor = ref('#000000')
-const textX = ref(50)
-const textY = ref(50)
 
 const mergeDirection = ref('horizontal')
 const gridCount = ref(1)
@@ -635,6 +588,8 @@ const handleFileDrop = (event) => {
 const loadImage = (file) => {
   selectedImage.value = file
   originalFileSize.value = file.size
+  originalFileType.value = file.type
+  originalFileName.value = file.name.replace(/\.[^/.]+$/, '')
   displayFileSize.value = file.size
   imagePreviewUrl.value = URL.createObjectURL(file)
   previewUrl.value = imagePreviewUrl.value
@@ -665,11 +620,6 @@ const resetAllSettings = () => {
   watermarkOpacity.value = 0.5
   watermarkX.value = 50
   watermarkY.value = 50
-  imageText.value = ''
-  textSize.value = 32
-  textColor.value = '#000000'
-  textX.value = 50
-  textY.value = 50
   gridCount.value = 1
   idPhotoSize.value = '35x25mm'
   idPhotoBg.value = 'white'
@@ -710,7 +660,7 @@ const applyAllEffects = async (forceMark = false) => {
     let currentImg = selectedImage.value
     
     if (currentFilter.value !== 'none' || mosaicLevel.value !== 20 || gridCount.value !== 1 || 
-        watermarkText.value || imageText.value || mergeDirection.value !== 'horizontal' || secondImageUrl.value ||
+        watermarkText.value || mergeDirection.value !== 'horizontal' || secondImageUrl.value ||
         rotation.value !== 0 || flipH.value || flipV.value ||
         resizeWidth.value !== originalWidth.value || resizeHeight.value !== originalHeight.value ||
         enableCircleCrop.value || enableIdPhoto.value) {
@@ -776,25 +726,18 @@ const processWithEffects = async () => {
       }
       
       if (watermarkText.value) {
-        ctx.font = `${watermarkSize.value}px Arial`
-        ctx.fillStyle = `rgba(255,255,255,${watermarkOpacity.value})`
+        ctx.font = `${watermarkSize.value || 24}px Arial`
+        const opacity = watermarkOpacity.value
+        const color = watermarkColor.value || '#ffffff'
+        const r = parseInt(color.slice(1, 3), 16)
+        const g = parseInt(color.slice(3, 5), 16)
+        const b = parseInt(color.slice(5, 7), 16)
+        ctx.fillStyle = `rgba(${r},${g},${b},${opacity === '' || opacity === null || opacity === undefined ? 0.5 : Number(opacity)})`
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
-        // 由于坐标系已经平移到中心，直接使用百分比位置
-        const x = (watermarkX.value - 50) / 50 * width / 2
-        const y = (watermarkY.value - 50) / 50 * height / 2
+        const x = ((watermarkX.value || 50) - 50) / 50 * width / 2
+        const y = ((watermarkY.value || 50) - 50) / 50 * height / 2
         ctx.fillText(watermarkText.value, x, y)
-      }
-      
-      if (imageText.value) {
-        ctx.font = `${textSize.value}px Arial`
-        ctx.fillStyle = textColor.value
-        ctx.textAlign = 'center'
-        ctx.textBaseline = 'middle'
-        // 由于坐标系已经平移到中心，直接使用百分比位置
-        const x = (textX.value - 50) / 50 * width / 2
-        const y = (textY.value - 50) / 50 * height / 2
-        ctx.fillText(imageText.value, x, y)
       }
       
       if (currentFilter.value === 'grayscale') {
@@ -1025,12 +968,28 @@ const processWithEffects = async () => {
   })
 }
 
-const processWithCompression = async (file) => {
+const processWithCompression = async (file, forceFormat = null) => {
+  const formatMap = {
+    jpg: 'image/jpeg',
+    jpeg: 'image/jpeg',
+    png: 'image/png',
+    webp: 'image/webp'
+  }
+  
+  let fileType
+  if (forceFormat) {
+    fileType = formatMap[forceFormat] || 'image/jpeg'
+  } else if (compressQuality.value === 100 && originalFileType.value) {
+    fileType = originalFileType.value
+  } else {
+    fileType = formatMap[downloadFormat.value] || 'image/jpeg'
+  }
+  
   const options = { 
     maxSizeMB: 10, 
     maxWidthOrHeight: Math.max(resizeWidth.value, resizeHeight.value), 
     useWebWorker: true,
-    fileType: 'image/jpeg',
+    fileType: fileType,
     initialQuality: compressQuality.value / 100
   }
   return await imageCompression(file, options)
@@ -1038,12 +997,14 @@ const processWithCompression = async (file) => {
 
 const rotateImage = (angle) => {
   rotation.value = (rotation.value + angle) % 360
+  markModified('rotate')
   applyAllEffects()
 }
 
 const toggleFlip = (direction) => {
   if (direction === 'horizontal') flipH.value = !flipH.value
   else flipV.value = !flipV.value
+  markModified('rotate')
   applyAllEffects()
 }
 
@@ -1064,13 +1025,8 @@ const resetResize = () => {
 
 const resetWatermark = () => {
   watermarkText.value = ''
+  watermarkColor.value = '#ffffff'
   clearModified('watermark')
-  applyAllEffects()
-}
-
-const resetText = () => {
-  imageText.value = ''
-  clearModified('text')
   applyAllEffects()
 }
 
@@ -1207,11 +1163,18 @@ const executeResetAll = () => {
   resetAll()
 }
 
+const openDownloadModal = () => {
+  const baseName = originalFileName.value || 'image'
+  downloadFileName.value = `${baseName}_processed`
+  showDownloadModal.value = true
+}
+
 const confirmDownload = () => {
   const link = document.createElement('a')
   link.href = previewUrl.value || imagePreviewUrl.value
+  const fileName = downloadFileName.value || 'image_processed'
   const ext = downloadFormat.value
-  link.download = `${downloadFileName.value || 'processed'}.${ext}`
+  link.download = `${fileName}.${ext}`
   link.click()
   showDownloadModal.value = false
 }

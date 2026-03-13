@@ -263,7 +263,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import authApi from '../utils/auth'
+import api from '../utils/api'
 import { validatePassword, PASSWORD_RULES, getPasswordStrength } from '../utils/validate'
 
 const router = useRouter()
@@ -307,7 +307,7 @@ const handleSendResetEmail = async () => {
   loading.value = true
   
   try {
-    await authApi.requestPasswordReset(form.email)
+    await api.requestPasswordReset(form.email)
     successMessage.value = '如果邮箱存在，我们将发送重置链接到您的邮箱'
     setTimeout(() => {
       router.push('/auth')
@@ -336,7 +336,7 @@ const handleResetPassword = async () => {
   loading.value = true
   
   try {
-    await authApi.confirmPasswordReset(form.token, form.email, form.newPassword)
+    await api.confirmPasswordReset(form.token, form.email, form.newPassword)
     successMessage.value = '密码重置成功！正在跳转到登录页面...'
     setTimeout(() => {
       router.push('/auth')

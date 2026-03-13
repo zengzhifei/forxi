@@ -327,7 +327,7 @@
 import { ref, reactive, computed, onMounted, inject, watch, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuth } from '../composable/useAuth'
-import authApi from '../utils/auth'
+import api from '../utils/api'
 import { validatePassword, PASSWORD_RULES, getPasswordStrength } from '../utils/validate'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
@@ -441,7 +441,7 @@ const logsMeta = ref({
 
 const fetchOauthAccounts = async () => {
   try {
-    const res = await authApi.getOauthAccounts()
+    const res = await api.getOauthAccounts()
     oauthAccounts.value = Array.isArray(res) ? res : (res.data || [])
   } catch (err) {
     console.error('获取OAuth账号失败:', err)
@@ -450,7 +450,7 @@ const fetchOauthAccounts = async () => {
 
 const fetchLoginLogs = async (page) => {
   try {
-    const res = await authApi.getLoginLogs(page, logsMeta.value.pageSize)
+    const res = await api.getLoginLogs(page, logsMeta.value.pageSize)
     const logs = Array.isArray(res) ? res : (res.data || [])
     loginLogs.value = logs
     logsMeta.value = { page, pageSize: logsMeta.value.pageSize, total: logs.length, totalPages: 1 }
@@ -462,7 +462,7 @@ const fetchLoginLogs = async (page) => {
 const handleUpdateProfile = async () => {
   loading.value = true
   try {
-    await authApi.updateProfile({
+    await api.updateProfile({
       nickname: profileForm.nickname,
       avatar: profileForm.avatar,
       bio: profileForm.bio
@@ -491,7 +491,7 @@ const handleChangePassword = async () => {
   
   loading.value = true
   try {
-    await authApi.changePassword(passwordForm.oldPassword, passwordForm.newPassword)
+    await api.changePassword(passwordForm.oldPassword, passwordForm.newPassword)
     toast.success('密码修改成功')
     passwordForm.oldPassword = ''
     passwordForm.newPassword = ''
@@ -505,7 +505,7 @@ const handleChangePassword = async () => {
 
 const handleBindGithub = async () => {
   try {
-    const authUrl = await authApi.getGithubAuthUrl()
+    const authUrl = await api.getGithubAuthUrl()
     if (authUrl) {
       window.location.href = authUrl
     }
@@ -519,7 +519,7 @@ const handleUnbindGithub = async () => {
   if (!ok) return
   
   try {
-    await authApi.unbindOAuth('github')
+    await api.unbindOAuth('github')
     toast.success('解绑成功')
     fetchOauthAccounts()
   } catch (err) {
