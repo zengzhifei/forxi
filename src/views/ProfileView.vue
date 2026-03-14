@@ -67,7 +67,7 @@
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">头像</label>
               <div class="flex items-center gap-4">
-                <div class="relative">
+                <div class="relative cursor-pointer" @click="triggerFileInput">
                   <img 
                     v-if="currentAvatar" 
                     :src="currentAvatar" 
@@ -77,7 +77,22 @@
                   <div v-else class="w-20 h-20 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white text-2xl font-bold">
                     {{ userInitial }}
                   </div>
+                  <div class="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full p-1 hover:bg-blue-700">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                  </div>
                 </div>
+                <div class="flex-1">
+                  <p class="text-xs text-gray-500">支持 JPG、PNG、GIF、WebP 格式，最大 2MB</p>
+                </div>
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  class="hidden" 
+                  ref="fileInput"
+                  @change="handleAvatarUpload"
+                />
               </div>
             </div>
             <div>
@@ -372,6 +387,8 @@ watch(activeTab, (val) => {
 })
 
 const loading = ref(false)
+const uploading = ref(false)
+const fileInput = ref(null)
 
 const tabs = [
   { id: 'profile', name: '基本资料' },
@@ -409,7 +426,7 @@ const showConfirmPassword = ref(false)
 const showPasswordRules = ref(false)
 
 const currentAvatar = computed(() => {
-  const avatar = user.value?.avatar || profileForm.avatar || ''
+  const avatar = profileForm.avatar || user.value?.avatar || ''
   return avatar.trim().replace(/`/g, '')
 })
 
@@ -537,5 +554,46 @@ const formatDate = (dateStr) => {
     hour: '2-digit',
     minute: '2-digit'
   })
+}
+
+const triggerFileInput = () => {
+  fileInput.value?.click()
+}
+
+const handleAvatarUpload = async (event) => {
+  const file = event.target.files[0]
+  if (!file) return
+  
+  // 验证文件大小
+  if (file.size > 2 * 1024 * 1024) {
+    toast.error('文件大小不能超过2MB')
+    return
+  }
+  
+  // 验证文件类型
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+  if (!allowedTypes.includes(file.type)) {
+    toast.error('只支持 JPG、PNG、GIF、WebP 格式')
+    return
+  }
+  
+  uploading.value = true
+  try {
+    // 上传文件获取URL
+    const uploadResult = await api.uploadFile(file, 'avatar')
+    if (uploadResult?.url) {
+      // 只更新表单，不自动保存到服务器
+      profileForm.avatar = uploadResult.url
+      // 不显示提示信息，直接显示新头像
+    }
+  } catch (err) {
+    toast.error(err.message || '上传失败')
+  } finally {
+    uploading.value = false
+    // 清除文件输入
+    if (fileInput.value) {
+      fileInput.value.value = ''
+    }
+  }
 }
 </script>

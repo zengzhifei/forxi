@@ -306,6 +306,26 @@ export const api = {
     return data.data
   },
 
+  // ==================== 文件上传接口 ====================
+
+  /**
+   * 上传文件
+   * 场景：上传用户头像、文件等
+   * 路由：POST /api/upload
+   */
+  async uploadFile(file, scene = 'avatar') {
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('scene', scene)
+
+    const data = await request('/upload', {
+      method: 'POST',
+      body: formData,
+      headers: {}
+    })
+    return data.data
+  },
+
   // ==================== 工具方法 ====================
 
   isAuthenticated() {

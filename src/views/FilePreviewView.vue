@@ -19,10 +19,10 @@
                     <label for="fileUrl" class="block text-sm font-medium text-gray-700 mb-2">远程文件</label>
                     <div class="flex flex-col space-y-2">
                       <div class="relative">
-                        <input id="fileUrl" v-model="fileUrl" @input="previewData = null" type="url" class="flex-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-4 py-3 pr-10" placeholder="请输入可访问的文件地址（http://或https://开头）" />
+                        <input id="fileUrl" v-model="fileUrl" @input="previewData = null; textContent = ''" type="url" class="flex-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-4 py-3 pr-10" placeholder="请输入可访问的文件地址（http://或https://开头）" />
                         <button 
                           v-if="fileUrl" 
-                          @click="fileUrl = ''; previewData = null" 
+                          @click="fileUrl = ''; previewData = null; textContent = ''" 
                           class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
                         >
                           <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -166,30 +166,35 @@
                 </div>
               </div>
 
-              <!-- 图片预览（Base64） -->
+              <!-- 图片预览 -->
               <div v-else-if="processedPreviewData.type === 'image'" class="h-full overflow-auto p-4 flex items-center justify-center">
-                <img :src="processedPreviewData.content" class="max-w-full max-h-full object-contain" alt="预览图片" />
+                <img :src="processedPreviewData.url" class="max-w-full max-h-full object-contain" alt="预览图片" />
               </div>
 
               <!-- 文本预览 -->
               <div v-else-if="processedPreviewData.type === 'text'" class="h-full overflow-auto p-4">
-                <pre class="whitespace-pre-wrap text-sm font-mono bg-gray-50 p-4 rounded">{{ processedPreviewData.content }}</pre>
+                <pre class="whitespace-pre-wrap text-sm font-mono bg-gray-50 p-4 rounded">{{ textContent }}</pre>
               </div>
 
               <!-- PDF预览 -->
               <div v-else-if="processedPreviewData.type === 'pdf'" class="h-full">
-                <embed :src="processedPreviewData.content" type="application/pdf" class="w-full h-full" />
+                <iframe :src="processedPreviewData.url" class="w-full h-full border-0"></iframe>
               </div>
 
               <!-- 视频预览 -->
               <div v-else-if="processedPreviewData.type === 'video'" class="h-full flex items-center justify-center bg-black">
-                <video :src="processedPreviewData.content" controls class="max-w-full max-h-full"></video>
+                <video :src="processedPreviewData.url" controls class="max-w-full max-h-full"></video>
+              </div>
+
+              <!-- 音频预览 -->
+              <div v-else-if="processedPreviewData.type === 'audio'" class="h-full flex items-center justify-center">
+                <audio :src="processedPreviewData.url" controls class="w-full max-w-md"></audio>
               </div>
 
               <!-- Office预览 -->
               <div v-else-if="processedPreviewData.type === 'office'" class="h-full">
                 <iframe 
-                  :src="'https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent(processedPreviewData.file)" 
+                  :src="'https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent(processedPreviewData.url)" 
                   class="w-full h-full border-0"
                 ></iframe>
               </div>
@@ -217,7 +222,7 @@
 
 <script setup>
 import { ref, computed, inject, onMounted, onUnmounted } from 'vue'
-import api, { API_DOMAIN_CONST } from '../utils/api'
+import api from '../utils/api'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
 
@@ -254,17 +259,20 @@ onUnmounted(() => {
 
 const processedPreviewData = computed(() => {
   if (!previewData.value) return null
-  const data = { ...previewData.value }
-  
-  if (data.type === 'image' && data.content && !data.content.startsWith('data:')) {
-    const mime = data.mime || 'image/png'
-    data.content = `data:${mime};base64,${data.content}`
-  }
-  if (data.type === 'pdf' && data.content && !data.content.startsWith('data:')) {
-    data.content = `data:application/pdf;base64,${data.content}`
-  }
-  return data
+  return { ...previewData.value }
 })
+
+const textContent = ref('')
+
+const fetchTextContent = async (url) => {
+  try {
+    const response = await fetch(url)
+    textContent.value = await response.text()
+  } catch (error) {
+    console.error('获取文本内容失败:', error)
+    textContent.value = '无法加载文本内容'
+  }
+}
 
 const formatFileSize = (bytes) => {
   if (bytes === 0) return '0 B'
@@ -277,10 +285,10 @@ const formatFileSize = (bytes) => {
 const getFileTypeClass = (type) => {
   const typeClasses = {
     image: 'bg-green-100 text-green-800',
-    image_url: 'bg-green-100 text-green-800',
     text: 'bg-blue-100 text-blue-800',
     pdf: 'bg-red-100 text-red-800',
     video: 'bg-purple-100 text-purple-800',
+    audio: 'bg-pink-100 text-pink-800',
     office: 'bg-orange-100 text-orange-800'
   }
   return typeClasses[type] || 'bg-gray-100 text-gray-800'
@@ -289,10 +297,10 @@ const getFileTypeClass = (type) => {
 const getFileTypeText = (type) => {
   const typeTexts = {
     image: '图片',
-    image_url: '图片',
     text: '文本',
     pdf: 'PDF',
     video: '视频',
+    audio: '音频',
     office: 'Office文档'
   }
   return typeTexts[type] || '未知类型'
@@ -301,23 +309,19 @@ const getFileTypeText = (type) => {
 const downloadFile = () => {
   if (!processedPreviewData.value) return
   
-  const { name, content, file, type } = processedPreviewData.value
+  const { name, url, type } = processedPreviewData.value
   const fileName = name || 'downloaded_file'
   
+  if (!url) {
+    toast.error('无法下载该文件')
+    return
+  }
+  
   try {
-    if (type === 'image' || type === 'text' || type === 'pdf' || type === 'video') {
-      const link = document.createElement('a')
-      link.href = content
-      link.download = fileName
-      link.click()
-    } else if (type === 'office' && file) {
-      const link = document.createElement('a')
-      link.href = file
-      link.download = fileName
-      link.click()
-    } else {
-      toast.error('无法下载该文件')
-    }
+    const link = document.createElement('a')
+    link.href = url
+    link.download = fileName
+    link.click()
   } catch (error) {
     console.error('下载失败:', error)
     toast.error('下载失败，请重试')
@@ -345,6 +349,7 @@ const cancelFileSelect = () => {
   selectedFile.value = null
   uploadStatus.value = null
   previewData.value = null
+  textContent.value = ''
   const fileInput = document.getElementById('file-upload')
   if (fileInput) {
     fileInput.value = ''
@@ -365,12 +370,13 @@ const uploadAndPreview = async () => {
   
   try {
     const result = await api.previewLocal(selectedFile.value)
-    // local接口返回的file字段需要拼接域名
-    if (result.file && !result.file.startsWith('http')) {
-      result.file = API_DOMAIN_CONST + '/api/filereview/cache?file=' + result.file
-    }
     previewData.value = result
     uploadStatus.value = { type: 'success', message: '预览已显示' }
+    
+    // text类型需要获取文本内容
+    if (result.type === 'text' && result.url) {
+      await fetchTextContent(result.url)
+    }
   } catch (error) {
     console.error('上传或预览失败:', error)
     uploadStatus.value = { type: 'error', message: error.message || '操作失败，请重试' }
@@ -395,8 +401,12 @@ const previewByUrl = async () => {
   
   try {
     const result = await api.previewOnline(fileUrl.value)
-    // online接口返回的file字段已经是完整URL，不需要拼接
     previewData.value = result
+    
+    // text类型需要获取文本内容
+    if (result.type === 'text' && result.url) {
+      await fetchTextContent(result.url)
+    }
   } catch (error) {
     console.error('预览失败:', error)
     toast.error(error.message || '预览失败，请检查URL是否正确')
