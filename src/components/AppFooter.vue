@@ -9,5 +9,5 @@
 </template>
 
 <script setup>
-const icpNumber = '陕ICP备2026004216号'
+const icpNumber = '陕ICP备2026004216号-1'
 </script>
