@@ -73,6 +73,18 @@
             </div>
           </div>
           
+          <!-- AI趣玩 -->
+          <div class="bg-white shadow-lg rounded-lg overflow-hidden transition-transform hover:transform hover:scale-105 cursor-pointer" @click="navigateToAI">
+            <div class="h-40 sm:h-48 bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
+              <svg class="h-12 sm:h-16 w-12 sm:w-16 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+            </div>
+            <div class="p-4 sm:p-6">
+              <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">AI趣玩</h3>
+              <p class="text-sm sm:text-base text-gray-600 mb-4">文生图、图生图等多种AI功能</p>
+              <span class="inline-flex items-center text-sm font-medium text-blue-600">立即使用 →</span>
+            </div>
+          </div>
+          
           <!-- IT 工具集合 -->
           <div class="bg-white shadow-lg rounded-lg overflow-hidden transition-transform hover:transform hover:scale-105 cursor-pointer" @click="navigateToItTools">
             <div class="h-40 sm:h-48 bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center">
@@ -162,6 +174,12 @@ const navigateToFilePreview = () => {
 
 const navigateToImageProcessing = () => {
   router.push('/image-processing').then(() => {
+    window.scrollTo(0, 0)
+  })
+}
+
+const navigateToAI = () => {
+  router.push('/ai').then(() => {
     window.scrollTo(0, 0)
   })
 }

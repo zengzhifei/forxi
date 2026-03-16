@@ -44,7 +44,6 @@
           >
             {{ item.name }}
           </router-link>
-          <span class="inline-flex items-center px-1 py-1 border-b-2 border-transparent text-sm font-medium text-gray-400">敬请期待</span>
         </nav>
 
         <!-- 用户菜单 -->
@@ -70,7 +69,6 @@
         >
           {{ item.name }}
         </router-link>
-        <div class="px-3 py-3 text-base font-medium text-gray-400">敬请期待</div>
       </div>
     </div>
   </header>
@@ -87,6 +85,7 @@ const menuItems = [
   { name: '首页', path: '/' },
   { name: '在线文件预览', path: '/file-preview' },
   { name: '在线图片处理', path: '/image-processing' },
+  { name: 'AI趣玩', path: '/ai' },
   { name: 'IT 工具集合', path: '/it-tools' },
   { name: 'JetBrains', path: '/jetbra' }
 ]

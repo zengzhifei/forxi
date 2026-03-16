@@ -340,7 +340,7 @@
 
 <script setup>
 import { ref, reactive, computed, onMounted, inject, watch, onUnmounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../composable/useAuth'
 import api from '../utils/api'
 import { validatePassword, PASSWORD_RULES, getPasswordStrength } from '../utils/validate'
@@ -351,6 +351,7 @@ const toast = inject('toast')
 const confirm = inject('confirm')
 const { user, fetchUserInfo, loading: authLoading } = useAuth()
 const route = useRoute()
+const router = useRouter()
 
 const activeTab = ref('profile')
 
@@ -509,10 +510,15 @@ const handleChangePassword = async () => {
   loading.value = true
   try {
     await api.changePassword(passwordForm.oldPassword, passwordForm.newPassword)
-    toast.success('密码修改成功')
+    toast.success('密码修改成功，请重新登录')
     passwordForm.oldPassword = ''
     passwordForm.newPassword = ''
     passwordForm.confirmPassword = ''
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('refresh_token')
+    setTimeout(() => {
+      router.push('/auth')
+    }, 1500)
   } catch (err) {
     toast.error(err.message || '修改失败')
   } finally {

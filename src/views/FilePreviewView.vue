@@ -306,7 +306,7 @@ const getFileTypeText = (type) => {
   return typeTexts[type] || '未知类型'
 }
 
-const downloadFile = () => {
+const downloadFile = async () => {
   if (!processedPreviewData.value) return
   
   const { name, url, type } = processedPreviewData.value
@@ -318,13 +318,26 @@ const downloadFile = () => {
   }
   
   try {
+    const response = await fetch(url)
+    const blob = await response.blob()
+    const blobUrl = window.URL.createObjectURL(blob)
+    
+    const link = document.createElement('a')
+    link.href = blobUrl
+    link.download = fileName
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(blobUrl)
+  } catch (error) {
+    console.error('下载失败:', error)
     const link = document.createElement('a')
     link.href = url
     link.download = fileName
+    link.target = '_blank'
+    document.body.appendChild(link)
     link.click()
-  } catch (error) {
-    console.error('下载失败:', error)
-    toast.error('下载失败，请重试')
+    document.body.removeChild(link)
   }
 }
 

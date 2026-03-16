@@ -8,6 +8,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 const HomeView = () => import('../views/HomeView.vue')
 const FilePreviewView = () => import('../views/FilePreviewView.vue')
 const ImageProcessingView = () => import('../views/ImageProcessingView.vue')
+const AIView = () => import('../views/AIView.vue')
 const ItToolsView = () => import('../views/ItToolsView.vue')
 const JetbrainsView = () => import('../views/JetbrainsView.vue')
 const NotFoundView = () => import('../views/NotFoundView.vue')
@@ -87,6 +88,16 @@ const routes = [
       title: 'Forxi - 在线图片处理',
       description: '免费在线图片处理工具，支持压缩、裁剪、旋转、水印、滤镜等功能，操作简单。',
       keywords: '在线图片处理,图片压缩,图片裁剪,图片旋转,图片水印,图片滤镜,图片编辑'
+    }
+  },
+  {
+    path: '/ai',
+    name: 'ai',
+    component: AIView,
+    meta: {
+      title: 'Forxi - AI趣玩',
+      description: '免费在线AI工具，文生图、图生图等多种AI功能。',
+      keywords: 'AI趣玩,文生图,图生图,AI绘画'
     }
   },
   {

@@ -9,14 +9,6 @@
           <p class="text-sm sm:text-base text-gray-600">支持图片压缩、裁剪、滤镜、拼接等多种处理功能</p>
         </div>
 
-        <!-- 隐私提示 -->
-        <div class="bg-green-50 border border-green-200 rounded-lg p-3 mb-6 max-w-2xl mx-auto flex items-center justify-center">
-          <svg class="w-5 h-5 text-green-600 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-          </svg>
-          <span class="text-sm text-green-700">所有图片处理在本地浏览器完成，不会上传至服务器</span>
-        </div>
-
         <div v-if="!selectedImage" class="max-w-xl mx-auto">
           <div 
             class="border-2 border-dashed border-gray-300 rounded-xl p-12 text-center hover:border-blue-400 transition-colors cursor-pointer"
@@ -35,7 +27,7 @@
           </div>
         </div>
 
-        <div v-else class="space-y-4">
+        <div v-else class="space-y-4 max-w-4xl mx-auto">
           <div class="bg-white rounded-xl shadow-lg overflow-hidden">
             <div class="p-3 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
               <div class="flex items-center space-x-2">
@@ -55,8 +47,38 @@
                 </button>
               </div>
             </div>
-            <div class="p-4 bg-gray-100 flex items-center justify-center" :style="{ minHeight: previewHeight + 'px' }">
-              <img ref="previewImage" :src="previewUrl || imagePreviewUrl" class="max-w-full max-h-[400px] object-contain">
+            <div class="p-4 bg-gray-100 flex items-center justify-center relative" :style="{ minHeight: previewHeight + 'px' }">
+              <div class="relative inline-block" ref="imageContainer">
+                <img 
+                  ref="previewImage" 
+                  :src="previewUrl || imagePreviewUrl" 
+                  class="max-w-full max-h-[400px] object-contain select-none block"
+                  :class="{ 'cursor-move': activeTab === 'ai-crop' && enableAICrop }"
+                  @mousedown="handleCropMouseDown"
+                >
+                <div 
+                  v-if="activeTab === 'ai-crop' && enableAICrop && !isCropped"
+                  class="absolute inset-0 pointer-events-none"
+                >
+                  <div 
+                    class="absolute border-2 border-white bg-black/30 pointer-events-auto"
+                    :style="cropBoxStyle"
+                    @mousedown.stop="startDrag"
+                  >
+                    <div class="absolute inset-0 grid grid-cols-3 grid-rows-3 pointer-events-none">
+                      <div v-for="i in 9" :key="i" class="border border-white/30"></div>
+                    </div>
+                    <div class="absolute top-1/2 left-0 right-0 h-0.5 bg-white -translate-y-1/2 pointer-events-auto cursor-row-resize" @mousedown.stop="startResize('top')"></div>
+                    <div class="absolute top-0 left-1/2 w-0.5 bg-white -translate-x-1/2 pointer-events-auto cursor-col-resize" @mousedown.stop="startResize('right')"></div>
+                    <div class="absolute bottom-1/2 left-0 right-0 h-0.5 bg-white translate-y-1/2 pointer-events-auto cursor-row-resize" @mousedown.stop="startResize('bottom')"></div>
+                    <div class="absolute top-0 left-1/2 w-0.5 bg-white -translate-x-1/2 pointer-events-auto cursor-col-resize" @mousedown.stop="startResize('left')"></div>
+                    <div class="absolute top-0 left-0 w-3 h-3 bg-white rounded-full pointer-events-auto cursor-nw-resize" @mousedown.stop="startResize('nw')"></div>
+                    <div class="absolute top-0 right-0 w-3 h-3 bg-white rounded-full pointer-events-auto cursor-ne-resize" @mousedown.stop="startResize('ne')"></div>
+                    <div class="absolute bottom-0 left-0 w-3 h-3 bg-white rounded-full pointer-events-auto cursor-sw-resize" @mousedown.stop="startResize('sw')"></div>
+                    <div class="absolute bottom-0 right-0 w-3 h-3 bg-white rounded-full pointer-events-auto cursor-se-resize" @mousedown.stop="startResize('se')"></div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="px-4 py-2 bg-gray-50 border-t border-gray-200 flex justify-between text-sm text-gray-500">
               <span>尺寸: {{ displayWidth }} × {{ displayHeight }}</span>
@@ -73,7 +95,7 @@
                 class="relative py-2 px-3 text-xs font-medium rounded-md transition-colors whitespace-nowrap"
                 :class="activeTab === tab.id ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
               >
-                {{ tab.name }}
+                <span v-if="tab.isAi" class="text-[10px] text-blue-500 mr-1">AI</span>{{ tab.name }}
                 <span v-if="isTabModified(tab.id)" class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full"></span>
               </button>
             </div>
@@ -137,7 +159,7 @@
                   原始尺寸: {{ originalWidth }} × {{ originalHeight }}
                 </div>
                 <button @click="resetResize" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
-                  恢复原始尺寸
+                  恢复默认
                 </button>
               </div>
 
@@ -174,7 +196,7 @@
                   </div>
                 </div>
                 <button @click="resetWatermark" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
-                  清除水印
+                  恢复默认
                 </button>
               </div>
 
@@ -219,52 +241,27 @@
                   </select>
                 </div>
                 <button @click="resetGrid" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
-                  恢复原图
+                  恢复默认
                 </button>
               </div>
 
               <!-- 圆形裁剪 -->
               <div v-if="activeTab === 'circle'" class="space-y-4">
-                <div class="flex items-center justify-between">
-                  <label class="text-sm font-medium text-gray-700">启用圆形裁剪</label>
-                  <div class="relative inline-block w-12 mr-2 align-middle select-none cursor-pointer" @click="enableCircleCrop = !enableCircleCrop; markModified('circle'); applyAllEffects()">
-                    <input type="checkbox" v-model="enableCircleCrop" class="sr-only">
-                    <div class="block bg-gray-300 w-12 h-6 rounded-full"></div>
-                    <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition"></div>
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div class="flex items-start">
+                    <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                      <p class="text-sm text-blue-800 font-medium">圆形裁剪</p>
+                      <p class="text-xs text-blue-600 mt-1">将图片裁剪为圆形形状，适合头像、图标等场景</p>
+                    </div>
                   </div>
                 </div>
-                <button @click="resetCircle" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
-                  恢复默认
+                <button @click="enableCircleCrop = true; markModified('circle'); applyAllEffects()" class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                  开始处理
                 </button>
-              </div>
-
-              <!-- 证件照 -->
-              <div v-if="activeTab === 'idphoto'" class="space-y-4">
-                <div class="flex items-center justify-between">
-                  <label class="text-sm font-medium text-gray-700">启用证件照模式</label>
-                  <div class="relative inline-block w-12 mr-2 align-middle select-none cursor-pointer" @click="enableIdPhoto = !enableIdPhoto; markModified('idphoto'); applyAllEffects()">
-                    <input type="checkbox" v-model="enableIdPhoto" class="sr-only">
-                    <div class="block bg-gray-300 w-12 h-6 rounded-full"></div>
-                    <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition"></div>
-                  </div>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">证件照尺寸</label>
-                  <select v-model="idPhotoSize" class="w-full px-3 py-2 border border-gray-300 rounded-lg" @change="markModified('idphoto'); applyAllEffects()">
-                    <option value="35x25mm">一寸 (35×25mm)</option>
-                    <option value="45x35mm">二寸 (45×35mm)</option>
-                    <option value="33x48mm">小二寸 (33×48mm)</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">背景颜色</label>
-                  <div class="flex gap-2">
-                    <button @click="idPhotoBg = 'white'; markModified('idphoto'); applyAllEffects()" class="flex-1 py-2 border rounded-lg" :class="idPhotoBg === 'white' ? 'border-blue-500 bg-blue-50' : 'border-gray-300'">白底</button>
-                    <button @click="idPhotoBg = 'blue'; markModified('idphoto'); applyAllEffects()" class="flex-1 py-2 border rounded-lg" :class="idPhotoBg === 'blue' ? 'border-blue-500 bg-blue-50' : 'border-gray-300'">蓝底</button>
-                    <button @click="idPhotoBg = 'red'; markModified('idphoto'); applyAllEffects()" class="flex-1 py-2 border rounded-lg" :class="idPhotoBg === 'red' ? 'border-blue-500 bg-blue-50' : 'border-gray-300'">红底</button>
-                  </div>
-                </div>
-                <button @click="resetIdPhoto" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
+                <button @click="resetCircle" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
                   恢复默认
                 </button>
               </div>
@@ -289,7 +286,140 @@
                   <input type="range" v-model.number="mosaicLevel" min="5" max="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" @input="markModified('mosaic'); applyAllEffects()">
                 </div>
                 <button @click="resetMosaic" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
-                  恢复原图
+                  恢复默认
+                </button>
+              </div>
+
+              <!-- AI抠图 -->
+              <div v-if="activeTab === 'ai-remove-bg'" class="space-y-4">
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div class="flex items-start">
+                    <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                      <p class="text-sm text-blue-800 font-medium">AI智能抠图</p>
+                      <p class="text-xs text-blue-600 mt-1">使用AI技术自动识别并去除图片背景</p>
+                    </div>
+                  </div>
+                </div>
+                <button 
+                  @click="handleAIRemoveBackground" 
+                  :disabled="aiProcessing"
+                  class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+                >
+                  开始处理
+                </button>
+                <button @click="resetAIRemoveBackground" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
+                  恢复默认
+                </button>
+              </div>
+
+              <!-- 背景透明 -->
+              <div v-if="activeTab === 'ai-transparent'" class="space-y-4">
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div class="flex items-start">
+                    <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                      <p class="text-sm text-blue-800 font-medium">AI智能背景透明</p>
+                      <p class="text-xs text-blue-600 mt-1">将图片背景设置为透明，支持PNG格式</p>
+                    </div>
+                  </div>
+                </div>
+                <button 
+                  @click="handleAITransparent" 
+                  :disabled="aiProcessing"
+                  class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+                >
+                  开始处理
+                </button>
+                <button @click="resetAITransparent" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
+                  恢复默认
+                </button>
+              </div>
+
+              <!-- AI裁剪 -->
+              <div v-if="activeTab === 'ai-crop'" class="space-y-4">
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div class="flex items-start">
+                    <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                      <p class="text-sm text-blue-800 font-medium">AI智能裁剪</p>
+                      <p class="text-xs text-blue-600 mt-1">拖动裁剪框调整位置，拉动边角调整大小</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between">
+                  <label class="text-sm font-medium text-gray-700">手动裁剪</label>
+                  <div v-if="!isCropped" class="relative inline-block w-12 mr-2 align-middle select-none cursor-pointer" @click="enableAICrop = !enableAICrop">
+                    <input type="checkbox" v-model="enableAICrop" class="sr-only">
+                    <div class="block bg-gray-300 w-12 h-6 rounded-full" :class="{ 'bg-blue-500': enableAICrop }"></div>
+                    <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition transform" :class="{ 'translate-x-6': enableAICrop }"></div>
+                  </div>
+                  <span v-else class="text-sm text-gray-400">已完成</span>
+                </div>
+                <p class="text-sm text-gray-600">
+                  X: {{ Math.round(cropBox.x) }} Y: {{ Math.round(cropBox.y) }} 宽度: {{ Math.round(cropBox.width) }} 高度: {{ Math.round(cropBox.height) }}
+                </p>
+                <div v-if="!isCropped" class="space-y-2">
+                  <button 
+                    @click="handleAICrop" 
+                    :disabled="aiProcessing"
+                    class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+                  >
+                    {{ aiProcessing ? '处理中...' : '开始处理' }}
+                  </button>
+                </div>
+                <div v-else class="text-sm text-green-600 text-center py-2">
+                  ✓ 裁剪完成
+                </div>
+                <button @click="clearCropSelection" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
+                  恢复默认
+                </button>
+              </div>
+
+              <!-- AI证件照 -->
+              <div v-if="activeTab === 'ai-photo'" class="space-y-4">
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div class="flex items-start">
+                    <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                      <p class="text-sm text-blue-800 font-medium">AI证件照</p>
+                      <p class="text-xs text-blue-600 mt-1">AI自动生成标准证件照，支持多种尺寸和背景色</p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">证件照尺寸</label>
+                  <select v-model="aiPhotoSize" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                    <option value="一寸">一寸 (295×413)</option>
+                    <option value="二寸">二寸 (413×579)</option>
+                    <option value="小二寸">小二寸 (390×567)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">背景颜色</label>
+                  <div class="flex gap-2">
+                    <button @click="aiPhotoBg = '#FFFFFF'" class="flex-1 py-2 border rounded-lg" :class="aiPhotoBg === '#FFFFFF' ? 'border-blue-500 bg-blue-50' : 'border-gray-300'">白色</button>
+                    <button @click="aiPhotoBg = '#438EDB'" class="flex-1 py-2 border rounded-lg" :class="aiPhotoBg === '#438EDB' ? 'border-blue-500 bg-blue-50' : 'border-gray-300'">蓝色</button>
+                    <button @click="aiPhotoBg = '#E60000'" class="flex-1 py-2 border rounded-lg" :class="aiPhotoBg === '#E60000' ? 'border-blue-500 bg-blue-50' : 'border-gray-300'">红色</button>
+                  </div>
+                </div>
+                <button 
+                  @click="handleAIPhoto" 
+                  :disabled="aiProcessing"
+                  class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+                >
+                  开始处理
+                </button>
+                <button @click="resetAIPhoto" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
+                  恢复默认
                 </button>
               </div>
             </div>
@@ -381,6 +511,34 @@
                 <div class="text-xs text-gray-500">支持 JPG、PNG、WebP 格式互转</div>
               </div>
             </div>
+            <div class="flex items-start">
+              <span class="text-xl mr-2">✨</span>
+              <div>
+                <div class="font-medium text-gray-800 text-sm">AI抠图</div>
+                <div class="text-xs text-gray-500">AI智能去除图片背景</div>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <span class="text-xl mr-2">🔮</span>
+              <div>
+                <div class="font-medium text-gray-800 text-sm">AI背景透明</div>
+                <div class="text-xs text-gray-500">AI将图片背景设为透明</div>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <span class="text-xl mr-2">✂️</span>
+              <div>
+                <div class="font-medium text-gray-800 text-sm">AI裁剪</div>
+                <div class="text-xs text-gray-500">AI智能识别主体裁剪</div>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <span class="text-xl mr-2">📋</span>
+              <div>
+                <div class="font-medium text-gray-800 text-sm">AI证件照</div>
+                <div class="text-xs text-gray-500">AI生成标准证件照</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -432,15 +590,19 @@
 </template>
 
 <script setup>
-import { ref, watch, onBeforeUnmount, computed } from 'vue'
+import { ref, watch, onBeforeUnmount, computed, onMounted, inject } from 'vue'
 import imageCompression from 'browser-image-compression'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
+import api from '../utils/api'
+
+const toast = inject('toast')
 
 const fileInput = ref(null)
 const previewImage = ref(null)
 const secondFileInput = ref(null)
 const selectedImage = ref(null)
+const selectedImageOriginal = ref(null)
 const secondImageFile = ref(null)
 const imagePreviewUrl = ref('')
 const secondImageUrl = ref('')
@@ -454,6 +616,7 @@ const originalFileName = ref('')
 const originalWidth = ref(0)
 const originalHeight = ref(0)
 const processing = ref(false)
+const aiProcessing = ref(false)
 const isDragging = ref(false)
 const activeTab = ref('compress')
 const modifiedTabs = ref(new Set())
@@ -473,9 +636,12 @@ const tabs = [
   { id: 'merge', name: '拼接' },
   { id: 'grid', name: '九宫格' },
   { id: 'circle', name: '圆形' },
-  { id: 'idphoto', name: '证件照' },
   { id: 'filter', name: '滤镜' },
-  { id: 'mosaic', name: '马赛克' }
+  { id: 'mosaic', name: '马赛克' },
+  { id: 'ai-remove-bg', name: '抠图', isAi: true },
+  { id: 'ai-transparent', name: '背景透明', isAi: true },
+  { id: 'ai-crop', name: '裁剪', isAi: true },
+  { id: 'ai-photo', name: '证件照', isAi: true }
 ]
 
 const filters = [
@@ -509,6 +675,41 @@ const currentFilter = ref('none')
 const mosaicLevel = ref(20)
 const enableCircleCrop = ref(false)
 const enableIdPhoto = ref(false)
+
+const aiPhotoSize = ref('一寸')
+const aiPhotoBg = ref('#FFFFFF')
+const enableAICrop = ref(false)
+const isCropped = ref(false)
+const imageContainer = ref(null)
+const cropBox = ref({ x: 50, y: 50, width: 200, height: 200 })
+const isResizing = ref(false)
+const resizeDir = ref('')
+const dragStart = ref({ x: 0, y: 0 })
+const cropStart = ref({ x: 0, y: 0, width: 0, height: 0 })
+
+const cropBoxStyle = computed(() => {
+  if (!imageContainer.value) return {}
+  const img = previewImage.value
+  if (!img) return {}
+  
+  const containerRect = imageContainer.value.getBoundingClientRect()
+  const imgRect = img.getBoundingClientRect()
+  
+  const scaleX = imgRect.width / originalWidth.value
+  const scaleY = imgRect.height / originalHeight.value
+  
+  const displayX = imgRect.left - containerRect.left
+  const displayY = imgRect.top - containerRect.top
+  const displayWidth = imgRect.width
+  const displayHeight = imgRect.height
+  
+  return {
+    left: `${displayX + cropBox.value.x * scaleX}px`,
+    top: `${displayY + cropBox.value.y * scaleY}px`,
+    width: `${cropBox.value.width * scaleX}px`,
+    height: `${cropBox.value.height * scaleY}px`
+  }
+})
 
 const rotation = ref(0)
 const flipH = ref(false)
@@ -587,6 +788,7 @@ const handleFileDrop = (event) => {
 
 const loadImage = (file) => {
   selectedImage.value = file
+  selectedImageOriginal.value = file
   originalFileSize.value = file.size
   originalFileType.value = file.type
   originalFileName.value = file.name.replace(/\.[^/.]+$/, '')
@@ -628,6 +830,11 @@ const resetAllSettings = () => {
   mergeDirection.value = 'horizontal'
   enableCircleCrop.value = false
   enableIdPhoto.value = false
+  aiPhotoSize.value = '一寸'
+  aiPhotoBg.value = '#FFFFFF'
+  enableAICrop.value = false
+  isCropped.value = false
+  cropBox.value = { x: 50, y: 50, width: 200, height: 200 }
   clearAllModified()
   previewUrl.value = imagePreviewUrl.value
   displayFileSize.value = originalFileSize.value
@@ -1129,6 +1336,44 @@ const resetMosaic = () => {
   applyAllEffects()
 }
 
+const resetAIRemoveBackground = async () => {
+  isCropped.value = false
+  clearModified('ai-remove-bg')
+  if (previewUrl.value && previewUrl.value !== imagePreviewUrl.value) {
+    URL.revokeObjectURL(previewUrl.value)
+  }
+  previewUrl.value = imagePreviewUrl.value
+  displayFileSize.value = originalFileSize.value
+  displayWidth.value = originalWidth.value
+  displayHeight.value = originalHeight.value
+}
+
+const resetAITransparent = async () => {
+  isCropped.value = false
+  clearModified('ai-transparent')
+  if (previewUrl.value && previewUrl.value !== imagePreviewUrl.value) {
+    URL.revokeObjectURL(previewUrl.value)
+  }
+  previewUrl.value = imagePreviewUrl.value
+  displayFileSize.value = originalFileSize.value
+  displayWidth.value = originalWidth.value
+  displayHeight.value = originalHeight.value
+}
+
+const resetAIPhoto = async () => {
+  isCropped.value = false
+  clearModified('ai-photo')
+  aiPhotoSize.value = '一寸'
+  aiPhotoBg.value = '#FFFFFF'
+  if (previewUrl.value && previewUrl.value !== imagePreviewUrl.value) {
+    URL.revokeObjectURL(previewUrl.value)
+  }
+  previewUrl.value = imagePreviewUrl.value
+  displayFileSize.value = originalFileSize.value
+  displayWidth.value = originalWidth.value
+  displayHeight.value = originalHeight.value
+}
+
 const resetCircle = () => {
   enableCircleCrop.value = false
   clearModified('circle')
@@ -1179,11 +1424,263 @@ const confirmDownload = () => {
   showDownloadModal.value = false
 }
 
+const handleAIRemoveBackground = async () => {
+  if (!selectedImage.value) return
+  aiProcessing.value = true
+  try {
+    const result = await api.removeBackground(selectedImage.value)
+    if (result.base64) {
+      const blob = base64ToBlob(result.base64, 'image/png')
+      const url = URL.createObjectURL(blob)
+      if (previewUrl.value && previewUrl.value !== imagePreviewUrl.value) {
+        URL.revokeObjectURL(previewUrl.value)
+      }
+      previewUrl.value = url
+      displayFileSize.value = blob.size
+      markModified('ai-remove-bg')
+    }
+  } catch (error) {
+    console.error('AI抠图失败:', error)
+    toast.error('处理失败: ' + (error.message || '未知错误'))
+  } finally {
+    aiProcessing.value = false
+  }
+}
+
+const handleAITransparent = async () => {
+  if (!selectedImage.value) return
+  aiProcessing.value = true
+  try {
+    const result = await api.imageTransparent(selectedImage.value)
+    if (result.base64) {
+      const blob = base64ToBlob(result.base64, 'image/png')
+      const url = URL.createObjectURL(blob)
+      if (previewUrl.value && previewUrl.value !== imagePreviewUrl.value) {
+        URL.revokeObjectURL(previewUrl.value)
+      }
+      previewUrl.value = url
+      displayFileSize.value = blob.size
+      markModified('ai-transparent')
+    }
+  } catch (error) {
+    console.error('背景透明化失败:', error)
+    toast.error('处理失败: ' + (error.message || '未知错误'))
+  } finally {
+    aiProcessing.value = false
+  }
+}
+
+const handleAICrop = async () => {
+  if (!selectedImage.value) return
+  aiProcessing.value = true
+  try {
+    const options = {
+      x: Math.round(cropBox.value.x),
+      y: Math.round(cropBox.value.y),
+      width: Math.round(cropBox.value.width),
+      height: Math.round(cropBox.value.height)
+    }
+    
+    const result = await api.imageCrop(selectedImage.value, options)
+    if (result.base64) {
+      const blob = base64ToBlob(result.base64, 'image/png')
+      const url = URL.createObjectURL(blob)
+      if (previewUrl.value && previewUrl.value !== imagePreviewUrl.value) {
+        URL.revokeObjectURL(previewUrl.value)
+      }
+      previewUrl.value = url
+      displayFileSize.value = blob.size
+      if (result.width) displayWidth.value = result.width
+      if (result.height) displayHeight.value = result.height
+      markModified('ai-crop')
+      isCropped.value = true
+    }
+  } catch (error) {
+    console.error('AI裁剪失败:', error)
+    toast.error('处理失败: ' + (error.message || '未知错误'))
+  } finally {
+    aiProcessing.value = false
+  }
+}
+
+const clearCropSelection = async () => {
+  cropBox.value = { x: 50, y: 50, width: 200, height: 200 }
+  isCropped.value = false
+  enableAICrop.value = false
+  clearModified('ai-crop')
+  selectedImage.value = selectedImageOriginal.value
+  
+  if (previewUrl.value && previewUrl.value !== imagePreviewUrl.value) {
+    URL.revokeObjectURL(previewUrl.value)
+  }
+  previewUrl.value = imagePreviewUrl.value
+  displayFileSize.value = originalFileSize.value
+  displayWidth.value = originalWidth.value
+  displayHeight.value = originalHeight.value
+}
+
+const handleCropMouseDown = (e) => {
+  if (!enableAICrop.value) return
+  e.preventDefault()
+}
+
+const startDrag = (e) => {
+  if (!enableAICrop.value) return
+  isDragging.value = true
+  dragStart.value = { x: e.clientX, y: e.clientY }
+  cropStart.value = { ...cropBox.value }
+  window.addEventListener('mousemove', handleDrag)
+  window.addEventListener('mouseup', stopDrag)
+}
+
+const handleDrag = (e) => {
+  if (!isDragging.value || !previewImage.value) return
+  const imgRect = previewImage.value.getBoundingClientRect()
+  const scaleX = originalWidth.value / imgRect.width
+  const scaleY = originalHeight.value / imgRect.height
+  
+  const dx = (e.clientX - dragStart.value.x) * scaleX
+  const dy = (e.clientY - dragStart.value.y) * scaleY
+  
+  let newX = cropStart.value.x + dx
+  let newY = cropStart.value.y + dy
+  
+  newX = Math.max(0, Math.min(newX, originalWidth.value - cropBox.value.width))
+  newY = Math.max(0, Math.min(newY, originalHeight.value - cropBox.value.height))
+  
+  cropBox.value.x = newX
+  cropBox.value.y = newY
+}
+
+const stopDrag = () => {
+  isDragging.value = false
+  window.removeEventListener('mousemove', handleDrag)
+  window.removeEventListener('mouseup', stopDrag)
+}
+
+const startResize = (dir) => {
+  if (!enableAICrop.value) return
+  isResizing.value = true
+  resizeDir.value = dir
+  dragStart.value = { x: event.clientX, y: event.clientY }
+  cropStart.value = { ...cropBox.value }
+  window.addEventListener('mousemove', handleResize)
+  window.addEventListener('mouseup', stopResize)
+}
+
+const handleResize = (e) => {
+  if (!isResizing.value || !previewImage.value) return
+  const imgRect = previewImage.value.getBoundingClientRect()
+  const scaleX = originalWidth.value / imgRect.width
+  const scaleY = originalHeight.value / imgRect.height
+  
+  const dx = (e.clientX - dragStart.value.x) * scaleX
+  const dy = (e.clientY - dragStart.value.y) * scaleY
+  
+  let { x, y, width, height } = cropStart.value
+  const minSize = 50
+  
+  switch (resizeDir.value) {
+    case 'se':
+      width = Math.max(minSize, cropStart.value.width + dx)
+      height = Math.max(minSize, cropStart.value.height + dy)
+      break
+    case 'sw':
+      x = cropStart.value.x + dx
+      width = Math.max(minSize, cropStart.value.width - dx)
+      height = Math.max(minSize, cropStart.value.height + dy)
+      break
+    case 'ne':
+      y = cropStart.value.y + dy
+      width = Math.max(minSize, cropStart.value.width + dx)
+      height = Math.max(minSize, cropStart.value.height - dy)
+      break
+    case 'nw':
+      x = cropStart.value.x + dx
+      y = cropStart.value.y + dy
+      width = Math.max(minSize, cropStart.value.width - dx)
+      height = Math.max(minSize, cropStart.value.height - dy)
+      break
+    case 'right':
+      width = Math.max(minSize, cropStart.value.width + dx)
+      break
+    case 'left':
+      x = cropStart.value.x + dx
+      width = Math.max(minSize, cropStart.value.width - dx)
+      break
+    case 'bottom':
+      height = Math.max(minSize, cropStart.value.height + dy)
+      break
+    case 'top':
+      y = cropStart.value.y + dy
+      height = Math.max(minSize, cropStart.value.height - dy)
+      break
+  }
+  
+  x = Math.max(0, x)
+  y = Math.max(0, y)
+  if (x + width > originalWidth.value) width = originalWidth.value - x
+  if (y + height > originalHeight.value) height = originalHeight.value - y
+  
+  cropBox.value = { x, y, width, height }
+}
+
+const stopResize = () => {
+  isResizing.value = false
+  resizeDir.value = ''
+  window.removeEventListener('mousemove', handleResize)
+  window.removeEventListener('mouseup', stopResize)
+}
+
 onBeforeUnmount(() => {
   if (imagePreviewUrl.value) URL.revokeObjectURL(imagePreviewUrl.value)
   if (previewUrl.value && previewUrl.value !== imagePreviewUrl.value) URL.revokeObjectURL(previewUrl.value)
   if (secondImageUrl.value) URL.revokeObjectURL(secondImageUrl.value)
 })
+
+const handleAIPhoto = async () => {
+  if (!selectedImage.value) return
+  aiProcessing.value = true
+  try {
+    const sizeMap = { 
+      '一寸': { width: 295, height: 413 },
+      '二寸': { width: 413, height: 579 },
+      '小二寸': { width: 390, height: 567 }
+    }
+    const result = await api.imagePhoto(selectedImage.value, {
+      bg_color: aiPhotoBg.value,
+      width: sizeMap[aiPhotoSize.value]?.width,
+      height: sizeMap[aiPhotoSize.value]?.height
+    })
+    if (result.base64) {
+      const blob = base64ToBlob(result.base64, 'image/jpeg')
+      const url = URL.createObjectURL(blob)
+      if (previewUrl.value && previewUrl.value !== imagePreviewUrl.value) {
+        URL.revokeObjectURL(previewUrl.value)
+      }
+      previewUrl.value = url
+      displayFileSize.value = blob.size
+      if (result.width) displayWidth.value = result.width
+      if (result.height) displayHeight.value = result.height
+      markModified('ai-photo')
+    }
+  } catch (error) {
+    console.error('AI证件照失败:', error)
+    toast.error('处理失败: ' + (error.message || '未知错误'))
+  } finally {
+    aiProcessing.value = false
+  }
+}
+
+const base64ToBlob = (base64, mimeType) => {
+  const byteCharacters = atob(base64)
+  const byteNumbers = new Array(byteCharacters.length)
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i)
+  }
+  const byteArray = new Uint8Array(byteNumbers)
+  return new Blob([byteArray], { type: mimeType })
+}
 </script>
 
 <style scoped>

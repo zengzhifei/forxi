@@ -6,7 +6,7 @@
         src="/jetbrains/index.html" 
         frameborder="0" 
         class="jetbrains-iframe"
-        sandbox="allow-scripts"
+        sandbox="allow-scripts allow-downloads"
       ></iframe>
     </div>
   </div>
