@@ -410,10 +410,45 @@ export const api = {
     }
 
     const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 3 * 60 * 1000)
+    const timeoutId = setTimeout(() => controller.abort(), 5 * 60 * 1000)
 
     try {
       const data = await request('/ai/text2image', {
+        method: 'POST',
+        body: formData,
+        headers: {},
+        signal: controller.signal
+      })
+      clearTimeout(timeoutId)
+      return data.data
+    } catch (error) {
+      clearTimeout(timeoutId)
+      throw error
+    }
+  },
+
+  /**
+   * 图生图
+   */
+  async image2image(options = {}) {
+    const formData = new FormData()
+    formData.append('prompt', options.prompt)
+    formData.append('model', options.model)
+    if (options.file) {
+      formData.append('file', options.file)
+    }
+    if (options.negative_prompt) {
+      formData.append('negative_prompt', options.negative_prompt)
+    }
+    if (options.size) {
+      formData.append('size', options.size)
+    }
+
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 5 * 60 * 1000)
+
+    try {
+      const data = await request('/ai/image2image', {
         method: 'POST',
         body: formData,
         headers: {},

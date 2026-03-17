@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import './style.css'
+import './plugins/baidu-tongji.js'
 
 /**
  * 初始化Vue应用
