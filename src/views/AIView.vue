@@ -470,6 +470,7 @@ const menuItems = [
 ]
 
 const activeMenu = ref('text2image')
+const isInitialMount = ref(true)
 const prompt = ref('')
 const negativePrompt = ref('')
 const selectedModel = ref('')
@@ -521,25 +522,17 @@ onMounted(() => {
   window.addEventListener('scroll', handleScroll)
   
   const hash = window.location.hash.slice(1)
-  if (hash && menuItems.some(item => item.id === hash)) {
-    activeMenu.value = hash
-  }
-  const task = activeMenu.value === 'text2image' ? 'text-to-image-synthesis' : 'image-to-image'
-  api.getAiModels(task).then(data => {
-    models.value = data.models || []
-    if (models.value.length > 0) {
-      selectedModel.value = models.value[0].id
-    }
-  }).catch(err => {
-    console.error('获取模型列表失败:', err)
-  })
+  const initialMenu = hash && menuItems.some(item => item.id === hash) ? hash : 'text2image'
+  activeMenu.value = initialMenu
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
 
-watch(activeMenu, (newVal) => {
+watch(activeMenu, (newVal, oldVal) => {
+  if (!oldVal) return
+  
   window.location.hash = newVal
   generatedImage.value = null
   error.value = null
