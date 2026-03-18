@@ -3,29 +3,33 @@
     <AppHeader />
 
     <main class="flex-1">
+      <!-- 页面标题 -->
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 lg:hidden">
+        <h1 class="text-xl font-bold text-gray-800">AI趣玩</h1>
+      </div>
       <div class="max-w-7xl mx-auto py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
-          <!-- 左侧菜单 -->
+          <!-- 左侧菜单 - 移动端横向排列 -->
           <div class="w-full lg:w-64 flex-shrink-0">
-            <div class="bg-white rounded-2xl shadow-lg p-4 sticky top-20">
-              <h3 class="text-lg font-bold text-gray-800 mb-4 px-3">AI 工具</h3>
-              <div class="space-y-1">
+            <div class="bg-white rounded-2xl shadow-lg p-2 lg:p-4 sticky top-16 lg:top-20 z-10">
+              <h3 class="hidden lg:block text-lg font-bold text-gray-800 mb-4 px-3">AI趣玩</h3>
+              <div class="flex lg:flex-col gap-1 lg:space-y-1 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
                 <button 
                   v-for="item in menuItems" 
                   :key="item.id"
                   @click="activeMenu = item.id"
-                  class="w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 flex items-center gap-3"
+                  class="flex-shrink-0 text-left px-4 py-2 lg:py-3 rounded-xl text-sm font-medium transition-all duration-200 flex items-center gap-2 whitespace-nowrap"
                   :class="activeMenu === item.id ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md' : 'text-gray-600 hover:bg-gray-100'"
                 >
-                  <span v-html="item.icon"></span>
-                  {{ item.name }}
+                  <span v-html="item.icon" class="w-4 h-4 lg:w-5 lg:h-5 flex-shrink-0"></span>
+                  <span>{{ item.name }}</span>
                 </button>
               </div>
             </div>
           </div>
 
           <!-- 右侧内容区 -->
-          <div class="flex-1">
+          <div class="flex-1 min-w-0">
             <!-- 在线文生图 -->
             <div v-if="activeMenu === 'text2image'" class="space-y-6">
               <!-- 输入卡片 -->
@@ -102,19 +106,35 @@
                   <button 
                     @click="generateImage" 
                     :disabled="!prompt.trim() || !selectedModel || generating"
-                    class="w-full py-4 px-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-3 transition-all duration-300 shadow-lg hover:shadow-xl"
+                    class="w-full py-4 px-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 disabled:opacity-40 disabled:cursor-not-allowed flex flex-col items-center justify-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl"
                   >
-                    <svg v-if="generating" class="animate-spin h-6 w-6" fill="none" viewBox="0 0 24 24">
-                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <span v-if="generating" class="text-lg">AI 创作中...</span>
-                    <span v-else class="text-lg">🎨 开始创作</span>
+                    <span v-if="generating">AI 创作中...</span>
+                    <span v-else>🎨 开始创作</span>
                   </button>
                 </div>
               </div>
 
-              <!-- 生成结果 -->
+              <!-- 生成中蒙层 -->
+              <div v-if="generating" id="result-section" class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div class="p-6">
+                  <div class="flex justify-center items-center min-h-[400px] bg-gray-100 rounded-xl">
+                    <div class="text-center">
+                      <div class="relative w-32 h-32 mx-auto mb-4">
+                        <svg class="w-full h-full transform -rotate-90">
+                          <circle cx="64" cy="64" r="56" stroke="#e5e7eb" stroke-width="8" fill="none"/>
+                          <circle cx="64" cy="64" r="56" stroke="#3b82f6" stroke-width="8" fill="none" stroke-linecap="round"
+                            :stroke-dasharray="351.86" :stroke-dashoffset="351.86 - (351.86 * progress / 100)"
+                            class="transition-all duration-500"/>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                          <span class="text-2xl font-bold text-blue-500">{{ progress }}%</span>
+                        </div>
+                      </div>
+                      <p class="text-gray-600">正在生成中，请稍后...</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <transition name="fade-slide">
                 <div v-if="generatedImage" class="bg-white rounded-2xl shadow-lg overflow-hidden">
                   <div class="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-100 flex items-center justify-between">
@@ -303,15 +323,33 @@
                   <button 
                     @click="generateImage" 
                     :disabled="!prompt.trim() || !inputImageFile || !selectedModel || generating"
-                    class="w-full py-4 px-6 bg-gradient-to-r from-green-600 via-teal-600 to-cyan-600 text-white font-semibold rounded-xl hover:from-green-700 hover:via-teal-700 hover:to-cyan-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-3 transition-all duration-300 shadow-lg hover:shadow-xl"
+                    class="w-full py-4 px-6 bg-gradient-to-r from-green-600 via-teal-600 to-cyan-600 text-white font-semibold rounded-xl hover:from-green-700 hover:via-teal-700 hover:to-cyan-700 disabled:opacity-40 disabled:cursor-not-allowed flex flex-col items-center justify-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl"
                   >
-                    <svg v-if="generating" class="animate-spin h-6 w-6" fill="none" viewBox="0 0 24 24">
-                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <span v-if="generating" class="text-lg">AI 处理中...</span>
-                    <span v-else class="text-lg">✨ 开始改造</span>
+                    <span v-if="generating">AI 处理中...</span>
+                    <span v-else>✨ 开始改造</span>
                   </button>
+                </div>
+              </div>
+
+              <!-- 生成中蒙层 -->
+              <div v-if="generating" id="result-section" class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div class="p-6">
+                  <div class="flex justify-center items-center min-h-[400px] bg-gray-100 rounded-xl">
+                    <div class="text-center">
+                      <div class="relative w-32 h-32 mx-auto mb-4">
+                        <svg class="w-full h-full transform -rotate-90">
+                          <circle cx="64" cy="64" r="56" stroke="#e5e7eb" stroke-width="8" fill="none"/>
+                          <circle cx="64" cy="64" r="56" stroke="#10b981" stroke-width="8" fill="none" stroke-linecap="round"
+                            :stroke-dasharray="351.86" :stroke-dashoffset="351.86 - (351.86 * progress / 100)"
+                            class="transition-all duration-500"/>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                          <span class="text-2xl font-bold text-green-500">{{ progress }}%</span>
+                        </div>
+                      </div>
+                      <p class="text-gray-600">正在生成中，请稍后...</p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -395,12 +433,23 @@
       </div>
     </main>
 
+    <!-- 回到顶部按钮 -->
+    <button 
+      @click="scrollToTop"
+      class="fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 z-50"
+      :class="{ 'opacity-100': showBackToTop, 'opacity-0 pointer-events-none': !showBackToTop }"
+    >
+      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+      </svg>
+    </button>
+
     <AppFooter />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, inject, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, inject, watch } from 'vue'
 import { api } from '@/utils/api'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
@@ -432,6 +481,19 @@ const fileInput = ref(null)
 const generating = ref(false)
 const generatedImage = ref(null)
 const error = ref(null)
+const taskId = ref(null)
+const taskStatus = ref('')
+const progress = ref(0)
+const showBackToTop = ref(false)
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+const handleScroll = () => {
+  showBackToTop.value = window.scrollY > 300
+}
+let pollTimer = null
 const models = ref([])
 
 const currentTime = computed(() => {
@@ -456,6 +518,8 @@ const formatNumber = (num) => {
 }
 
 onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+  
   const hash = window.location.hash.slice(1)
   if (hash && menuItems.some(item => item.id === hash)) {
     activeMenu.value = hash
@@ -471,6 +535,10 @@ onMounted(() => {
   })
 })
 
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+
 watch(activeMenu, (newVal) => {
   window.location.hash = newVal
   generatedImage.value = null
@@ -482,6 +550,7 @@ watch(activeMenu, (newVal) => {
   previewInputImage.value = ''
   inputImageFile.value = null
   clearInputImage()
+  cancelGeneration(false)
   
   const task = newVal === 'text2image' ? 'text-to-image-synthesis' : 'image-to-image'
   api.getAiModels(task).then(data => {
@@ -512,6 +581,9 @@ const generateImage = async () => {
 
   generating.value = true
   error.value = null
+  generatedImage.value = null
+  progress.value = 0
+  taskStatus.value = 'PROCESSING'
 
   try {
     let result
@@ -532,17 +604,84 @@ const generateImage = async () => {
       })
     }
 
-    if (result.url) {
-      generatedImage.value = result.url
-      toast.success('图片生成成功！')
+    if (result.taskId) {
+      taskId.value = result.taskId
+      toast.info('任务已提交，开始生成...')
+      startPolling()
+      setTimeout(() => {
+        const resultSection = document.getElementById('result-section')
+        if (resultSection) {
+          resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 100)
     } else {
-      error.value = '未生成图片'
+      error.value = '任务提交失败'
+      toast.error('任务提交失败')
+      generating.value = false
     }
   } catch (err) {
     error.value = err.message || '生成失败，请重试'
     toast.error(error.value)
-  } finally {
     generating.value = false
+  }
+}
+
+const startPolling = () => {
+  if (pollTimer) clearInterval(pollTimer)
+  
+  progress.value = 1
+  
+  pollTimer = setInterval(async () => {
+    if (!taskId.value) {
+      clearInterval(pollTimer)
+      return
+    }
+
+    try {
+      const result = await api.queryTask(taskId.value)
+      if (result.task_status === 'SUCCEED') {
+        progress.value = 100
+        clearInterval(pollTimer)
+        if (result.output_images && result.output_images.length > 0) {
+          generatedImage.value = result.output_images[0]
+          toast.success('图片生成成功！')
+        } else {
+          error.value = '未生成图片'
+        }
+        generating.value = false
+      } else if (result.task_status === 'FAILED') {
+        clearInterval(pollTimer)
+        error.value = result.message || '生成失败'
+        toast.error(error.value)
+        generating.value = false
+      } else {
+        if (progress.value < 90) {
+          const randomIncrement = Math.floor(Math.random() * 4) + 3
+          progress.value = Math.min(progress.value + randomIncrement, 90)
+        } else if (progress.value < 99) {
+          const slowIncrement = Math.floor(Math.random() * 2) + 1
+          progress.value = Math.min(progress.value + slowIncrement, 99)
+        }
+      }
+    } catch (err) {
+      clearInterval(pollTimer)
+      error.value = err.message || '查询任务状态失败'
+      generating.value = false
+    }
+  }, 5000)
+}
+
+const cancelGeneration = (showToast = true) => {
+  if (pollTimer) {
+    clearInterval(pollTimer)
+    pollTimer = null
+  }
+  taskId.value = null
+  taskStatus.value = ''
+  progress.value = 0
+  generating.value = false
+  if (showToast) {
+    toast.info('已取消生成')
   }
 }
 

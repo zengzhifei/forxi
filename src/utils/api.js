@@ -462,6 +462,16 @@ export const api = {
     }
   },
 
+  /**
+   * 查询任务状态
+   */
+  async queryTask(taskId) {
+    const data = await request(`/ai/query/task?taskId=${encodeURIComponent(taskId)}`, {
+      method: 'GET'
+    })
+    return data.data
+  },
+
   // ==================== 文件上传接口 ====================
 
   /**
