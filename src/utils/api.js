@@ -472,6 +472,24 @@ export const api = {
     return data.data
   },
 
+  /**
+   * 流式对话
+   */
+  async chat(options = {}) {
+    const response = await fetch(`${BASE_URL}/ai/chat`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: options.model,
+        messages: options.messages
+      })
+    })
+
+    return response
+  },
+
   // ==================== 文件上传接口 ====================
 
   /**

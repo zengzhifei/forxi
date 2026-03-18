@@ -428,6 +428,112 @@
                 </div>
               </transition>
             </div>
+
+            <!-- AI 对话 -->
+            <div v-if="activeMenu === 'chat'" class="space-y-6">
+              <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col" style="height: calc(100vh - 200px); min-height: 500px;">
+                <div class="p-4 border-b border-gray-100 flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                      <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h2 class="text-xl font-bold text-gray-800">AI 对话</h2>
+                      <p class="text-sm text-gray-500">智能对话，解答你的问题</p>
+                    </div>
+                  </div>
+                  <button @click="clearChat" class="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+                    新对话
+                  </button>
+                </div>
+                
+                <div class="px-4 py-2 bg-gray-50 border-b border-gray-100">
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm text-gray-600">模型:</span>
+                    <select v-model="chatModel" class="flex-1 px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white">
+                      <option value="" disabled>选择模型</option>
+                      <option v-for="model in models" :key="model.id" :value="model.id">
+                        {{ model.display_name }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div ref="chatScrollContainer" class="flex-1 overflow-y-auto p-4 space-y-4">
+                  <div v-if="chatMessages.length === 0" class="flex flex-col items-center justify-center h-full text-gray-400">
+                    <svg class="w-16 h-16 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                    <p>开始一段对话吧</p>
+                  </div>
+                  
+                  <div v-for="(msg, index) in chatMessages" :key="index" 
+                    class="flex gap-3 group"
+                  >
+                    <template v-if="msg.role === 'user'">
+                      <div class="ml-auto max-w-[70%]">
+                        <div class="relative inline-block">
+                          <button 
+                            @click="resendMessage(msg.content)"
+                            class="absolute -left-8 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center text-gray-400 hover:text-blue-500 transition-colors opacity-0 group-hover:opacity-100"
+                            title="重发"
+                          >
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                            </svg>
+                          </button>
+                          <div class="px-4 py-2 rounded-2xl whitespace-pre-wrap bg-blue-500 text-white">
+                            {{ msg.content }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-blue-500">
+                        <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                      </div>
+                    </template>
+                    <template v-else>
+                      <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-purple-500">
+                        <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                      </div>
+                      <div class="px-4 py-2 rounded-2xl whitespace-pre-wrap max-w-[70%] bg-gray-100 text-gray-800">
+                        {{ msg.content }}<span v-if="chatLoading && index === chatMessages.length - 1" class="inline-block w-2 h-4 bg-gray-400 animate-pulse ml-1"></span>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+                
+                <div class="p-4 border-t border-gray-100">
+                  <div class="flex gap-2">
+                    <input 
+                      v-model="chatInput"
+                      @keyup.enter="sendChatMessage"
+                      type="text"
+                      placeholder="输入消息..."
+                      class="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      :disabled="chatLoading"
+                      ref="chatInputRef"
+                    />
+                    <button 
+                      @click="sendChatMessage"
+                      :disabled="!chatModel || !chatInput.trim() || chatLoading"
+                      class="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl hover:from-purple-600 hover:to-pink-600 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                    >
+                      <svg v-if="chatLoading" class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      <span v-else>发送</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -435,6 +541,7 @@
 
     <!-- 回到顶部按钮 -->
     <button 
+      v-if="activeMenu !== 'chat'"
       @click="scrollToTop"
       class="fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 z-50"
       :class="{ 'opacity-100': showBackToTop, 'opacity-0 pointer-events-none': !showBackToTop }"
@@ -449,7 +556,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, inject, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, inject, watch, nextTick } from 'vue'
 import { api } from '@/utils/api'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
@@ -466,11 +573,15 @@ const menuItems = [
     id: 'image2image', 
     name: '图生图', 
     icon: '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>'
+  },
+  { 
+    id: 'chat', 
+    name: 'AI 对话', 
+    icon: '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>'
   }
 ]
 
 const activeMenu = ref('text2image')
-const isInitialMount = ref(true)
 const prompt = ref('')
 const negativePrompt = ref('')
 const selectedModel = ref('')
@@ -496,6 +607,36 @@ const handleScroll = () => {
 }
 let pollTimer = null
 const models = ref([])
+const chatMessages = ref([])
+const chatInput = ref('')
+const chatLoading = ref(false)
+const chatModel = ref('')
+const chatScrollContainer = ref(null)
+const chatInputRef = ref(null)
+const chatSummary = ref('')
+const chatRoundCount = ref(0)
+
+const scrollToBottom = async () => {
+  await nextTick()
+  if (chatScrollContainer.value) {
+    chatScrollContainer.value.scrollTo({
+      top: chatScrollContainer.value.scrollHeight,
+      behavior: 'smooth'
+    })
+  }
+}
+
+const focusChatInput = async () => {
+  await nextTick()
+  if (chatInputRef.value) {
+    chatInputRef.value.focus()
+  }
+}
+
+const resendMessage = async (content) => {
+  chatInput.value = content
+  await focusChatInput()
+}
 
 const currentTime = computed(() => {
   return new Date().toLocaleString('zh-CN', {
@@ -545,7 +686,11 @@ watch(activeMenu, (newVal, oldVal) => {
   clearInputImage()
   cancelGeneration(false)
   
-  const task = newVal === 'text2image' ? 'text-to-image-synthesis' : 'image-to-image'
+  if (newVal === 'chat') {
+    clearChat()
+  }
+  
+  const task = newVal === 'text2image' ? 'text-to-image-synthesis' : newVal === 'image2image' ? 'image-to-image' : 'text-generation'
   api.getAiModels(task).then(data => {
     models.value = data.models || []
     if (models.value.length > 0) {
@@ -555,6 +700,204 @@ watch(activeMenu, (newVal, oldVal) => {
     console.error('获取模型列表失败:', err)
   })
 })
+
+watch(chatModel, () => {
+  if (activeMenu.value === 'chat' && chatModel.value) {
+    clearChat()
+  }
+})
+
+const sendChatMessage = async () => {
+  if (!chatModel.value) {
+    toast.error('请先选择模型')
+    return
+  }
+  if (!chatInput.value.trim() || chatLoading.value) return
+  
+  const userMessage = chatInput.value.trim()
+  chatInput.value = ''
+  
+  chatMessages.value.push({
+    role: 'user',
+    content: userMessage
+  })
+  
+  chatMessages.value.push({
+    role: 'assistant',
+    content: ''
+  })
+  
+  await scrollToBottom()
+  
+  chatLoading.value = true
+  
+  chatRoundCount.value++
+  
+  const systemPrompt = '你是一个有帮助的AI助手。'
+  
+  let messages = []
+  if (chatSummary.value) {
+    const recentMessages = chatMessages.value.slice(-chatRoundCount.value * 2).slice(0, -1)
+    messages = [
+      { role: 'system', content: systemPrompt },
+      { role: 'system', content: `历史对话摘要：${chatSummary.value}` },
+      ...recentMessages.map(m => ({ role: m.role, content: m.content }))
+    ]
+  } else {
+    const prevMessages = chatMessages.value.slice(0, -1)
+    messages = [
+      { role: 'system', content: systemPrompt },
+      ...prevMessages.map(m => ({ role: m.role, content: m.content }))
+    ]
+  }
+  
+  try {
+    const response = await api.chat({
+      model: chatModel.value,
+      messages
+    })
+    
+    if (response.status === 429) {
+      chatMessages.value[chatMessages.value.length - 1].content = '模型配额已用完，请更换模型重试'
+      chatLoading.value = false
+      await focusChatInput()
+      return
+    }
+    if (!response.ok) {
+      throw new Error('请求失败')
+    }
+    
+    const reader = response.body.getReader()
+    const decoder = new TextDecoder()
+    let currentEvent = ''
+    let currentData = ''
+    
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+      
+      const text = decoder.decode(value)
+      const lines = text.split('\n')
+      
+      for (const line of lines) {
+        if (line.startsWith('event:')) {
+          currentEvent = line.slice(6).trim()
+        } else if (line.startsWith('data:')) {
+          currentData = line.slice(5).trim()
+          
+          if (currentEvent === 'message' && currentData) {
+            try {
+              const parsed = JSON.parse(currentData)
+              chatMessages.value[chatMessages.value.length - 1].content += parsed.message || parsed.content || ''
+              await scrollToBottom()
+            } catch (e) {
+              chatMessages.value[chatMessages.value.length - 1].content += currentData
+              await scrollToBottom()
+            }
+          } else if (currentEvent === 'done') {
+            break
+          }
+        }
+      }
+    }
+  } catch (err) {
+    chatMessages.value[chatMessages.value.length - 1].content = '抱歉，发生错误，请重试。'
+    console.error('聊天错误:', err)
+  } finally {
+    chatLoading.value = false
+    await focusChatInput()
+    
+    if (chatRoundCount.value >= 2) {
+      let tempCurrentChatRound = chatRoundCount.value
+      chatRoundCount.value = 0
+      await summarizeChat(tempCurrentChatRound)
+    }
+  }
+}
+
+const summarizeChat = async (currentChatRound) => {
+  if (!chatModel.value) return
+  
+  const historyText = chatMessages.value
+    .slice(-currentChatRound * 2)
+    .filter(m => m.role !== 'system')
+    .map(m => `${m.role === 'user' ? '用户' : '助手'}: ${m.content}`)
+    .join('\n')
+  
+  const prompt = `你是一个对话摘要助手。
+任务：
+请总结用户和助手之间的历史对话。
+总结要求：
+1. 必须包含用户的目标和需求
+2. 必须包含助手(AI)已经给出的关键方案、结论
+3. 删除无关寒暄、重复解释和无价值内容
+4. 禁止编造对话中不存在的信息
+5. 保持客观、简洁
+6.后续对话遗忘本次总结对话摘要的请求记忆
+
+输出格式(必须严格按照以下结构):
+用户目标:
+关键需求:
+AI已提供方案:
+当前进展:
+未解决问题:
+
+以下是对话内容：\n${chatSummary.value ? '【上一次摘要】\n' + chatSummary.value + '\n【新对话】\n' : ''}${historyText}
+`
+
+  try {
+    const response = await api.chat({
+      model: chatModel.value,
+      messages: [
+        { role: 'system', content: '你是一个对话摘要助手。' },
+        { role: 'user', content: prompt }
+      ]
+    })
+    
+    if (response.status === 429) {
+      throw new Error('请求过于频繁，请稍后再试。')
+    }
+    if (!response.ok) {
+      throw new Error('请求失败')
+    }
+    
+    const reader = response.body.getReader()
+    const decoder = new TextDecoder()
+    let summary = ''
+    
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+      
+      const text = decoder.decode(value)
+      const lines = text.split('\n')
+      
+      for (const line of lines) {
+        if (line.startsWith('event:')) continue
+        if (line.startsWith('data:')) {
+          const data = line.slice(5).trim()
+          if (data === '[DONE]' || !data) continue
+          try {
+            const parsed = JSON.parse(data)
+            summary += parsed.message || parsed.content || ''
+          } catch (e) {
+            summary += data
+          }
+        }
+      }
+    }
+    
+    chatSummary.value = summary.trim()
+  } catch (err) {
+    console.error('摘要生成失败:', err)
+  }
+}
+
+const clearChat = () => {
+  chatMessages.value = []
+  chatSummary.value = ''
+  chatRoundCount.value = 0
+}
 
 const generateImage = async () => {
   if (!prompt.value.trim()) {
