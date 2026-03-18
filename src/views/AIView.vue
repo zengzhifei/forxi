@@ -67,18 +67,19 @@
               @clearImage="clearInputImage"
             />
 
-            <Chat 
-              v-if="activeMenu === 'chat'"
-              v-model:model="chatModel"
-              v-model:input="chatInput"
-              :models="models"
-              :messages="chatMessages"
-              :loading="chatLoading"
-              @send="sendChatMessage"
-              @clearChat="clearChat"
-              @resend="resendMessage"
-              ref="chatComponentRef"
-            />
+            <div v-if="activeMenu === 'chat'" class="space-y-6">
+              <Chat 
+                v-model:model="chatModel"
+                v-model:input="chatInput"
+                :models="models"
+                :messages="chatMessages"
+                :loading="chatLoading"
+                @send="sendChatMessage"
+                @clearChat="clearChat"
+                @resend="resendMessage"
+                ref="chatComponentRef"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -174,11 +175,35 @@ onMounted(() => {
   const hash = window.location.hash.slice(1)
   const initialMenu = hash && menuItems.some(item => item.id === hash) ? hash : 'chat'
   activeMenu.value = initialMenu
+  loadModelsForMenu(initialMenu)
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
+
+const loadModelsForMenu = (menu) => {
+  const taskMap = {
+    'chat': 'text-generation',
+    'text2image': 'text-to-image-synthesis',
+    'image2image': 'image-to-image'
+  }
+  const task = taskMap[menu]
+  if (!task) return
+  
+  api.getAiModels(task).then(data => {
+    models.value = data.models || []
+    if (models.value.length > 0) {
+      if (menu === 'chat') {
+        chatModel.value = models.value[0].id
+      } else {
+        selectedModel.value = models.value[0].id
+      }
+    }
+  }).catch(err => {
+    console.error('获取模型列表失败:', err)
+  })
+}
 
 watch(activeMenu, (newVal, oldVal) => {
   if (!oldVal) return
@@ -196,25 +221,9 @@ watch(activeMenu, (newVal, oldVal) => {
   
   if (newVal === 'chat') {
     clearChat()
-    api.getAiModels('text-generation').then(data => {
-      models.value = data.models || []
-      if (models.value.length > 0) {
-        chatModel.value = models.value[0].id
-      }
-    }).catch(err => {
-      console.error('获取模型列表失败:', err)
-    })
   }
   
-  const task = newVal === 'text2image' ? 'text-to-image-synthesis' : newVal === 'image2image' ? 'image-to-image' : 'text-generation'
-  api.getAiModels(task).then(data => {
-    models.value = data.models || []
-    if (models.value.length > 0) {
-      selectedModel.value = models.value[0].id
-    }
-  }).catch(err => {
-    console.error('获取模型列表失败:', err)
-  })
+  loadModelsForMenu(newVal)
 })
 
 watch(chatModel, () => {

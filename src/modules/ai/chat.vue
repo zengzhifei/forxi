@@ -1,108 +1,122 @@
 <template>
-  <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col" :style="{ height: isMobile ? 'calc(100vh - 280px)' : 'calc(100vh - 200px)', minHeight: isMobile ? '400px' : '500px' }">
-    <div class="p-3 sm:p-4 border-b border-gray-100 flex items-center justify-between">
-      <div class="flex items-center gap-2 sm:gap-3">
-        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-          <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-          </svg>
-        </div>
-        <div class="hidden sm:block">
-          <h2 class="text-lg sm:text-xl font-bold text-gray-800">AI 对话</h2>
-          <p class="text-sm text-gray-500">智能对话，解答你的问题</p>
-        </div>
-        <div class="sm:hidden">
-          <span class="text-base font-bold text-gray-800">AI</span>
-        </div>
+  <div 
+    class="bg-white rounded-2xl shadow-lg p-6 sm:p-8 overflow-hidden flex flex-col" 
+    :class="{ 'fixed inset-0 z-50 rounded-none': isFullscreen }"
+    :style="{ height: isFullscreen ? '100dvh' : 'auto', minHeight: isMobile ? '60vh' : '500px' }"
+  >
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+        <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
       </div>
-      <button @click="emit('clearChat')" class="px-2 sm:px-3 py-1.5 text-xs sm:text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
-        新对话
+      <div class="flex-1">
+        <h2 class="text-xl font-bold text-gray-800">聊一聊</h2>
+        <p class="text-sm text-gray-500">智能对话，解答你的问题</p>
+      </div>
+      <button 
+        v-if="isMobile"
+        @click="toggleFullscreen"
+        class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+        :title="isFullscreen ? '退出全屏' : '全屏'"
+      >
+        <svg v-if="!isFullscreen" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+        </svg>
+        <svg v-else class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" />
+        </svg>
       </button>
     </div>
     
-    <div class="px-2 sm:px-4 py-2 bg-gray-50 border-b border-gray-100">
-      <div class="flex items-center gap-2">
-        <span class="text-xs sm:text-sm text-gray-600 whitespace-nowrap">模型:</span>
-        <select 
-          :value="model" 
-          @change="emit('update:model', $event.target.value)"
-          class="flex-1 min-w-0 px-2 sm:px-3 py-1.5 text-xs sm:text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white truncate"
-        >
-          <option value="" disabled>选择模型</option>
-          <option v-for="m in models" :key="m.id" :value="m.id" class="truncate">
-            {{ m.display_name }}
-          </option>
-        </select>
+    <div class="space-y-5">
+      <div class="flex gap-3 items-end">
+        <div class="flex-1">
+          <label class="block text-sm font-semibold text-gray-700 mb-2">模型</label>
+          <select 
+            :value="model" 
+            @change="emit('update:model', $event.target.value)"
+            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white"
+          >
+            <option value="" disabled>选择模型</option>
+            <option v-for="m in models" :key="m.id" :value="m.id">
+              {{ m.display_name }}
+            </option>
+          </select>
+        </div>
+        <button @click="emit('clearChat')" class="px-4 py-3 bg-purple-500 text-white text-sm font-medium rounded-xl hover:bg-purple-600 transition-colors whitespace-nowrap">
+          新对话
+        </button>
       </div>
     </div>
     
-    <div ref="scrollContainer" class="flex-1 overflow-y-auto p-2 sm:p-4 space-y-3 sm:space-y-4">
-      <div v-if="messages.length === 0" class="flex flex-col items-center justify-center h-full text-gray-400">
-        <svg class="w-12 h-12 sm:w-16 sm:h-16 mb-2 sm:mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div ref="scrollContainer" class="flex-1 overflow-y-auto py-6 space-y-4">
+      <div v-if="messages.length === 0" class="flex flex-col items-center justify-center h-full text-gray-400 py-20">
+        <svg class="w-16 h-16 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
         </svg>
-        <p class="text-sm sm:text-base">开始一段对话吧</p>
+        <p class="text-base">开始一段对话吧</p>
       </div>
       
-      <div v-for="(msg, index) in messages" :key="index" class="flex gap-2 sm:gap-3 group">
+      <div v-for="(msg, index) in messages" :key="index" class="flex gap-3 group">
         <template v-if="msg.role === 'user'">
-          <div class="ml-auto max-w-[75%] sm:max-w-[70%]">
+          <div class="ml-auto max-w-[70%]">
             <div class="relative inline-block">
               <button 
                 @click="emit('resend', msg.content)"
-                class="absolute -left-6 sm:-left-8 top-1/2 -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center text-gray-400 hover:text-blue-500 transition-colors opacity-0 group-hover:opacity-100"
+                class="absolute -left-8 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center text-gray-400 hover:text-blue-500 transition-colors opacity-0 group-hover:opacity-100"
                 title="重发"
               >
-                <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
                 </svg>
               </button>
-              <div class="px-3 py-2 sm:px-4 sm:py-2 rounded-2xl whitespace-pre-wrap bg-blue-500 text-white text-sm sm:text-base">
+              <div class="px-4 py-2.5 rounded-2xl whitespace-pre-wrap bg-blue-500 text-white text-sm">
                 {{ msg.content }}
               </div>
             </div>
           </div>
-          <div class="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center bg-blue-500">
-            <svg class="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-blue-500">
+            <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
           </div>
         </template>
         <template v-else>
-          <div class="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center bg-purple-500">
-            <svg class="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-purple-500">
+            <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
-          <div class="px-3 py-2 sm:px-4 sm:py-2 rounded-2xl whitespace-pre-wrap max-w-[75%] sm:max-w-[70%] bg-gray-100 text-gray-800 text-sm sm:text-base">
+          <div class="px-4 py-2.5 rounded-2xl whitespace-pre-wrap max-w-[70%] bg-gray-100 text-gray-800 text-sm">
             {{ msg.content }}<span v-if="loading && index === messages.length - 1" class="inline-block w-2 h-4 bg-gray-400 animate-pulse ml-1"></span>
           </div>
         </template>
       </div>
     </div>
     
-    <div class="p-2 sm:p-4 border-t border-gray-100">
-      <div class="flex gap-2">
+    <div class="pt-4 border-t border-gray-100 pb-safe">
+      <div class="flex gap-3 min-w-0">
         <input 
           :value="input"
           @input="emit('update:input', $event.target.value)"
           @keyup.enter="emit('send')"
           type="text"
           placeholder="输入消息..."
-          class="flex-1 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+          class="flex-1 px-4 py-2 text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
           :disabled="loading"
           ref="inputRef"
         />
         <button 
           @click="emit('send')"
           :disabled="!model || !input?.trim() || loading"
-          class="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl hover:from-purple-600 hover:to-pink-600 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          class="px-4 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl hover:from-purple-600 hover:to-pink-600 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center"
         >
-          <svg v-if="loading" class="animate-spin w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24">
+          <svg v-if="loading" class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <span v-else class="text-sm sm:text-base">发送</span>
+          <span v-else>发送</span>
         </button>
       </div>
     </div>
@@ -132,9 +146,19 @@ const emit = defineEmits([
 const scrollContainer = ref(null)
 const inputRef = ref(null)
 const isMobile = ref(false)
+const isFullscreen = ref(false)
 
 const checkMobile = () => {
   isMobile.value = window.innerWidth < 640
+}
+
+const toggleFullscreen = () => {
+  isFullscreen.value = !isFullscreen.value
+  if (isFullscreen.value) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = ''
+  }
 }
 
 onMounted(() => {
@@ -144,6 +168,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('resize', checkMobile)
+  document.body.style.overflow = ''
 })
 
 watch(() => props.messages, async () => {
