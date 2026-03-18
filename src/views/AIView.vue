@@ -126,7 +126,7 @@ const menuItems = [
   }
 ]
 
-const activeMenu = ref('text2image')
+const activeMenu = ref('chat')
 const prompt = ref('')
 const negativePrompt = ref('')
 const selectedModel = ref('')
@@ -172,7 +172,7 @@ const resendMessage = async (content) => {
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
   const hash = window.location.hash.slice(1)
-  const initialMenu = hash && menuItems.some(item => item.id === hash) ? hash : 'text2image'
+  const initialMenu = hash && menuItems.some(item => item.id === hash) ? hash : 'chat'
   activeMenu.value = initialMenu
 })
 
