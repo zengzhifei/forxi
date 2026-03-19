@@ -4,6 +4,12 @@ import router from './router'
 import './style.css'
 import './plugins/baidu-tongji.js'
 
+if (import.meta.env.DEV) {
+  import('vconsole').then(({ default: VConsole }) => {
+    new VConsole()
+  })
+}
+
 /**
  * 初始化Vue应用
  * 加载路由配置并挂载到DOM

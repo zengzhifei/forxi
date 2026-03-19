@@ -64,18 +64,19 @@
                     class="absolute border-2 border-white bg-black/30 pointer-events-auto"
                     :style="cropBoxStyle"
                     @mousedown.stop="startDrag"
+                    @touchstart.stop="startDrag"
                   >
                     <div class="absolute inset-0 grid grid-cols-3 grid-rows-3 pointer-events-none">
                       <div v-for="i in 9" :key="i" class="border border-white/30"></div>
                     </div>
-                    <div class="absolute top-1/2 left-0 right-0 h-0.5 bg-white -translate-y-1/2 pointer-events-auto cursor-row-resize" @mousedown.stop="startResize('top')"></div>
-                    <div class="absolute top-0 left-1/2 w-0.5 bg-white -translate-x-1/2 pointer-events-auto cursor-col-resize" @mousedown.stop="startResize('right')"></div>
-                    <div class="absolute bottom-1/2 left-0 right-0 h-0.5 bg-white translate-y-1/2 pointer-events-auto cursor-row-resize" @mousedown.stop="startResize('bottom')"></div>
-                    <div class="absolute top-0 left-1/2 w-0.5 bg-white -translate-x-1/2 pointer-events-auto cursor-col-resize" @mousedown.stop="startResize('left')"></div>
-                    <div class="absolute top-0 left-0 w-3 h-3 bg-white rounded-full pointer-events-auto cursor-nw-resize" @mousedown.stop="startResize('nw')"></div>
-                    <div class="absolute top-0 right-0 w-3 h-3 bg-white rounded-full pointer-events-auto cursor-ne-resize" @mousedown.stop="startResize('ne')"></div>
-                    <div class="absolute bottom-0 left-0 w-3 h-3 bg-white rounded-full pointer-events-auto cursor-sw-resize" @mousedown.stop="startResize('sw')"></div>
-                    <div class="absolute bottom-0 right-0 w-3 h-3 bg-white rounded-full pointer-events-auto cursor-se-resize" @mousedown.stop="startResize('se')"></div>
+                    <div class="absolute top-1/2 left-0 right-0 h-0.5 bg-white -translate-y-1/2 pointer-events-auto cursor-row-resize" @mousedown.stop="startResize($event, 'top')" @touchstart.stop="startResize($event, 'top')"></div>
+                    <div class="absolute top-0 left-1/2 w-0.5 bg-white -translate-x-1/2 pointer-events-auto cursor-col-resize" @mousedown.stop="startResize($event, 'right')" @touchstart.stop="startResize($event, 'right')"></div>
+                    <div class="absolute bottom-1/2 left-0 right-0 h-0.5 bg-white translate-y-1/2 pointer-events-auto cursor-row-resize" @mousedown.stop="startResize($event, 'bottom')" @touchstart.stop="startResize($event, 'bottom')"></div>
+                    <div class="absolute top-0 left-1/2 w-0.5 bg-white -translate-x-1/2 pointer-events-auto cursor-col-resize" @mousedown.stop="startResize($event, 'left')" @touchstart.stop="startResize($event, 'left')"></div>
+                    <div class="absolute top-0 left-0 w-3 h-3 bg-white rounded-full pointer-events-auto cursor-nw-resize" @mousedown.stop="startResize($event, 'nw')" @touchstart.stop="startResize($event, 'nw')"></div>
+                    <div class="absolute top-0 right-0 w-3 h-3 bg-white rounded-full pointer-events-auto cursor-ne-resize" @mousedown.stop="startResize($event, 'ne')" @touchstart.stop="startResize($event, 'ne')"></div>
+                    <div class="absolute bottom-0 left-0 w-3 h-3 bg-white rounded-full pointer-events-auto cursor-sw-resize" @mousedown.stop="startResize($event, 'sw')" @touchstart.stop="startResize($event, 'sw')"></div>
+                    <div class="absolute bottom-0 right-0 w-3 h-3 bg-white rounded-full pointer-events-auto cursor-se-resize" @mousedown.stop="startResize($event, 'se')" @touchstart.stop="startResize($event, 'se')"></div>
                   </div>
                 </div>
               </div>
@@ -306,9 +307,9 @@
                 <button 
                   @click="handleAIRemoveBackground" 
                   :disabled="aiProcessing"
-                  class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+                  class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm disabled:opacity-50"
                 >
-                  开始处理
+                  {{ aiProcessing ? '处理中...' : '开始处理' }}
                 </button>
                 <button @click="resetAIRemoveBackground" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
                   恢复默认
@@ -331,9 +332,9 @@
                 <button 
                   @click="handleAITransparent" 
                   :disabled="aiProcessing"
-                  class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+                  class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm disabled:opacity-50"
                 >
-                  开始处理
+                  {{ aiProcessing ? '处理中...' : '开始处理' }}
                 </button>
                 <button @click="resetAITransparent" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
                   恢复默认
@@ -414,9 +415,9 @@
                 <button 
                   @click="handleAIPhoto" 
                   :disabled="aiProcessing"
-                  class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+                  class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm disabled:opacity-50"
                 >
-                  开始处理
+                  {{ aiProcessing ? '处理中...' : '开始处理' }}
                 </button>
                 <button @click="resetAIPhoto" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
                   恢复默认
@@ -1414,13 +1415,40 @@ const openDownloadModal = () => {
   showDownloadModal.value = true
 }
 
-const confirmDownload = () => {
-  const link = document.createElement('a')
-  link.href = previewUrl.value || imagePreviewUrl.value
+const confirmDownload = async () => {
   const fileName = downloadFileName.value || 'image_processed'
   const ext = downloadFormat.value
-  link.download = `${fileName}.${ext}`
-  link.click()
+  const url = previewUrl.value || imagePreviewUrl.value
+  
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+  
+  if (isMobile && url.startsWith('data:')) {
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `${fileName}.${ext}`
+    link.click()
+  } else if (isMobile) {
+    try {
+      const response = await fetch(url)
+      const blob = await response.blob()
+      const blobUrl = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = blobUrl
+      link.download = `${fileName}.${ext}`
+      link.click()
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000)
+    } catch (err) {
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `${fileName}.${ext}`
+      link.click()
+    }
+  } else {
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `${fileName}.${ext}`
+    link.click()
+  }
   showDownloadModal.value = false
 }
 
@@ -1526,21 +1554,28 @@ const handleCropMouseDown = (e) => {
 
 const startDrag = (e) => {
   if (!enableAICrop.value) return
+  e.preventDefault()
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY
   isDragging.value = true
-  dragStart.value = { x: e.clientX, y: e.clientY }
+  dragStart.value = { x: clientX, y: clientY }
   cropStart.value = { ...cropBox.value }
   window.addEventListener('mousemove', handleDrag)
   window.addEventListener('mouseup', stopDrag)
+  window.addEventListener('touchmove', handleDrag)
+  window.addEventListener('touchend', stopDrag)
 }
 
 const handleDrag = (e) => {
   if (!isDragging.value || !previewImage.value) return
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY
   const imgRect = previewImage.value.getBoundingClientRect()
   const scaleX = originalWidth.value / imgRect.width
   const scaleY = originalHeight.value / imgRect.height
   
-  const dx = (e.clientX - dragStart.value.x) * scaleX
-  const dy = (e.clientY - dragStart.value.y) * scaleY
+  const dx = (clientX - dragStart.value.x) * scaleX
+  const dy = (clientY - dragStart.value.y) * scaleY
   
   let newX = cropStart.value.x + dx
   let newY = cropStart.value.y + dy
@@ -1556,26 +1591,36 @@ const stopDrag = () => {
   isDragging.value = false
   window.removeEventListener('mousemove', handleDrag)
   window.removeEventListener('mouseup', stopDrag)
+  window.removeEventListener('touchmove', handleDrag)
+  window.removeEventListener('touchend', stopDrag)
 }
 
-const startResize = (dir) => {
+const startResize = (e, dir) => {
   if (!enableAICrop.value) return
+  e.preventDefault()
+  e.stopPropagation()
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY
   isResizing.value = true
   resizeDir.value = dir
-  dragStart.value = { x: event.clientX, y: event.clientY }
+  dragStart.value = { x: clientX, y: clientY }
   cropStart.value = { ...cropBox.value }
   window.addEventListener('mousemove', handleResize)
   window.addEventListener('mouseup', stopResize)
+  window.addEventListener('touchmove', handleResize)
+  window.addEventListener('touchend', stopResize)
 }
 
 const handleResize = (e) => {
   if (!isResizing.value || !previewImage.value) return
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY
   const imgRect = previewImage.value.getBoundingClientRect()
   const scaleX = originalWidth.value / imgRect.width
   const scaleY = originalHeight.value / imgRect.height
   
-  const dx = (e.clientX - dragStart.value.x) * scaleX
-  const dy = (e.clientY - dragStart.value.y) * scaleY
+  const dx = (clientX - dragStart.value.x) * scaleX
+  const dy = (clientY - dragStart.value.y) * scaleY
   
   let { x, y, width, height } = cropStart.value
   const minSize = 50
@@ -1630,6 +1675,8 @@ const stopResize = () => {
   resizeDir.value = ''
   window.removeEventListener('mousemove', handleResize)
   window.removeEventListener('mouseup', stopResize)
+  window.removeEventListener('touchmove', handleResize)
+  window.removeEventListener('touchend', stopResize)
 }
 
 onBeforeUnmount(() => {

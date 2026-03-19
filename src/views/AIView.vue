@@ -318,7 +318,7 @@ const sendChatMessage = async () => {
   } finally {
     chatLoading.value = false
     
-    if (chatRoundCount.value >= 2) {
+    if (chatRoundCount.value >= 15) {
       let tempCurrentChatRound = chatRoundCount.value
       chatRoundCount.value = 0
       await summarizeChat(tempCurrentChatRound)
@@ -577,26 +577,48 @@ const clearInputImage = () => {
 const downloadImage = async () => {
   if (!generatedImage.value) return
   
-  try {
-    const response = await fetch(generatedImage.value)
-    const blob = await response.blob()
-    const blobUrl = window.URL.createObjectURL(blob)
-    
-    const link = document.createElement('a')
-    link.href = blobUrl
-    link.download = `ai-image-${Date.now()}.png`
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    window.URL.revokeObjectURL(blobUrl)
-  } catch (err) {
-    const link = document.createElement('a')
-    link.href = generatedImage.value
-    link.download = `ai-image-${Date.now()}.png`
-    link.target = '_blank'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+  const fileName = `ai-image-${Date.now()}.png`
+  
+  if (isMobile) {
+    try {
+      const response = await fetch(generatedImage.value)
+      const blob = await response.blob()
+      const blobUrl = window.URL.createObjectURL(blob)
+      
+      const link = document.createElement('a')
+      link.href = blobUrl
+      link.download = fileName
+      link.click()
+      
+      setTimeout(() => {
+        window.URL.revokeObjectURL(blobUrl)
+      }, 1000)
+    } catch (err) {
+      window.open(generatedImage.value, '_blank')
+    }
+  } else {
+    try {
+      const response = await fetch(generatedImage.value)
+      const blob = await response.blob()
+      const blobUrl = window.URL.createObjectURL(blob)
+      
+      const link = document.createElement('a')
+      link.href = blobUrl
+      link.download = fileName
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(blobUrl)
+    } catch (err) {
+      const link = document.createElement('a')
+      link.href = generatedImage.value
+      link.download = fileName
+      link.target = '_blank'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
   }
 }
 </script>
