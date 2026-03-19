@@ -44,6 +44,7 @@ import reverse from './text/reverse.vue'
 import sql from './text/sql.vue'
 import list from './text/list.vue'
 import sort from './text/sort.vue'
+import code from './text/code.vue'
 
 // 进制与计算
 import base from './convert/base.vue'
@@ -94,6 +95,7 @@ export const tools = {
   'sql': { component: sql, name: 'SQL 格式化', description: 'SQL 语句格式化', category: 'text', icon: '🗄️' },
   'list': { component: list, name: '列表转换', description: '文本与 JSON/CSV 格式互转', category: 'text', icon: '📝' },
   'sort': { component: sort, name: '字母排序', description: '对文本进行排序', category: 'text', icon: '🔢' },
+  'code': { component: code, name: '代码美化', description: '代码格式化与压缩，支持多种语言', category: 'text', icon: '✨' },
   'base': { component: base, name: '进制转换', description: '十进制、二进制、十六进制、八进制互相转换', category: 'convert', icon: '🔢' },
   'timestamp': { component: timestamp, name: '时间戳转换', description: 'Unix 时间戳与日期时间互转', category: 'convert', icon: '⏰' },
   'binary': { component: binary, name: '文本转二进制', description: '文本与二进制互相转换', category: 'convert', icon: '01' },
@@ -184,7 +186,8 @@ export const categories = [
       { id: 'reverse', ...tools.reverse },
       { id: 'sql', ...tools.sql },
       { id: 'list', ...tools.list },
-      { id: 'sort', ...tools.sort }
+      { id: 'sort', ...tools.sort },
+      { id: 'code', ...tools.code }
     ]
   },
   {
