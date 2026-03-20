@@ -290,7 +290,7 @@ const sendChatMessage = async () => {
       const { done, value } = await reader.read()
       if (done) break
       
-      const text = decoder.decode(value)
+      const text = decoder.decode(value, { stream: true })
       const lines = text.split('\n')
       
       for (const line of lines) {

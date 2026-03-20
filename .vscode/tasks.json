@@ -2,22 +2,19 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "启动服务",
-      "type": "shell",
-      "command": "lsof -i :5173 | awk 'NR>1 {print $2}' | sort -u | xargs kill 2>/dev/null; sleep 1; cd ${workspaceFolder} && npm run dev; echo '服务已启动'",
-      "problemMatcher": []
-    },
-    {
       "label": "停止服务",
       "type": "shell",
       "command": "lsof -i :5173 | awk 'NR>1 {print $2}' | sort -u | xargs kill 2>/dev/null; echo '服务已停止'",
       "problemMatcher": []
     },
     {
-      "label": "重启服务",
+      "label": "启动服务",
       "type": "shell",
-      "command": "lsof -i :5173 | awk 'NR>1 {print $2}' | sort -u | xargs kill 2>/dev/null; sleep 1; cd ${workspaceFolder} && npm run dev; echo '服务已重启'",
-      "problemMatcher": []
+      "command": "lsof -i :5173 | awk 'NR>1 {print $2}' | sort -u | xargs kill 2>/dev/null; sleep 1; cd ${workspaceFolder} && npm run dev",
+      "problemMatcher": [],
+       "presentation": {
+        "reveal": "silent"
+      }
     }
   ]
 }

@@ -100,7 +100,7 @@
         <input 
           :value="input"
           @input="emit('update:input', $event.target.value)"
-          @keyup.enter="emit('send')"
+          @keydown.enter="handleEnterKey"
           type="text"
           placeholder="输入消息..."
           class="flex-1 px-4 py-2 text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
@@ -142,6 +142,11 @@ const emit = defineEmits([
   'resend',
   'scrollToBottom'
 ])
+
+const handleEnterKey = (e) => {
+  if (e.isComposing) return
+  emit('send')
+}
 
 const scrollContainer = ref(null)
 const inputRef = ref(null)
