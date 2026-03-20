@@ -10,7 +10,8 @@ build/
 *.local
 
 # Editor directories and files
-.vscode/
+!.vscode/
+!.vscode/tasks.json
 .idea/
 *.swp
 *.swo
