@@ -226,12 +226,6 @@ watch(activeMenu, (newVal, oldVal) => {
   loadModelsForMenu(newVal)
 })
 
-watch(chatModel, () => {
-  if (activeMenu.value === 'chat' && chatModel.value) {
-    clearChat()
-  }
-})
-
 const sendChatMessage = async () => {
   if (!chatModel.value) {
     toast.error('请先选择模型')
@@ -249,13 +243,14 @@ const sendChatMessage = async () => {
   chatRoundCount.value++
   
   const systemPrompt = `
-你必须以“可直接渲染的 Markdown”格式输出内容。
-要求：
-- 禁止在最外层使用 \`\`\` 或 \`\`\`markdown 包裹整个回答
-- 仅在代码示例时使用 \`\`\`语言（如 \`\`\`python）
-- 正文必须是普通 Markdown（标题、列表、段落）
-- 保持合理换行
-你的输出将直接渲染到网页中，如果格式错误会导致页面显示异常。
+你是一个 AI 技术助理。
+- 回答问题时使用简明、专业的中文
+- 输出示例代码时使用 Markdown 代码块，并指定语言
+- 多行代码必须保留换行，不要用空格代替
+- 请在回答中，用 <NL> 表示换行，不要直接换行
+- 如果回答涉及列表，保证每一项单独占一行
+- 不要在 JSON 或代码块里加入解释文字
+- 如果无法准确回答，说明原因，不要编造内容
 `
   
   let messages = []
@@ -305,7 +300,7 @@ const sendChatMessage = async () => {
         if (line.startsWith('event:')) {
           currentEvent = line.slice(6).trim()
         } else if (line.startsWith('data:')) {
-          currentData = line.slice(5)
+          currentData = line.slice(5).replace(/<NL>/g, "\n")
           if (currentData === "") {
             currentData = "\n"
           }
