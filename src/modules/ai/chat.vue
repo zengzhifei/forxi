@@ -62,7 +62,7 @@
         <template v-if="msg.role === 'user'">
           <div class="ml-auto max-w-[70%]">
             <div class="relative inline-block">
-              <button 
+              <button
                 @click="emit('resend', msg.content)"
                 class="absolute -left-8 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center text-gray-400 hover:text-blue-500 transition-colors opacity-0 group-hover:opacity-100"
                 title="重发"
@@ -88,8 +88,8 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
-          <div class="px-4 py-2.5 rounded-2xl whitespace-pre-wrap max-w-[70%] bg-gray-100 text-gray-800 text-sm">
-            {{ msg.content }}<span v-if="loading && index === messages.length - 1" class="inline-block w-2 h-4 bg-gray-400 animate-pulse ml-1"></span>
+          <div class="px-4 py-2.5 rounded-2xl max-w-[70%] bg-white text-gray-800 text-sm border border-gray-200 shadow-none">
+            <div class="markdown-content" v-html="parseMarkdown(msg.content)" contenteditable="false"></div><span v-if="loading && index === messages.length - 1" class="inline-block w-0.5 h-4 bg-gray-400 animate-pulse ml-0.5"></span>
           </div>
         </template>
       </div>
@@ -125,6 +125,51 @@
 
 <script setup>
 import { ref, watch, nextTick, onMounted, onUnmounted } from 'vue'
+import MarkdownIt from 'markdown-it'
+import hljs from 'highlight.js'
+
+const copyCode = async (btn) => {
+  const wrapper = btn.closest('.code-block-wrapper')
+  const code = wrapper.querySelector('code')
+  if (code) {
+    const text = code.textContent
+    try {
+      await navigator.clipboard.writeText(text)
+    } catch (err) {
+      const textarea = document.createElement('textarea')
+      textarea.value = text
+      textarea.style.position = 'fixed'
+      textarea.style.opacity = '0'
+      document.body.appendChild(textarea)
+      textarea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textarea)
+    }
+    btn.textContent = '已复制'
+    setTimeout(() => btn.textContent = '复制', 2000)
+  }
+}
+
+window.copyCode = copyCode
+
+const md = new MarkdownIt({
+  breaks: true,
+  html: false,
+  linkify: true,
+  highlight: (str, lang) => {
+    let highlighted
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        highlighted = hljs.highlight(str, { language: lang, ignoreIllegals: true }).value
+      } catch (_) {
+        highlighted = md.utils.escapeHtml(str)
+      }
+    } else {
+      highlighted = md.utils.escapeHtml(str)
+    }
+    return `<div class="code-block-wrapper"><pre class="hljs"><code class="language-${lang || ''}">${highlighted}</code></pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>`
+  }
+})
 
 const props = defineProps({
   models: Array,
@@ -146,6 +191,11 @@ const emit = defineEmits([
 const handleEnterKey = (e) => {
   if (e.isComposing) return
   emit('send')
+}
+
+const parseMarkdown = (content) => {
+  if (!content) return ''
+  return md.render(content)
 }
 
 const scrollContainer = ref(null)

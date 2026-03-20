@@ -8,3 +8,144 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
+
+pre, .hljs, .code-block-wrapper, code {
+  box-shadow: none !important;
+  caret-color: auto;
+}
+
+.markdown-content {
+  caret-color: auto;
+  user-select: text;
+}
+
+.code-block-wrapper {
+  position: relative;
+  margin: 0.75rem 0;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  color: #6a737d;
+  background: #ffffff;
+  border: 1px solid #e1e4e8;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, background 0.2s;
+  z-index: 1;
+}
+
+.code-block-wrapper:hover .copy-btn {
+  opacity: 1;
+}
+
+.copy-btn:hover {
+  background: #e1e4e8;
+}
+
+.hljs {
+  background: #f6f8fa;
+  color: #24292e;
+  border-radius: 0;
+  padding: 1rem;
+  margin: 0.75rem 0;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border: 1px solid #e1e4e8;
+}
+
+.hljs-keyword { color: #d73a49; }
+.hljs-string { color: #032f62; }
+.hljs-number { color: #005cc5; }
+.hljs-function { color: #6f42c1; }
+.hljs-comment { color: #6a737d; }
+.hljs-class { color: #22863a; }
+.hljs-variable { color: #e36209; }
+.hljs-attr { color: #005cc5; }
+.hljs-tag { color: #22863a; }
+.hljs-attribute { color: #6f42c1; }
+.hljs-selector-class { color: #6f42c1; }
+.hljs-selector-id { color: #6f42c1; }
+.hljs-title { color: #6f42c1; }
+.hljs-built_in { color: #005cc5; }
+.hljs-literal { color: #005cc5; }
+.hljs-type { color: #e36209; }
+.hljs-params { color: #24292e; }
+.hljs-meta { color: #735c0f; }
+.hljs-regexp { color: #032f62; }
+.hljs-symbol { color: #005cc5; }
+.hljs-operator { color: #d73a49; }
+.hljs-punctuation { color: #24292e; }
+
+.hljs code {
+  display: block;
+  white-space: pre;
+}
+
+.markdown-content p {
+  margin: 0.5em 0;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+  margin: 1em 0 0.5em;
+  font-weight: 600;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  margin: 0.5em 0;
+  padding-left: 1.5em;
+}
+
+.markdown-content li {
+  margin: 0.25em 0;
+}
+
+.markdown-content blockquote {
+  margin: 0.5em 0;
+  padding-left: 1em;
+  border-left: 3px solid #d1d5db;
+  color: #6b7280;
+}
+
+.markdown-content code:not(.hljs) {
+  background: transparent;
+  padding: 0;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
+
+.markdown-content pre {
+  margin: 0.75rem 0;
+}
+
+.markdown-content a {
+  color: #3b82f6;
+  text-decoration: underline;
+}
+
+.markdown-content table {
+  border-collapse: collapse;
+  margin: 0.5em 0;
+}
+
+.markdown-content th,
+.markdown-content td {
+  border: 1px solid #d1d5db;
+  padding: 0.375em 0.75em;
+}
+
+.markdown-content th {
+  background: #f3f4f6;
+}

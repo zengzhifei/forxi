@@ -248,7 +248,15 @@ const sendChatMessage = async () => {
   chatLoading.value = true
   chatRoundCount.value++
   
-  const systemPrompt = '你是一个有帮助的AI助手。'
+  const systemPrompt = `
+你必须以“可直接渲染的 Markdown”格式输出内容。
+要求：
+- 禁止在最外层使用 \`\`\` 或 \`\`\`markdown 包裹整个回答
+- 仅在代码示例时使用 \`\`\`语言（如 \`\`\`python）
+- 正文必须是普通 Markdown（标题、列表、段落）
+- 保持合理换行
+你的输出将直接渲染到网页中，如果格式错误会导致页面显示异常。
+`
   
   let messages = []
   if (chatSummary.value) {
@@ -297,9 +305,11 @@ const sendChatMessage = async () => {
         if (line.startsWith('event:')) {
           currentEvent = line.slice(6).trim()
         } else if (line.startsWith('data:')) {
-          currentData = line.slice(5).trim()
-          
-          if (currentEvent === 'message' && currentData) {
+          currentData = line.slice(5)
+          if (currentData === "") {
+            currentData = "\n"
+          }
+          if (currentEvent === 'message') {
             try {
               const parsed = JSON.parse(currentData)
               chatMessages.value[chatMessages.value.length - 1].content += parsed.message || parsed.content || ''
