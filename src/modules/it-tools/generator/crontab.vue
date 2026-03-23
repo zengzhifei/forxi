@@ -191,14 +191,14 @@ const timeFields = [
       <input
         v-model="crontab"
         type="text"
-        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-lg"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400 font-mono text-lg"
         placeholder="* * * * *"
       />
       <p class="mt-2 text-sm text-gray-600">格式: 分钟 小时 日期 月份 星期</p>
     </div>
 
-    <div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-      <p class="text-blue-800 font-medium">{{ description }}</p>
+    <div class="mb-4 p-4 bg-zinc-50 border border-zinc-200 rounded-lg">
+      <p class="text-zinc-700 font-medium">{{ description }}</p>
     </div>
 
     <div class="mb-4">
@@ -210,7 +210,7 @@ const timeFields = [
           @click="crontab = item.pattern"
           class="px-3 py-1.5 text-sm bg-white border border-gray-200 rounded hover:bg-gray-50 transition-colors"
         >
-          <span class="font-mono text-blue-600">{{ item.pattern }}</span>
+          <span class="font-mono text-zinc-600">{{ item.pattern }}</span>
           <span class="ml-2 text-gray-500">{{ item.description }}</span>
         </button>
       </div>
@@ -220,7 +220,7 @@ const timeFields = [
       <h3 class="text-sm font-medium text-gray-700 mb-2">表达式说明</h3>
       <div class="grid grid-cols-2 gap-2 text-sm">
         <div v-for="item in cronHelp" :key="item.symbol" class="flex items-center gap-2">
-          <code class="px-2 py-1 bg-gray-100 rounded font-mono text-blue-600">{{ item.symbol }}</code>
+          <code class="px-2 py-1 bg-gray-100 rounded font-mono text-zinc-600">{{ item.symbol }}</code>
           <span class="text-gray-600">{{ item.meaning }}</span>
         </div>
       </div>

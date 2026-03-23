@@ -10,15 +10,30 @@
       <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
 
         <div class="relative inline-block opacity-0 animate-fade-in-up" style="animation-delay: 0.1s;">
-          <div class="absolute -inset-8 bg-gradient-to-r from-zinc-100 via-white to-zinc-100 rounded-3xl blur-xl opacity-50"></div>
-          <h1 class="relative text-sm sm:text-lg md:text-xl lg:text-2xl font-medium text-zinc-700 tracking-wide leading-relaxed">
-            <span class="block bg-gradient-to-r from-zinc-600 via-zinc-500 to-zinc-600 bg-clip-text text-transparent">愿你我</span>
-            <span class="block mt-2 bg-gradient-to-r from-zinc-600 via-zinc-500 to-zinc-600 bg-clip-text text-transparent">皆可成为自己的指路明灯</span>
+          <!-- 背景光晕 -->
+          <div class="absolute -inset-16 rounded-3xl blur-3xl opacity-40" style="background: radial-gradient(ellipse at center, rgba(161,161,170,0.3) 0%, transparent 70%);"></div>
+          <!-- 装饰线 -->
+          <div class="flex items-center gap-4 mb-6 justify-center">
+            <div class="h-px w-12 bg-gradient-to-r from-transparent to-zinc-300"></div>
+            <div class="w-1.5 h-1.5 rounded-full bg-zinc-300"></div>
+            <div class="h-px w-12 bg-gradient-to-l from-transparent to-zinc-300"></div>
+          </div>
+          <h1 class="relative font-serif tracking-[0.2em] leading-loose" style="font-size: clamp(1.4rem, 3.5vw, 2.5rem);">
+            <span class="block text-hero-sub" style="font-size: clamp(0.85rem, 1.8vw, 1.1rem); letter-spacing: 0.35em; color: #a1a1aa; margin-bottom: 0.6rem; font-weight: 400;">愿你我</span>
+            <span class="block text-hero-main" style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 35%, #71717a 65%, #52525b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 500; letter-spacing: 0.18em; line-height: 1.8;">皆可成为自己的指路明灯</span>
           </h1>
+          <!-- 底部装饰线 -->
+          <div class="flex items-center gap-4 mt-6 justify-center">
+            <div class="h-px w-8 bg-gradient-to-r from-transparent to-zinc-200"></div>
+            <div class="w-1 h-1 rounded-full bg-zinc-200"></div>
+            <div class="h-px w-20 bg-zinc-200"></div>
+            <div class="w-1 h-1 rounded-full bg-zinc-200"></div>
+            <div class="h-px w-8 bg-gradient-to-l from-transparent to-zinc-200"></div>
+          </div>
         </div>
 
         <div class="flex flex-col items-center justify-center gap-4 mt-12 opacity-0 animate-fade-in-up" style="animation-delay: 0.2s;">
-          <button @click="scrollToTools" class="group relative px-8 py-4 bg-zinc-800 text-white rounded-full font-medium text-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-zinc-300/50 hover:scale-105">
+          <button @click="scrollToTools" class="group relative px-8 py-4 rounded-full font-medium text-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-zinc-400/30 hover:scale-105 text-white" style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)">
             <span class="relative z-10">
               求索
             </span>
@@ -34,7 +49,7 @@
       </div>
     </section>
 
-    <section id="tools" class="pt-2 pb-24 bg-white">
+    <section id="tools" class="pt-16 pb-24 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
           <h2 class="text-xl sm:text-2xl font-bold text-zinc-600 mb-4">此中有真意</h2>
@@ -43,9 +58,10 @@
           <div
             v-for="(tool, index) in tools"
             :key="tool.title"
+            :ref="el => { if (el) bookRefs[index] = el }"
             class="book group relative w-full cursor-pointer transition-all duration-700 hover:shadow-lg hover:shadow-zinc-300/30 hover:-translate-y-2"
             :style="{ animationDelay: `${index * 0.1}s`, perspective: '1400px' }"
-            :class="index >= 3 ? 'opacity-0 animate-fade-in-up' : ''"
+            :class="[index >= 3 ? 'opacity-0 animate-fade-in-up' : '', activeBook === index ? 'is-in-view' : '']"
             @click="tool.onClick"
           >
             <!-- 书页厚度 -->
@@ -120,6 +136,10 @@ import AppFooter from '../components/AppFooter.vue'
 
 const router = useRouter()
 const showBackToTop = ref(false)
+const bookRefs = ref([])
+const activeBook = ref(-1)
+let rafId = null
+let bookObserver = null
 
 const FileIcon = {
   render() {
@@ -178,34 +198,11 @@ const ComingIcon = {
   }
 }
 
-const ShieldIcon = {
-  render() {
-    return h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
-      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-width': '2', d: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' })
-    ])
-  }
-}
-
-const ZapIcon = {
-  render() {
-    return h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
-      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-width': '2', d: 'M13 10V3L4 14h7v7l9-11h-7z' })
-    ])
-  }
-}
-
-const CloudIcon = {
-  render() {
-    return h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
-      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-width': '2', d: 'M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z' })
-    ])
-  }
-}
 
 const tools = [
   {
     title: '文件预览',
-    description: '支持在线预览 docx、excel、ppt、jpg 等多种文件格式，无需安装额外软件',
+    description: 'Word、Excel、PPT、PDF、图片……无需安装，打开即览',
     icon: FileIcon,
     bgDefault: 'bg-zinc-50',
     bgHover: 'group-hover:bg-blue-100',
@@ -215,7 +212,7 @@ const tools = [
   },
   {
     title: '图片处理',
-    description: '支持在线图片压缩、裁剪、尺寸修改、格式转换，纯前端处理保护隐私',
+    description: '压缩、裁剪、转格式，一切处理在本地完成，文件从不离手',
     icon: ImageIcon,
     bgDefault: 'bg-zinc-50',
     bgHover: 'group-hover:bg-emerald-100',
@@ -225,7 +222,7 @@ const tools = [
   },
   {
     title: 'AI 趣玩',
-    description: '文生图、图生图等多种 AI 功能，激发创意无限可能',
+    description: '文生图、图生图、AI 对话，让想象力找到出口',
     icon: AIIcon,
     bgDefault: 'bg-zinc-50',
     bgHover: 'group-hover:bg-violet-100',
@@ -235,7 +232,7 @@ const tools = [
   },
   {
     title: 'IT 工具',
-    description: 'Base64、JSON、URL 编码、颜色转换、UUID 生成等多种实用工具',
+    description: 'Base64、JSON、UUID、颜色转换……日常开发的那些小事，一站搞定',
     icon: ToolsIcon,
     bgDefault: 'bg-zinc-50',
     bgHover: 'group-hover:bg-orange-100',
@@ -245,7 +242,7 @@ const tools = [
   },
   {
     title: 'JetBrains',
-    description: '技术人你懂的 😏',
+    description: '懂的都懂 😏',
     icon: JetbrainsIcon,
     bgDefault: 'bg-zinc-50',
     bgHover: 'group-hover:bg-yellow-100',
@@ -255,7 +252,7 @@ const tools = [
   },
   {
     title: '更多工具开发中',
-    description: '新工具正在开发中，敬请期待',
+    description: '更多工具正在路上，总有一款在等你',
     icon: ComingIcon,
     bgDefault: 'bg-zinc-50',
     bgHover: 'group-hover:bg-zinc-100',
@@ -265,29 +262,6 @@ const tools = [
   }
 ]
 
-const features = [
-  {
-    title: '安全可靠',
-    description: '所有操作均在本地完成，保护您的隐私和数据安全，无需担心数据泄露',
-    icon: ShieldIcon,
-    bgClass: 'bg-zinc-50 text-zinc-500',
-    iconClass: 'text-zinc-500'
-  },
-  {
-    title: '快速高效',
-    description: '采用先进的 Web 技术，确保工具响应迅速，操作流畅',
-    icon: ZapIcon,
-    bgClass: 'bg-zinc-50 text-zinc-500',
-    iconClass: 'text-zinc-500'
-  },
-  {
-    title: '随时可用',
-    description: '无需安装任何软件，只需打开浏览器即可使用所有工具',
-    icon: CloudIcon,
-    bgClass: 'bg-zinc-50 text-zinc-500',
-    iconClass: 'text-zinc-500'
-  }
-]
 
 
 
@@ -315,10 +289,62 @@ const scrollToTools = () => {
 onMounted(() => {
   window.scrollTo(0, 0)
   window.addEventListener('scroll', handleScroll)
+
+  // 移动端：用 scroll + rAF 实时计算离屏幕中心最近的卡片并激活
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+  if (isTouchDevice) {
+    let scrollEndTimer = null
+
+    const updateActiveBook = (forceClose = false) => {
+      if (forceClose) {
+        activeBook.value = -1
+        return
+      }
+      const centerY = window.innerHeight / 2
+      let minDist = Infinity
+      let nearest = -1
+      bookRefs.value.forEach((el, i) => {
+        if (!el) return
+        const rect = el.getBoundingClientRect()
+        const cardCenter = rect.top + rect.height / 2
+        const dist = Math.abs(cardCenter - centerY)
+        if (dist < minDist && rect.top < window.innerHeight && rect.bottom > 0) {
+          minDist = dist
+          nearest = i
+        }
+      })
+      activeBook.value = minDist < window.innerHeight * 0.35 ? nearest : -1
+    }
+
+    const onScroll = () => {
+      if (rafId) cancelAnimationFrame(rafId)
+      rafId = requestAnimationFrame(() => updateActiveBook())
+
+      // 滚动停止后 300ms 重算一次，确保惯性滚动结束后状态正确
+      clearTimeout(scrollEndTimer)
+      scrollEndTimer = setTimeout(() => updateActiveBook(), 300)
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    // scrollend 原生事件支持时直接用（更精准）
+    window.addEventListener('scrollend', () => updateActiveBook(), { passive: true })
+    // 初始执行一次
+    setTimeout(() => updateActiveBook(), 150)
+
+    bookObserver = {
+      disconnect: () => {
+        window.removeEventListener('scroll', onScroll)
+        window.removeEventListener('scrollend', updateActiveBook)
+        clearTimeout(scrollEndTimer)
+        if (rafId) cancelAnimationFrame(rafId)
+      }
+    }
+  }
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  if (bookObserver) bookObserver.disconnect()
 })
 </script>
 
@@ -451,27 +477,33 @@ onUnmounted(() => {
 }
 
 /* 多页翻 */
-.book:hover .page:nth-child(1) {
+.book:hover .page:nth-child(1),
+.book.is-in-view .page:nth-child(1) {
   transform: rotateY(-30deg);
   transition-delay: 0s;
 }
-.book:hover .page:nth-child(2) {
+.book:hover .page:nth-child(2),
+.book.is-in-view .page:nth-child(2) {
   transform: rotateY(-30deg);
   transition-delay: 0.08s;
 }
-.book:hover .page:nth-child(3) {
+.book:hover .page:nth-child(3),
+.book.is-in-view .page:nth-child(3) {
   transform: rotateY(-30deg);
   transition-delay: 0.16s;
 }
 
 /* 阴影层级 */
-.book:hover .page:nth-child(1) .front {
+.book:hover .page:nth-child(1) .front,
+.book.is-in-view .page:nth-child(1) .front {
   box-shadow: -15px 10px 30px rgba(0,0,0,0.15);
 }
-.book:hover .page:nth-child(2) .front {
+.book:hover .page:nth-child(2) .front,
+.book.is-in-view .page:nth-child(2) .front {
   box-shadow: -10px 8px 20px rgba(0,0,0,0.12);
 }
-.book:hover .page:nth-child(3) .front {
+.book:hover .page:nth-child(3) .front,
+.book.is-in-view .page:nth-child(3) .front {
   box-shadow: -5px 6px 15px rgba(0,0,0,0.1);
 }
 </style>

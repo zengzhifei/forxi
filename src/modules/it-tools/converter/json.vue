@@ -10,12 +10,12 @@
     </h3>
     <textarea 
       v-model="input" 
-      class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent font-mono text-sm"
+      class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent font-mono text-sm"
       rows="8"
       placeholder="请输入 JSON 字符串..."
     ></textarea>
     <div class="mt-4 flex gap-3 flex-wrap">
-      <button @click="format" class="px-5 py-2.5 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all shadow-lg shadow-purple-500/25 font-medium">格式化</button>
+      <button @click="format" class="px-5 py-2.5 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-all font-medium">格式化</button>
       <button @click="compress" class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all font-medium">压缩</button>
       <button @click="copy(output)" class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all font-medium" :disabled="!output">复制</button>
     </div>

@@ -10,12 +10,12 @@
     </h3>
     <textarea 
       v-model="input" 
-      class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent font-mono text-sm"
+      class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400 font-mono text-sm"
       rows="6"
       placeholder="请输入 Markdown 文本..."
     ></textarea>
     <div class="mt-4 flex gap-3">
-      <button @click="convert" class="px-5 py-2.5 bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-lg hover:from-pink-600 hover:to-pink-700 transition-all shadow-lg shadow-pink-500/25 font-medium">转换</button>
+      <button @click="convert" class="px-5 py-2.5 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-all font-medium">转换</button>
       <button @click="copy(output)" class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all font-medium">复制 HTML</button>
     </div>
     <div v-if="output" class="mt-4">

@@ -10,7 +10,7 @@
     </h3>
     <textarea 
       v-model="input" 
-      class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent"
       rows="6"
       placeholder="请输入要统计的文本..."
     ></textarea>

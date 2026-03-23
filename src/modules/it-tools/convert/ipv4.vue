@@ -15,7 +15,7 @@
           type="text" 
           v-model="ipv4" 
           @input="ipv4ToInt"
-          class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono"
+          class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent font-mono"
           placeholder="例如: 192.168.1.1"
         />
       </div>
@@ -25,7 +25,7 @@
           type="number" 
           v-model="intValue" 
           @input="intToIpv4"
-          class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono"
+          class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent font-mono"
           placeholder="例如: 3232235777"
         />
       </div>

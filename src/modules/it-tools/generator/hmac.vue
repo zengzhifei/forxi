@@ -76,7 +76,7 @@ function copyToClipboard() {
       <textarea
         v-model="plainText"
         @input="updateHmac"
-        class="w-full h-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none font-mono text-sm"
+        class="w-full h-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400 resize-none font-mono text-sm"
         placeholder="输入要计算 HMAC 的文本..."
       />
     </div>
@@ -87,7 +87,7 @@ function copyToClipboard() {
         v-model="secret"
         @input="updateHmac"
         type="text"
-        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
+        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400 font-mono"
         placeholder="输入密钥..."
       />
     </div>
@@ -98,7 +98,7 @@ function copyToClipboard() {
         <select
           v-model="hashFunction"
           @change="updateHmac"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400"
         >
           <option v-for="(label, value) in algos" :key="value" :value="value">
             {{ label }}
@@ -110,7 +110,7 @@ function copyToClipboard() {
         <select
           v-model="encoding"
           @change="updateHmac"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400"
         >
           <option v-for="enc in encodings" :key="enc.value" :value="enc.value">
             {{ enc.label }}
@@ -131,7 +131,7 @@ function copyToClipboard() {
         <button
           @click="copyToClipboard"
           :disabled="!hmacValue"
-          class="absolute top-2 right-2 px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+          class="absolute top-2 right-2 px-3 py-1 bg-zinc-600 text-white text-sm rounded hover:bg-zinc-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
         >
           复制
         </button>

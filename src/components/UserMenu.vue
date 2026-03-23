@@ -59,7 +59,7 @@
   <div v-else class="flex items-center">
     <router-link
       to="/auth"
-      class="flex items-center gap-2 px-3 sm:px-5 py-2 text-sm font-medium text-white bg-zinc-800 rounded-full shadow-md hover:shadow-lg hover:shadow-zinc-400/30 hover:bg-zinc-700 transition-all duration-200"
+      class="flex items-center gap-2 px-3 sm:px-5 py-2 text-sm font-medium text-zinc-500 bg-zinc-50 border border-zinc-200 rounded-full hover:bg-zinc-100 hover:text-zinc-600 hover:border-zinc-300 hover:shadow-sm transition-all duration-200"
     >
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />

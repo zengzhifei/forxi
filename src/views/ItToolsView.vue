@@ -7,7 +7,8 @@
       <button 
         v-if="isMobile"
         @click="toggleMenu"
-        class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full shadow-lg shadow-blue-500/30 flex items-center justify-center"
+        class="fixed bottom-6 right-6 z-50 w-14 h-14 text-white rounded-full shadow-lg flex items-center justify-center"
+        style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)"
       >
         <svg v-if="!menuOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -27,7 +28,7 @@
                 v-model="searchQuery"
                 type="text"
                 placeholder="搜索工具..."
-                class="w-full px-3 py-2 pl-9 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                class="w-full px-3 py-2 pl-9 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400"
               />
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -37,7 +38,7 @@
           <nav class="flex-1 overflow-y-auto p-2">
             <!-- 常用工具 - 收藏的工具 -->
             <div v-if="favoriteTools.length > 0" class="mb-4">
-              <h3 class="px-3 py-2 text-xs font-semibold text-orange-500 uppercase tracking-wider flex items-center">
+              <h3 class="px-3 py-2 text-xs font-semibold text-amber-500 uppercase tracking-wider flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
@@ -49,11 +50,11 @@
                     href="javascript:void(0)" 
                     @click="selectTool(tool)"
                     class="flex items-center px-3 py-2.5 text-sm rounded-lg transition-all duration-200 group"
-                    :class="isSelected(tool.id) ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-gray-50'"
+                    :class="isSelected(tool.id) ? 'bg-zinc-100 text-zinc-700' : 'text-gray-600 hover:bg-gray-50'"
                   >
-                    <span 
+                    <span
                       class="w-8 h-8 rounded-lg flex items-center justify-center mr-3 transition-colors"
-                      :class="isSelected(tool.id) ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-500'"
+                      :class="isSelected(tool.id) ? 'bg-zinc-200' : 'bg-gray-100 text-gray-500'"
                     >
                       {{ tool.icon }}
                     </span>
@@ -69,18 +70,18 @@
               </h3>
               <ul class="space-y-1">
                 <li v-for="tool in category.tools" :key="tool.id">
-                  <a 
-                    href="javascript:void(0)" 
+                  <a
+                    href="javascript:void(0)"
                     @click="selectTool(tool)"
                     class="flex items-center px-3 py-2.5 text-sm rounded-lg transition-all duration-200 group"
-                    :class="isSelected(tool.id) 
-                      ? 'bg-blue-500 text-white' 
+                    :class="isSelected(tool.id)
+                      ? 'bg-zinc-100 text-zinc-700'
                       : 'text-gray-600 hover:bg-gray-50'"
                   >
-                    <span 
+                    <span
                       class="w-8 h-8 rounded-lg flex items-center justify-center mr-3 transition-colors"
-                      :class="isSelected(tool.id) 
-                        ? 'bg-white/20 text-white' 
+                      :class="isSelected(tool.id)
+                        ? 'bg-zinc-200'
                         : 'bg-gray-100 text-gray-500'"
                     >
                       {{ tool.icon }}
@@ -115,7 +116,7 @@
                 v-model="searchQuery"
                 type="text"
                 placeholder="搜索工具..."
-                class="w-full px-3 py-2 pl-9 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                class="w-full px-3 py-2 pl-9 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400"
               />
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -125,7 +126,7 @@
           <nav class="p-2">
             <!-- 常用工具 - 收藏的工具 -->
             <div v-if="favoriteTools.length > 0" class="mb-4">
-              <h3 class="px-3 py-2 text-xs font-semibold text-orange-500 uppercase tracking-wider flex items-center">
+              <h3 class="px-3 py-2 text-xs font-semibold text-amber-500 uppercase tracking-wider flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
@@ -137,14 +138,14 @@
                     href="javascript:void(0)" 
                     @click="selectTool(tool)"
                     class="flex items-center px-3 py-2.5 text-sm rounded-lg transition-all duration-200 group"
-                    :class="isSelected(tool.id) 
-                      ? 'bg-blue-500 text-white' 
+                    :class="isSelected(tool.id)
+                      ? 'bg-zinc-100 text-zinc-700'
                       : 'text-gray-600 hover:bg-gray-50'"
                   >
-                    <span 
+                    <span
                       class="w-8 h-8 rounded-lg flex items-center justify-center mr-3 transition-colors flex-shrink-0"
-                      :class="isSelected(tool.id) 
-                        ? 'bg-white/20 text-white' 
+                      :class="isSelected(tool.id)
+                        ? 'bg-zinc-200'
                         : 'bg-gray-100 text-gray-500'"
                     >
                       {{ tool.icon }}
@@ -161,18 +162,18 @@
               </h3>
               <ul class="space-y-1">
                 <li v-for="tool in category.tools" :key="tool.id">
-                  <a 
-                    href="javascript:void(0)" 
+                  <a
+                    href="javascript:void(0)"
                     @click="selectTool(tool)"
                     class="flex items-center px-3 py-2.5 text-sm rounded-lg transition-all duration-200 group"
-                    :class="isSelected(tool.id) 
-                      ? 'bg-blue-500 text-white' 
+                    :class="isSelected(tool.id)
+                      ? 'bg-zinc-100 text-zinc-700'
                       : 'text-gray-600 hover:bg-gray-50'"
                   >
-                    <span 
+                    <span
                       class="w-8 h-8 rounded-lg flex items-center justify-center mr-3 transition-colors flex-shrink-0"
-                      :class="isSelected(tool.id) 
-                        ? 'bg-white/20 text-white' 
+                      :class="isSelected(tool.id)
+                        ? 'bg-zinc-200'
                         : 'bg-gray-100 text-gray-500'"
                     >
                       {{ tool.icon }}
@@ -208,16 +209,11 @@
                     <p class="text-gray-500 text-sm lg:text-base mt-0.5 lg:mt-1 truncate">{{ selectedTool.description }}</p>
                   </div>
                 </div>
-                <button @click="closeTool" class="flex-shrink-0 p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600">
-                  <svg class="w-5 h-5 lg:w-6 lg:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
                 <button
                   @click="toggleFav(selectedTool.id)"
                   class="flex-shrink-0 p-2 rounded-lg transition-colors"
-                  :class="isFavorite(selectedTool.id) 
-                    ? 'bg-orange-100 text-orange-500 hover:bg-orange-200' 
+                  :class="isFavorite(selectedTool.id)
+                    ? 'bg-amber-50 text-amber-500 hover:bg-amber-100'
                     : 'bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-gray-500'"
                   :title="isFavorite(selectedTool.id) ? '取消收藏' : '收藏'"
                 >
@@ -254,7 +250,7 @@
 </template>
 
 <script setup>
-import { ref, computed, inject, markRaw, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, markRaw, onMounted, onUnmounted, watch } from 'vue'
 import { categories, tools } from '../modules/it-tools/index.js'
 import { useBreakpoint } from '../composable/useBreakpoint'
 import { useFavorites } from '../composable/useFavorites'
@@ -263,7 +259,6 @@ import AppFooter from '../components/AppFooter.vue'
 
 const { isMobile } = useBreakpoint()
 const { favorites, isFavorite, toggleFavorite: toggleFav } = useFavorites()
-const toast = inject('toast')
 
 const selectedTool = ref(null)
 let isInitializing = true
@@ -332,21 +327,11 @@ const filteredCategories = computed(() => {
   return result
 })
 
-const hasSearchResults = computed(() => {
-  const query = searchQuery.value.trim().toLowerCase()
-  if (!query) return true
-  return filteredCategories.value.length > 0 || favoriteTools.value.length > 0
-})
-
 function selectTool(tool) {
   if (tool && tool.id) {
     selectedTool.value = markRaw(tool)
   }
   menuOpen.value = false
-}
-
-function closeTool() {
-  selectedTool.value = null
 }
 
 function isSelected(toolId) {
@@ -355,15 +340,5 @@ function isSelected(toolId) {
 
 function toggleMenu() {
   menuOpen.value = !menuOpen.value
-}
-
-function toggleFavorite(toolId) {
-  const wasFavorite = isFavorite(toolId)
-  toggleFav(toolId)
-  if (wasFavorite) {
-    toast.success('已取消收藏')
-  } else {
-    toast.success('已添加到常用工具')
-  }
 }
 </script>

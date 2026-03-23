@@ -1,66 +1,67 @@
 <template>
-  <div class="min-h-screen bg-gray-50 text-gray-900 font-sans flex flex-col">
+  <div class="min-h-screen bg-[#fafafa] text-zinc-600 font-sans flex flex-col">
     <AppHeader />
 
     <main class="flex-1">
-      <div class="max-w-7xl mx-auto py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-6 sm:mb-8">
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2">在线图片处理</h2>
-          <p class="text-sm sm:text-base text-gray-600">支持图片压缩、裁剪、滤镜、拼接等多种处理功能</p>
+      <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-8">
+          <h2 class="text-2xl font-semibold text-zinc-700 mb-2">图片处理</h2>
+          <p class="text-sm text-zinc-400">支持在线图片压缩、裁剪、滤镜、拼接等多种处理功能</p>
         </div>
 
         <div v-if="!selectedImage" class="max-w-xl mx-auto">
-          <div 
-            class="border-2 border-dashed border-gray-300 rounded-xl p-12 text-center hover:border-blue-400 transition-colors cursor-pointer"
+          <div
+            class="border-2 border-dashed border-zinc-200 rounded-xl p-12 text-center hover:border-zinc-300 transition-colors cursor-pointer"
             @click="triggerFileInput"
             @dragover.prevent="isDragging = true"
             @dragleave.prevent="isDragging = false"
             @drop.prevent="handleFileDrop"
-            :class="{ 'border-blue-500 bg-blue-50': isDragging }"
+            :class="{ 'border-zinc-400 bg-zinc-50': isDragging }"
           >
-            <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg class="mx-auto h-16 w-16 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <p class="mt-4 text-lg font-medium text-gray-900">点击或拖拽图片到此处</p>
-            <p class="mt-2 text-sm text-gray-500">支持 JPG、PNG、GIF、WebP、BMP 等常见格式</p>
+            <p class="mt-4 text-lg font-medium text-zinc-600">点击或拖拽图片到此处</p>
+            <p class="mt-2 text-sm text-zinc-400">支持 JPG、PNG、GIF、WebP、BMP 等常见格式</p>
             <input ref="fileInput" type="file" class="hidden" accept="image/jpeg,image/png,image/gif,image/webp,image/bmp" @change="handleFileSelect">
           </div>
         </div>
 
         <div v-else class="space-y-4 max-w-4xl mx-auto">
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div class="p-3 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+          <div class="bg-white border border-zinc-100 shadow-sm rounded-xl overflow-hidden">
+            <div class="p-3 bg-zinc-50 border-b border-zinc-100 flex items-center justify-between">
               <div class="flex items-center space-x-2">
-                <span class="text-sm font-medium text-gray-700">预览</span>
+                <span class="text-sm font-medium text-zinc-600">预览</span>
               </div>
               <div class="flex items-center space-x-2">
-                <button @click="openDownloadModal" :disabled="!previewUrl" class="px-3 py-1.5 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 disabled:opacity-50 flex items-center space-x-1">
+                <button @click="openDownloadModal" :disabled="!previewUrl" class="px-3 py-1.5 text-white text-sm rounded-xl transition-all hover:opacity-90 disabled:opacity-50 flex items-center space-x-1" style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)">
                   <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                   <span>下载</span>
                 </button>
-                <button @click="confirmResetAll" :disabled="!hasModifications" class="px-3 py-1.5 border border-gray-300 text-gray-700 text-sm rounded-lg hover:bg-gray-50 disabled:opacity-50 flex items-center space-x-1">
+                <button @click="confirmResetAll" :disabled="!hasModifications" class="px-3 py-1.5 border border-zinc-200 text-zinc-400 hover:bg-zinc-50 rounded-xl text-sm disabled:opacity-50 flex items-center space-x-1">
                   <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                   <span>重置全部</span>
                 </button>
-                <button @click="resetImage" class="px-3 py-1.5 text-gray-500 text-sm hover:text-gray-700">
-                  更换图片
+                <button @click="resetImage" class="px-3 py-1.5 border border-zinc-200 text-zinc-500 hover:bg-zinc-50 rounded-xl text-sm flex items-center space-x-1 transition-colors">
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                  <span>更换图片</span>
                 </button>
               </div>
             </div>
-            <div class="p-4 bg-gray-100 flex items-center justify-center relative" :style="{ minHeight: previewHeight + 'px' }">
+            <div class="p-4 bg-zinc-100 flex items-center justify-center relative" :style="{ minHeight: previewHeight + 'px' }">
               <div class="relative inline-block" ref="imageContainer">
-                <img 
-                  ref="previewImage" 
-                  :src="previewUrl || imagePreviewUrl" 
+                <img
+                  ref="previewImage"
+                  :src="previewUrl || imagePreviewUrl"
                   class="max-w-full max-h-[400px] object-contain select-none block"
                   :class="{ 'cursor-move': activeTab === 'ai-crop' && enableAICrop }"
                   @mousedown="handleCropMouseDown"
                 >
-                <div 
+                <div
                   v-if="activeTab === 'ai-crop' && enableAICrop && !isCropped"
                   class="absolute inset-0 pointer-events-none"
                 >
-                  <div 
+                  <div
                     class="absolute border-2 border-white bg-black/30 pointer-events-auto"
                     :style="cropBoxStyle"
                     @mousedown.stop="startDrag"
@@ -81,22 +82,22 @@
                 </div>
               </div>
             </div>
-            <div class="px-4 py-2 bg-gray-50 border-t border-gray-200 flex justify-between text-sm text-gray-500">
+            <div class="px-4 py-2 bg-zinc-50 border-t border-zinc-100 flex justify-between text-sm text-zinc-400">
               <span>尺寸: {{ displayWidth }} × {{ displayHeight }}</span>
               <span>大小: {{ formatFileSize(displayFileSize) }}</span>
             </div>
           </div>
 
-          <div class="bg-white rounded-xl shadow-lg p-4">
-            <div class="flex flex-wrap gap-1 mb-4 bg-gray-100 rounded-lg p-1">
-              <button 
-                v-for="tab in tabs" 
+          <div class="bg-white border border-zinc-100 shadow-sm rounded-xl p-4">
+            <div class="flex flex-wrap gap-1 mb-4 bg-zinc-100 rounded-xl p-1">
+              <button
+                v-for="tab in tabs"
                 :key="tab.id"
                 @click="switchTab(tab.id)"
-                class="relative py-2 px-3 text-xs font-medium rounded-md transition-colors whitespace-nowrap"
-                :class="activeTab === tab.id ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+                class="relative py-2 px-3 text-xs font-medium rounded-xl transition-colors whitespace-nowrap"
+                :class="activeTab === tab.id ? 'bg-white text-zinc-700 shadow-sm' : 'text-zinc-400 hover:text-zinc-600'"
               >
-                <span v-if="tab.isAi" class="text-[10px] text-blue-500 mr-1">AI</span>{{ tab.name }}
+                <span v-if="tab.isAi" class="text-[10px] text-zinc-400 mr-1">AI</span>{{ tab.name }}
                 <span v-if="isTabModified(tab.id)" class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full"></span>
               </button>
             </div>
@@ -106,12 +107,12 @@
               <div v-if="activeTab === 'compress'" class="space-y-4">
                 <div>
                   <div class="flex justify-between items-center mb-2">
-                    <label class="text-sm font-medium text-gray-700">压缩质量</label>
-                    <span class="text-sm text-blue-600">{{ compressQuality }}%</span>
+                    <label class="text-sm font-medium text-zinc-600">压缩质量</label>
+                    <span class="text-sm text-zinc-400">{{ compressQuality }}%</span>
                   </div>
-                  <input type="range" v-model.number="compressQuality" min="10" max="100" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" @input="applyAllEffects">
+                  <input type="range" v-model.number="compressQuality" min="10" max="100" class="w-full h-2 bg-zinc-200 rounded-lg appearance-none cursor-pointer" @input="applyAllEffects">
                 </div>
-                <button @click="resetCompress" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
+                <button @click="resetCompress" class="w-full py-2 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-sm transition-colors">
                   恢复默认
                 </button>
               </div>
@@ -119,23 +120,23 @@
               <!-- 旋转 -->
               <div v-if="activeTab === 'rotate'" class="space-y-4">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">旋转角度: {{ realRotation }}°</label>
+                  <label class="block text-sm font-medium text-zinc-600 mb-2">旋转角度: {{ realRotation }}°</label>
                   <div class="grid grid-cols-4 gap-2 mb-3">
-                    <button @click="rotateImage(-90)" class="py-2 px-2 bg-gray-100 rounded-lg hover:bg-gray-200">↺</button>
-                    <button @click="rotateImage(90)" class="py-2 px-2 bg-gray-100 rounded-lg hover:bg-gray-200">↻</button>
-                    <button @click="rotateImage(-15)" class="py-2 px-2 bg-gray-100 rounded-lg hover:bg-gray-200 text-xs">-15°</button>
-                    <button @click="rotateImage(15)" class="py-2 px-2 bg-gray-100 rounded-lg hover:bg-gray-200 text-xs">+15°</button>
+                    <button @click="rotateImage(-90)" class="py-2 px-2 bg-zinc-100 rounded-xl hover:bg-zinc-200">↺</button>
+                    <button @click="rotateImage(90)" class="py-2 px-2 bg-zinc-100 rounded-xl hover:bg-zinc-200">↻</button>
+                    <button @click="rotateImage(-15)" class="py-2 px-2 bg-zinc-100 rounded-xl hover:bg-zinc-200 text-xs">-15°</button>
+                    <button @click="rotateImage(15)" class="py-2 px-2 bg-zinc-100 rounded-xl hover:bg-zinc-200 text-xs">+15°</button>
                   </div>
-                  <input type="range" v-model.number="rotation" min="-180" max="180" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" @input="applyAllEffects">
+                  <input type="range" v-model.number="rotation" min="-180" max="180" class="w-full h-2 bg-zinc-200 rounded-lg appearance-none cursor-pointer" @input="applyAllEffects">
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">翻转</label>
+                  <label class="block text-sm font-medium text-zinc-600 mb-2">翻转</label>
                   <div class="grid grid-cols-2 gap-2">
-                    <button @click="toggleFlip('horizontal')" class="py-2 px-2 bg-gray-100 rounded-lg hover:bg-gray-200 text-sm" :class="flipH ? 'bg-blue-100 border-blue-500' : ''">水平翻转 {{ flipH ? '✓' : '' }}</button>
-                    <button @click="toggleFlip('vertical')" class="py-2 px-2 bg-gray-100 rounded-lg hover:bg-gray-200 text-sm" :class="flipV ? 'bg-blue-100 border-blue-500' : ''">垂直翻转 {{ flipV ? '✓' : '' }}</button>
+                    <button @click="toggleFlip('horizontal')" class="py-2 px-2 bg-zinc-100 rounded-xl hover:bg-zinc-200 text-sm" :class="flipH ? 'bg-zinc-200 text-zinc-700' : ''">水平翻转 {{ flipH ? '✓' : '' }}</button>
+                    <button @click="toggleFlip('vertical')" class="py-2 px-2 bg-zinc-100 rounded-xl hover:bg-zinc-200 text-sm" :class="flipV ? 'bg-zinc-200 text-zinc-700' : ''">垂直翻转 {{ flipV ? '✓' : '' }}</button>
                   </div>
                 </div>
-                <button @click="resetRotate" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
+                <button @click="resetRotate" class="w-full py-2 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-sm transition-colors">
                   恢复默认
                 </button>
               </div>
@@ -144,22 +145,22 @@
               <div v-if="activeTab === 'resize'" class="space-y-4">
                 <div class="grid grid-cols-2 gap-4">
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">宽度 (px)</label>
-                    <input type="number" v-model.number="resizeWidth" class="w-full px-3 py-2 border border-gray-300 rounded-lg" @input="applyAllEffects">
+                    <label class="block text-sm font-medium text-zinc-600 mb-1">宽度 (px)</label>
+                    <input type="number" v-model.number="resizeWidth" class="w-full px-3 py-2 border border-zinc-200 bg-zinc-50 text-zinc-700 placeholder-zinc-300 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-200 focus:bg-white rounded-xl outline-none transition-all" @input="applyAllEffects">
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">高度 (px)</label>
-                    <input type="number" v-model.number="resizeHeight" class="w-full px-3 py-2 border border-gray-300 rounded-lg" @input="applyAllEffects">
+                    <label class="block text-sm font-medium text-zinc-600 mb-1">高度 (px)</label>
+                    <input type="number" v-model.number="resizeHeight" class="w-full px-3 py-2 border border-zinc-200 bg-zinc-50 text-zinc-700 placeholder-zinc-300 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-200 focus:bg-white rounded-xl outline-none transition-all" @input="applyAllEffects">
                   </div>
                 </div>
                 <div class="flex items-center">
                   <input type="checkbox" id="maintainAspect" v-model="maintainAspectRatio" class="h-4 w-4" @change="applyAllEffects">
-                  <label for="maintainAspect" class="ml-2 text-sm text-gray-600">保持宽高比</label>
+                  <label for="maintainAspect" class="ml-2 text-sm text-zinc-600">保持宽高比</label>
                 </div>
-                <div class="text-sm text-gray-500 text-center">
+                <div class="text-sm text-zinc-400 text-center">
                   原始尺寸: {{ originalWidth }} × {{ originalHeight }}
                 </div>
-                <button @click="resetResize" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
+                <button @click="resetResize" class="w-full py-2 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-sm transition-colors">
                   恢复默认
                 </button>
               </div>
@@ -168,35 +169,35 @@
               <div v-if="activeTab === 'watermark'" class="space-y-4">
                 <div class="grid grid-cols-2 gap-2">
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">水印文字</label>
-                    <input type="text" v-model="watermarkText" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="输入水印文字" @input="applyAllEffects">
+                    <label class="block text-sm font-medium text-zinc-600 mb-1">水印文字</label>
+                    <input type="text" v-model="watermarkText" class="w-full px-3 py-2 border border-zinc-200 bg-zinc-50 text-zinc-700 placeholder-zinc-300 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-200 focus:bg-white rounded-xl outline-none transition-all" placeholder="输入水印文字" @input="applyAllEffects">
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">颜色</label>
-                    <input type="color" v-model="watermarkColor" class="w-full h-10 border border-gray-300 rounded-lg cursor-pointer" @input="applyAllEffects">
+                    <label class="block text-sm font-medium text-zinc-600 mb-1">颜色</label>
+                    <input type="color" v-model="watermarkColor" class="w-full h-10 border border-zinc-200 rounded-xl cursor-pointer" @input="applyAllEffects">
                   </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">字体大小</label>
-                    <input type="number" v-model.number="watermarkSize" min="12" max="200" class="w-full px-3 py-2 border border-gray-300 rounded-lg" @input="applyAllEffects">
+                    <label class="block text-sm font-medium text-zinc-600 mb-1">字体大小</label>
+                    <input type="number" v-model.number="watermarkSize" min="12" max="200" class="w-full px-3 py-2 border border-zinc-200 bg-zinc-50 text-zinc-700 placeholder-zinc-300 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-200 focus:bg-white rounded-xl outline-none transition-all" @input="applyAllEffects">
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">透明度</label>
-                    <input type="number" v-model.number="watermarkOpacity" min="0.1" max="1" step="0.1" class="w-full px-3 py-2 border border-gray-300 rounded-lg" @input="applyAllEffects">
+                    <label class="block text-sm font-medium text-zinc-600 mb-1">透明度</label>
+                    <input type="number" v-model.number="watermarkOpacity" min="0.1" max="1" step="0.1" class="w-full px-3 py-2 border border-zinc-200 bg-zinc-50 text-zinc-700 placeholder-zinc-300 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-200 focus:bg-white rounded-xl outline-none transition-all" @input="applyAllEffects">
                   </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">X位置 (%)</label>
-                    <input type="number" v-model.number="watermarkX" min="0" max="100" class="w-full px-3 py-2 border border-gray-300 rounded-lg" @input="applyAllEffects">
+                    <label class="block text-sm font-medium text-zinc-600 mb-1">X位置 (%)</label>
+                    <input type="number" v-model.number="watermarkX" min="0" max="100" class="w-full px-3 py-2 border border-zinc-200 bg-zinc-50 text-zinc-700 placeholder-zinc-300 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-200 focus:bg-white rounded-xl outline-none transition-all" @input="applyAllEffects">
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Y位置 (%)</label>
-                    <input type="number" v-model.number="watermarkY" min="0" max="100" class="w-full px-3 py-2 border border-gray-300 rounded-lg" @input="applyAllEffects">
+                    <label class="block text-sm font-medium text-zinc-600 mb-1">Y位置 (%)</label>
+                    <input type="number" v-model.number="watermarkY" min="0" max="100" class="w-full px-3 py-2 border border-zinc-200 bg-zinc-50 text-zinc-700 placeholder-zinc-300 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-200 focus:bg-white rounded-xl outline-none transition-all" @input="applyAllEffects">
                   </div>
                 </div>
-                <button @click="resetWatermark" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
+                <button @click="resetWatermark" class="w-full py-2 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-sm transition-colors">
                   恢复默认
                 </button>
               </div>
@@ -204,27 +205,27 @@
               <!-- 拼接 -->
               <div v-if="activeTab === 'merge'" class="space-y-4">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">拼接方向</label>
-                  <select v-model="mergeDirection" class="w-full px-3 py-2 border border-gray-300 rounded-lg" @change="markModified('merge'); applyAllEffects()">
+                  <label class="block text-sm font-medium text-zinc-600 mb-1">拼接方向</label>
+                  <select v-model="mergeDirection" class="border border-zinc-200 bg-zinc-50 text-zinc-700 rounded-xl px-3 py-2 w-full" @change="markModified('merge'); applyAllEffects()">
                     <option value="horizontal">水平拼接</option>
                     <option value="vertical">垂直拼接</option>
                   </select>
                 </div>
                 <div v-if="!secondImageUrl">
-                  <label class="block text-sm font-medium text-gray-700 mb-1">选择第二张图片</label>
-                  <div 
-                    class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:border-blue-400"
+                  <label class="block text-sm font-medium text-zinc-600 mb-1">选择第二张图片</label>
+                  <div
+                    class="border-2 border-dashed border-zinc-200 rounded-xl p-4 text-center cursor-pointer hover:border-zinc-300"
                     @click="triggerSecondFileInput"
                   >
-                    <p class="text-sm text-gray-500">点击选择第二张图片</p>
+                    <p class="text-sm text-zinc-400">点击选择第二张图片</p>
                     <input ref="secondFileInput" type="file" class="hidden" accept="image/jpeg,image/png,image/gif,image/webp,image/bmp,image/x-icon" @change="handleSecondFileSelect">
                   </div>
                 </div>
                 <div v-else class="space-y-2">
-                  <p class="text-sm text-gray-700">已选择第二张图片</p>
-                  <img :src="secondImageUrl" class="w-full h-20 object-contain border rounded-lg">
+                  <p class="text-sm text-zinc-600">已选择第二张图片</p>
+                  <img :src="secondImageUrl" class="w-full h-20 object-contain border border-zinc-100 rounded-xl">
                 </div>
-                <button @click="resetMerge" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
+                <button @click="resetMerge" class="w-full py-2 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-sm transition-colors">
                   恢复默认
                 </button>
               </div>
@@ -232,8 +233,8 @@
               <!-- 九宫格 -->
               <div v-if="activeTab === 'grid'" class="space-y-4">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">宫格数量</label>
-                  <select v-model="gridCount" class="w-full px-3 py-2 border border-gray-300 rounded-lg" @change="markModified('grid'); applyAllEffects()">
+                  <label class="block text-sm font-medium text-zinc-600 mb-1">宫格数量</label>
+                  <select v-model="gridCount" class="border border-zinc-200 bg-zinc-50 text-zinc-700 rounded-xl px-3 py-2 w-full" @change="markModified('grid'); applyAllEffects()">
                     <option :value="1">原图 (1×1)</option>
                     <option :value="3">九宫格 (3×3)</option>
                     <option :value="4">四宫格 (2×2)</option>
@@ -241,28 +242,28 @@
                     <option :value="2">二宫格 (1×2)</option>
                   </select>
                 </div>
-                <button @click="resetGrid" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
+                <button @click="resetGrid" class="w-full py-2 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-sm transition-colors">
                   恢复默认
                 </button>
               </div>
 
               <!-- 圆形裁剪 -->
               <div v-if="activeTab === 'circle'" class="space-y-4">
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div class="bg-zinc-50 border border-zinc-100 rounded-xl p-4">
                   <div class="flex items-start">
-                    <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="w-5 h-5 text-zinc-400 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div>
-                      <p class="text-sm text-blue-800 font-medium">圆形裁剪</p>
-                      <p class="text-xs text-blue-600 mt-1">将图片裁剪为圆形形状，适合头像、图标等场景</p>
+                      <p class="text-sm text-zinc-600 font-medium">圆形裁剪</p>
+                      <p class="text-xs text-zinc-400 mt-1">将图片裁剪为圆形形状，适合头像、图标等场景</p>
                     </div>
                   </div>
                 </div>
-                <button @click="enableCircleCrop = true; markModified('circle'); applyAllEffects()" class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                <button @click="enableCircleCrop = true; markModified('circle'); applyAllEffects()" class="w-full py-2 px-4 text-white rounded-xl transition-all hover:opacity-90 text-sm" style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)">
                   开始处理
                 </button>
-                <button @click="resetCircle" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
+                <button @click="resetCircle" class="w-full py-2 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-sm transition-colors">
                   恢复默认
                 </button>
               </div>
@@ -270,9 +271,9 @@
               <!-- 滤镜 -->
               <div v-if="activeTab === 'filter'" class="space-y-4">
                 <div class="grid grid-cols-2 gap-2">
-                  <button v-for="f in filters" :key="f.id" @click="currentFilter = f.id; markModified('filter'); applyAllEffects()" class="py-2 px-2 text-xs font-medium border rounded-lg" :class="currentFilter === f.id ? 'border-blue-500 bg-blue-50' : 'border-gray-300'"> {{ f.name }}</button>
+                  <button v-for="f in filters" :key="f.id" @click="currentFilter = f.id; markModified('filter'); applyAllEffects()" class="py-2 px-2 text-xs font-medium border rounded-xl" :class="currentFilter === f.id ? 'border-zinc-500 bg-zinc-100' : 'border-zinc-200'"> {{ f.name }}</button>
                 </div>
-                <button @click="resetFilter" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
+                <button @click="resetFilter" class="w-full py-2 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-sm transition-colors">
                   恢复默认
                 </button>
               </div>
@@ -281,96 +282,99 @@
               <div v-if="activeTab === 'mosaic'" class="space-y-4">
                 <div>
                   <div class="flex justify-between items-center mb-2">
-                    <label class="text-sm font-medium text-gray-700">马赛克强度</label>
-                    <span class="text-sm text-blue-600">{{ mosaicLevel }}</span>
+                    <label class="text-sm font-medium text-zinc-600">马赛克强度</label>
+                    <span class="text-sm text-zinc-400">{{ mosaicLevel }}</span>
                   </div>
-                  <input type="range" v-model.number="mosaicLevel" min="5" max="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" @input="markModified('mosaic'); applyAllEffects()">
+                  <input type="range" v-model.number="mosaicLevel" min="5" max="50" class="w-full h-2 bg-zinc-200 rounded-lg appearance-none cursor-pointer" @input="markModified('mosaic'); applyAllEffects()">
                 </div>
-                <button @click="resetMosaic" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
+                <button @click="resetMosaic" class="w-full py-2 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-sm transition-colors">
                   恢复默认
                 </button>
               </div>
 
               <!-- AI抠图 -->
               <div v-if="activeTab === 'ai-remove-bg'" class="space-y-4">
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div class="bg-zinc-50 border border-zinc-100 rounded-xl p-4">
                   <div class="flex items-start">
-                    <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="w-5 h-5 text-zinc-400 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div>
-                      <p class="text-sm text-blue-800 font-medium">AI智能抠图</p>
-                      <p class="text-xs text-blue-600 mt-1">使用AI技术自动识别并去除图片背景</p>
+                      <p class="text-sm text-zinc-600 font-medium">AI智能抠图</p>
+                      <p class="text-xs text-zinc-400 mt-1">使用AI技术自动识别并去除图片背景</p>
                     </div>
                   </div>
                 </div>
-                <button 
-                  @click="handleAIRemoveBackground" 
+                <button
+                  @click="handleAIRemoveBackground"
                   :disabled="aiProcessing"
-                  class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm disabled:opacity-50"
+                  class="w-full py-2 px-4 text-white rounded-xl transition-all hover:opacity-90 text-sm disabled:opacity-50"
+                  style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)"
                 >
                   {{ aiProcessing ? '处理中...' : '开始处理' }}
                 </button>
-                <button @click="resetAIRemoveBackground" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
+                <button @click="resetAIRemoveBackground" class="w-full py-2 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-sm transition-colors">
                   恢复默认
                 </button>
               </div>
 
               <!-- 背景透明 -->
               <div v-if="activeTab === 'ai-transparent'" class="space-y-4">
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div class="bg-zinc-50 border border-zinc-100 rounded-xl p-4">
                   <div class="flex items-start">
-                    <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="w-5 h-5 text-zinc-400 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div>
-                      <p class="text-sm text-blue-800 font-medium">AI智能背景透明</p>
-                      <p class="text-xs text-blue-600 mt-1">将图片背景设置为透明，支持PNG格式</p>
+                      <p class="text-sm text-zinc-600 font-medium">AI智能背景透明</p>
+                      <p class="text-xs text-zinc-400 mt-1">将图片背景设置为透明，支持PNG格式</p>
                     </div>
                   </div>
                 </div>
-                <button 
-                  @click="handleAITransparent" 
+                <button
+                  @click="handleAITransparent"
                   :disabled="aiProcessing"
-                  class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm disabled:opacity-50"
+                  class="w-full py-2 px-4 text-white rounded-xl transition-all hover:opacity-90 text-sm disabled:opacity-50"
+                  style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)"
                 >
                   {{ aiProcessing ? '处理中...' : '开始处理' }}
                 </button>
-                <button @click="resetAITransparent" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
+                <button @click="resetAITransparent" class="w-full py-2 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-sm transition-colors">
                   恢复默认
                 </button>
               </div>
 
               <!-- AI裁剪 -->
               <div v-if="activeTab === 'ai-crop'" class="space-y-4">
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div class="bg-zinc-50 border border-zinc-100 rounded-xl p-4">
                   <div class="flex items-start">
-                    <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="w-5 h-5 text-zinc-400 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div>
-                      <p class="text-sm text-blue-800 font-medium">AI智能裁剪</p>
-                      <p class="text-xs text-blue-600 mt-1">拖动裁剪框调整位置，拉动边角调整大小</p>
+                      <p class="text-sm text-zinc-600 font-medium">AI智能裁剪</p>
+                      <p class="text-xs text-zinc-400 mt-1">拖动裁剪框调整位置，拉动边角调整大小</p>
                     </div>
                   </div>
                 </div>
                 <div class="flex items-center justify-between">
-                  <label class="text-sm font-medium text-gray-700">手动裁剪</label>
+                  <label class="text-sm font-medium text-zinc-600">手动裁剪</label>
                   <div v-if="!isCropped" class="relative inline-block w-12 mr-2 align-middle select-none cursor-pointer" @click="enableAICrop = !enableAICrop">
                     <input type="checkbox" v-model="enableAICrop" class="sr-only">
-                    <div class="block bg-gray-300 w-12 h-6 rounded-full" :class="{ 'bg-blue-500': enableAICrop }"></div>
+                    <div class="block bg-zinc-300 w-12 h-6 rounded-full" :class="{ 'bg-zinc-500': enableAICrop }"></div>
                     <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition transform" :class="{ 'translate-x-6': enableAICrop }"></div>
                   </div>
-                  <span v-else class="text-sm text-gray-400">已完成</span>
+                  <span v-else class="text-sm text-zinc-400">已完成</span>
                 </div>
-                <p class="text-sm text-gray-600">
+                <p class="text-sm text-zinc-600">
                   X: {{ Math.round(cropBox.x) }} Y: {{ Math.round(cropBox.y) }} 宽度: {{ Math.round(cropBox.width) }} 高度: {{ Math.round(cropBox.height) }}
                 </p>
                 <div v-if="!isCropped" class="space-y-2">
-                  <button 
-                    @click="handleAICrop" 
+                  <button
+                    @click="handleAICrop"
                     :disabled="aiProcessing"
-                    class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+                    class="w-full py-2 px-4 text-white rounded-xl transition-all hover:opacity-90 text-sm"
+                    style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)"
                   >
                     {{ aiProcessing ? '处理中...' : '开始处理' }}
                   </button>
@@ -378,48 +382,49 @@
                 <div v-else class="text-sm text-green-600 text-center py-2">
                   ✓ 裁剪完成
                 </div>
-                <button @click="clearCropSelection" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
+                <button @click="clearCropSelection" class="w-full py-2 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-sm transition-colors">
                   恢复默认
                 </button>
               </div>
 
               <!-- AI证件照 -->
               <div v-if="activeTab === 'ai-photo'" class="space-y-4">
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div class="bg-zinc-50 border border-zinc-100 rounded-xl p-4">
                   <div class="flex items-start">
-                    <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="w-5 h-5 text-zinc-400 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div>
-                      <p class="text-sm text-blue-800 font-medium">AI证件照</p>
-                      <p class="text-xs text-blue-600 mt-1">AI自动生成标准证件照，支持多种尺寸和背景色</p>
+                      <p class="text-sm text-zinc-600 font-medium">AI证件照</p>
+                      <p class="text-xs text-zinc-400 mt-1">AI自动生成标准证件照，支持多种尺寸和背景色</p>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">证件照尺寸</label>
-                  <select v-model="aiPhotoSize" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                  <label class="block text-sm font-medium text-zinc-600 mb-1">证件照尺寸</label>
+                  <select v-model="aiPhotoSize" class="border border-zinc-200 bg-zinc-50 text-zinc-700 rounded-xl px-3 py-2 w-full">
                     <option value="一寸">一寸 (295×413)</option>
                     <option value="二寸">二寸 (413×579)</option>
                     <option value="小二寸">小二寸 (390×567)</option>
                   </select>
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">背景颜色</label>
+                  <label class="block text-sm font-medium text-zinc-600 mb-1">背景颜色</label>
                   <div class="flex gap-2">
-                    <button @click="aiPhotoBg = '#FFFFFF'" class="flex-1 py-2 border rounded-lg" :class="aiPhotoBg === '#FFFFFF' ? 'border-blue-500 bg-blue-50' : 'border-gray-300'">白色</button>
-                    <button @click="aiPhotoBg = '#438EDB'" class="flex-1 py-2 border rounded-lg" :class="aiPhotoBg === '#438EDB' ? 'border-blue-500 bg-blue-50' : 'border-gray-300'">蓝色</button>
-                    <button @click="aiPhotoBg = '#E60000'" class="flex-1 py-2 border rounded-lg" :class="aiPhotoBg === '#E60000' ? 'border-blue-500 bg-blue-50' : 'border-gray-300'">红色</button>
+                    <button @click="aiPhotoBg = '#FFFFFF'" class="flex-1 py-2 border rounded-xl" :class="aiPhotoBg === '#FFFFFF' ? 'border-zinc-500 bg-zinc-50' : 'border-zinc-200'">白色</button>
+                    <button @click="aiPhotoBg = '#438EDB'" class="flex-1 py-2 border rounded-xl" :class="aiPhotoBg === '#438EDB' ? 'border-zinc-500 bg-zinc-50' : 'border-zinc-200'">蓝色</button>
+                    <button @click="aiPhotoBg = '#E60000'" class="flex-1 py-2 border rounded-xl" :class="aiPhotoBg === '#E60000' ? 'border-zinc-500 bg-zinc-50' : 'border-zinc-200'">红色</button>
                   </div>
                 </div>
-                <button 
-                  @click="handleAIPhoto" 
+                <button
+                  @click="handleAIPhoto"
                   :disabled="aiProcessing"
-                  class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm disabled:opacity-50"
+                  class="w-full py-2 px-4 text-white rounded-xl transition-all hover:opacity-90 text-sm disabled:opacity-50"
+                  style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)"
                 >
                   {{ aiProcessing ? '处理中...' : '开始处理' }}
                 </button>
-                <button @click="resetAIPhoto" class="w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-sm">
+                <button @click="resetAIPhoto" class="w-full py-2 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-sm transition-colors">
                   恢复默认
                 </button>
               </div>
@@ -427,117 +432,19 @@
           </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 mt-6 max-w-4xl mx-auto">
-          <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-            <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            功能说明
-          </h3>
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <div class="flex items-start">
-              <span class="text-xl mr-2">📦</span>
+        <!-- 功能说明 -->
+        <div class="mt-8 max-w-4xl mx-auto">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="h-px flex-1 bg-zinc-100"></div>
+            <span class="text-sm text-zinc-400 tracking-wider">功能一览</span>
+            <div class="h-px flex-1 bg-zinc-100"></div>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            <div v-for="feat in featureList" :key="feat.name" class="flex items-start gap-3 bg-white border border-zinc-100 rounded-xl p-3 hover:border-zinc-200 transition-colors">
+              <span class="text-lg leading-none mt-0.5">{{ feat.icon }}</span>
               <div>
-                <div class="font-medium text-gray-800 text-sm">图片压缩</div>
-                <div class="text-xs text-gray-500">调整压缩质量，减小文件大小</div>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <span class="text-xl mr-2">🔄</span>
-              <div>
-                <div class="font-medium text-gray-800 text-sm">旋转翻转</div>
-                <div class="text-xs text-gray-500">任意角度旋转，支持水平/垂直翻转</div>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <span class="text-xl mr-2">📐</span>
-              <div>
-                <div class="font-medium text-gray-800 text-sm">尺寸调整</div>
-                <div class="text-xs text-gray-500">自由调整宽高，支持保持比例</div>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <span class="text-xl mr-2">💧</span>
-              <div>
-                <div class="font-medium text-gray-800 text-sm">添加水印</div>
-                <div class="text-xs text-gray-500">自定义文字、颜色、位置和透明度</div>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <span class="text-xl mr-2">🖼️</span>
-              <div>
-                <div class="font-medium text-gray-800 text-sm">图片拼接</div>
-                <div class="text-xs text-gray-500">水平或垂直拼接多张图片</div>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <span class="text-xl mr-2">⬜</span>
-              <div>
-                <div class="font-medium text-gray-800 text-sm">九宫格</div>
-                <div class="text-xs text-gray-500">将图片分割成多宫格形式</div>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <span class="text-xl mr-2">⭕</span>
-              <div>
-                <div class="font-medium text-gray-800 text-sm">圆形裁剪</div>
-                <div class="text-xs text-gray-500">将图片裁剪为圆形形状</div>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <span class="text-xl mr-2">📇</span>
-              <div>
-                <div class="font-medium text-gray-800 text-sm">证件照</div>
-                <div class="text-xs text-gray-500">标准证件照尺寸，蓝/白/红底色</div>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <span class="text-xl mr-2">🎨</span>
-              <div>
-                <div class="font-medium text-gray-800 text-sm">图片滤镜</div>
-                <div class="text-xs text-gray-500">灰度、复古、提亮、对比、模糊</div>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <span class="text-xl mr-2">🎯</span>
-              <div>
-                <div class="font-medium text-gray-800 text-sm">马赛克</div>
-                <div class="text-xs text-gray-500">调整马赛克强度，保护隐私</div>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <span class="text-xl mr-2">🔃</span>
-              <div>
-                <div class="font-medium text-gray-800 text-sm">格式转换</div>
-                <div class="text-xs text-gray-500">支持 JPG、PNG、WebP 格式互转</div>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <span class="text-xl mr-2">✨</span>
-              <div>
-                <div class="font-medium text-gray-800 text-sm">AI抠图</div>
-                <div class="text-xs text-gray-500">AI智能去除图片背景</div>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <span class="text-xl mr-2">🔮</span>
-              <div>
-                <div class="font-medium text-gray-800 text-sm">AI背景透明</div>
-                <div class="text-xs text-gray-500">AI将图片背景设为透明</div>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <span class="text-xl mr-2">✂️</span>
-              <div>
-                <div class="font-medium text-gray-800 text-sm">AI裁剪</div>
-                <div class="text-xs text-gray-500">AI智能识别主体裁剪</div>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <span class="text-xl mr-2">📋</span>
-              <div>
-                <div class="font-medium text-gray-800 text-sm">AI证件照</div>
-                <div class="text-xs text-gray-500">AI生成标准证件照</div>
+                <div class="text-sm font-medium text-zinc-600">{{ feat.name }}</div>
+                <div class="text-xs text-zinc-400 mt-0.5 leading-relaxed">{{ feat.desc }}</div>
               </div>
             </div>
           </div>
@@ -549,39 +456,46 @@
 
     <div v-if="showDownloadModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="showDownloadModal = false">
       <div class="bg-white rounded-xl p-6 max-w-sm w-full mx-4">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">下载图片</h3>
+        <h3 class="text-lg font-semibold text-zinc-700 mb-4">下载图片</h3>
         <div class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">文件名</label>
-            <input type="text" v-model="downloadFileName" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="图片名称_processed">
+            <label class="block text-sm font-medium text-zinc-600 mb-2">文件名</label>
+            <input type="text" v-model="downloadFileName" class="w-full px-3 py-2 border border-zinc-200 bg-zinc-50 text-zinc-700 placeholder-zinc-300 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-200 focus:bg-white rounded-xl outline-none transition-all" placeholder="图片名称_processed">
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">保存格式</label>
-            <select v-model="downloadFormat" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+            <label class="block text-sm font-medium text-zinc-600 mb-2">保存格式</label>
+            <select v-model="downloadFormat" class="border border-zinc-200 bg-zinc-50 text-zinc-700 rounded-xl px-3 py-2 w-full">
               <option v-for="fmt in downloadFormats" :key="fmt" :value="fmt">{{ fmt.toUpperCase() }}</option>
             </select>
           </div>
         </div>
         <div class="flex space-x-3 mt-6">
-          <button @click="showDownloadModal = false" class="flex-1 py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700">
+          <button @click="showDownloadModal = false" class="flex-1 py-2 px-4 border border-zinc-200 text-zinc-500 bg-white hover:bg-zinc-50 rounded-xl transition-colors">
             取消
           </button>
-          <button @click="confirmDownload" class="flex-1 py-2 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700">
+          <button @click="confirmDownload" class="flex-1 py-2 px-4 text-white rounded-xl transition-all hover:opacity-90" style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)">
             下载
           </button>
         </div>
       </div>
     </div>
 
-    <div v-if="showConfirmModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="showConfirmModal = false">
-      <div class="bg-white rounded-xl p-6 max-w-sm w-full mx-4">
-        <h3 class="text-lg font-semibold text-gray-900 mb-2">确认重置</h3>
-        <p class="text-gray-600 mb-6">确定要将所有配置恢复为默认状态吗？此操作不可撤销。</p>
-        <div class="flex space-x-3">
-          <button @click="showConfirmModal = false" class="flex-1 py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700">
+    <div v-if="showConfirmModal" class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50" @click.self="showConfirmModal = false">
+      <div class="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-xl">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-9 h-9 rounded-full bg-red-50 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+            </svg>
+          </div>
+          <h3 class="text-base font-semibold text-zinc-700">确认重置</h3>
+        </div>
+        <p class="text-sm text-zinc-400 mb-6 pl-12">所有调整将恢复为默认状态，此操作不可撤销。</p>
+        <div class="flex gap-3">
+          <button @click="showConfirmModal = false" class="flex-1 py-2.5 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-sm transition-colors">
             取消
           </button>
-          <button @click="executeResetAll" class="flex-1 py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700">
+          <button @click="executeResetAll" class="flex-1 py-2.5 px-4 bg-red-50 hover:bg-red-100 text-red-500 border border-red-100 rounded-xl text-sm transition-colors">
             确认重置
           </button>
         </div>
@@ -599,6 +513,22 @@ import api from '../utils/api'
 
 const toast = inject('toast')
 
+const featureList = [
+  { icon: '📦', name: '图片压缩', desc: '调整压缩质量，减小文件大小' },
+  { icon: '🔄', name: '旋转翻转', desc: '任意角度旋转，支持水平/垂直翻转' },
+  { icon: '📐', name: '尺寸调整', desc: '自由调整宽高，支持保持比例' },
+  { icon: '💧', name: '添加水印', desc: '自定义文字、颜色、位置和透明度' },
+  { icon: '🖼️', name: '图片拼接', desc: '水平或垂直拼接多张图片' },
+  { icon: '⬜', name: '九宫格', desc: '将图片分割成多宫格形式' },
+  { icon: '⭕', name: '圆形裁剪', desc: '将图片裁剪为圆形形状' },
+  { icon: '🎨', name: '图片滤镜', desc: '灰度、复古、提亮、对比、模糊' },
+  { icon: '🎯', name: '马赛克', desc: '调整马赛克强度，保护隐私' },
+  { icon: '🔃', name: '格式转换', desc: '支持 JPG、PNG、WebP 格式互转' },
+  { icon: '✨', name: 'AI 抠图', desc: 'AI 智能去除图片背景' },
+  { icon: '🔮', name: 'AI 背景透明', desc: 'AI 将图片背景设为透明' },
+  { icon: '✂️', name: 'AI 裁剪', desc: 'AI 智能识别主体裁剪' },
+  { icon: '📇', name: 'AI 证件照', desc: 'AI 生成标准证件照' },
+]
 const fileInput = ref(null)
 const previewImage = ref(null)
 const secondFileInput = ref(null)

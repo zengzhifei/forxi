@@ -1,23 +1,24 @@
 <template>
-  <div class="min-h-screen bg-gray-50 text-gray-900 font-sans flex flex-col">
+  <div class="min-h-screen bg-[#fafafa] text-zinc-600 font-sans flex flex-col">
     <AppHeader />
 
     <main class="flex-1">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 lg:hidden">
-        <h1 class="text-xl font-bold text-gray-800">AI趣玩</h1>
+        <h1 class="text-xl font-bold text-zinc-600 text-center">AI趣玩</h1>
       </div>
       <div class="max-w-7xl mx-auto py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
           <div class="w-full lg:w-64 flex-shrink-0">
-            <div class="bg-white rounded-2xl shadow-lg p-2 lg:p-4 sticky top-16 lg:top-20 z-10">
-              <h3 class="hidden lg:block text-lg font-bold text-gray-800 mb-4 px-3">AI趣玩</h3>
+            <div class="bg-white rounded-2xl shadow-sm border border-zinc-100 p-2 lg:p-4 sticky top-16 lg:top-20 z-10">
+              <h3 class="hidden lg:block text-lg font-bold text-zinc-700 mb-4 px-3">AI趣玩</h3>
               <div class="flex lg:flex-col gap-1 lg:space-y-1 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
-                <button 
-                  v-for="item in menuItems" 
+                <button
+                  v-for="item in menuItems"
                   :key="item.id"
                   @click="activeMenu = item.id"
                   class="flex-shrink-0 text-left px-4 py-2 lg:py-3 rounded-xl text-sm font-medium transition-all duration-200 flex items-center gap-2 whitespace-nowrap"
-                  :class="activeMenu === item.id ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md' : 'text-gray-600 hover:bg-gray-100'"
+                  :class="activeMenu === item.id ? 'text-white shadow-md' : 'text-zinc-500 hover:bg-zinc-50'"
+                  :style="activeMenu === item.id ? 'background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)' : ''"
                 >
                   <span v-html="item.icon" class="w-4 h-4 lg:w-5 lg:h-5 flex-shrink-0"></span>
                   <span>{{ item.name }}</span>
@@ -85,11 +86,12 @@
       </div>
     </main>
 
-    <button 
+    <button
       v-if="activeMenu !== 'chat'"
       @click="scrollToTop"
-      class="fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 z-50"
+      class="fixed bottom-8 right-8 w-12 h-12 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 z-50"
       :class="{ 'opacity-100': showBackToTop, 'opacity-0 pointer-events-none': !showBackToTop }"
+      style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)"
     >
       <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />

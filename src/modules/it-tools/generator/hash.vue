@@ -81,7 +81,7 @@ function copyToClipboard(text) {
       <textarea
         v-model="clearText"
         @input="updateHashes"
-        class="w-full h-28 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none font-mono text-sm"
+        class="w-full h-28 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400 resize-none font-mono text-sm"
         placeholder="输入要哈希的文本..."
       />
     </div>
@@ -91,7 +91,7 @@ function copyToClipboard(text) {
       <select
         v-model="encoding"
         @change="updateHashes"
-        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400"
       >
         <option v-for="enc in encodings" :key="enc.value" :value="enc.value">
           {{ enc.label }}
@@ -113,7 +113,7 @@ function copyToClipboard(text) {
           <button
             @click="copyToClipboard(hashes[algo.value])"
             :disabled="!hashes[algo.value]"
-            class="absolute top-1/2 right-2 -translate-y-1/2 px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            class="absolute top-1/2 right-2 -translate-y-1/2 px-3 py-1 bg-zinc-600 text-white text-xs rounded hover:bg-zinc-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
           >
             复制
           </button>

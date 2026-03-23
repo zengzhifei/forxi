@@ -1,51 +1,41 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-[#fafafa]">
     <AppHeader />
-    
+
     <div class="max-w-4xl mx-auto py-8 px-4">
-      <h1 class="text-2xl font-bold text-gray-900 mb-8">个人中心</h1>
-      
+      <h1 class="text-2xl font-semibold text-zinc-700 mb-8">个人中心</h1>
+
       <!-- 用户信息卡片 -->
-      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+      <div class="bg-white rounded-xl shadow-sm border border-zinc-100 p-6 mb-6">
         <div class="flex items-center gap-4 mb-6">
           <img
             v-if="currentAvatar"
             :src="currentAvatar"
-            class="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
+            class="w-20 h-20 rounded-full object-cover border-2 border-zinc-100"
             @error="handleAvatarError"
           />
-          <div v-else class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-2xl font-bold">
+          <div v-else class="w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl font-bold" style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)">
             {{ userInfo.nickname?.charAt(0)?.toUpperCase() || 'U' }}
           </div>
           <div>
-            <h2 class="text-xl font-semibold text-gray-900">{{ userInfo.nickname }}</h2>
-            <p class="text-gray-500">{{ userInfo.email }}</p>
-            <span 
-              class="inline-block mt-1 px-2 py-0.5 text-xs rounded-full"
-              :class="{
-                'bg-green-100 text-green-700': userInfo.role === 'user',
-                'bg-blue-100 text-blue-700': userInfo.role === 'admin',
-                'bg-purple-100 text-purple-700': userInfo.role === 'super_admin'
-              }"
-            >
-              {{ userInfo.role === 'user' ? '普通用户' : userInfo.role === 'admin' ? '管理员' : '超级管理员' }}
-            </span>
+            <h2 class="text-xl font-semibold text-zinc-700">{{ userInfo.nickname }}</h2>
+            <p class="text-zinc-400">{{ userInfo.email }}</p>
           </div>
         </div>
       </div>
 
       <!-- 标签页 -->
-      <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="border-b border-gray-200">
+      <div class="bg-white rounded-xl shadow-sm border border-zinc-100 overflow-hidden">
+        <div class="border-b border-zinc-100">
           <nav class="flex -mb-px">
             <button
               v-for="tab in tabs"
               :key="tab.id"
               @click="activeTab = tab.id"
               class="py-4 px-6 text-sm font-medium border-b-2 transition-colors"
-              :class="activeTab === tab.id 
-                ? 'border-blue-500 text-blue-600' 
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+              :class="activeTab === tab.id
+                ? 'border-zinc-500 text-zinc-700'
+                : 'border-transparent text-zinc-400 hover:text-zinc-600 hover:border-zinc-200'"
             >
               {{ tab.name }}
             </button>
@@ -56,60 +46,61 @@
         <div v-if="activeTab === 'profile'" class="p-6">
           <form @submit.prevent="handleUpdateProfile" class="space-y-6">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">昵称</label>
+              <label class="block text-sm font-medium text-zinc-600 mb-2">昵称</label>
               <input
                 v-model="profileForm.nickname"
                 type="text"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-700 placeholder-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-200 focus:border-zinc-400 focus:bg-white transition-all"
                 placeholder="请输入昵称"
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">头像</label>
+              <label class="block text-sm font-medium text-zinc-600 mb-2">头像</label>
               <div class="flex items-center gap-4">
                 <div class="relative cursor-pointer" @click="triggerFileInput">
-                  <img 
-                    v-if="currentAvatar" 
-                    :src="currentAvatar" 
-                    class="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
+                  <img
+                    v-if="currentAvatar"
+                    :src="currentAvatar"
+                    class="w-20 h-20 rounded-full object-cover border-2 border-zinc-100"
                     @error="handleAvatarError"
                   />
-                  <div v-else class="w-20 h-20 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white text-2xl font-bold">
+                  <div v-else class="w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl font-bold" style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)">
                     {{ userInitial }}
                   </div>
-                  <div class="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full p-1 hover:bg-blue-700">
+                  <div class="absolute bottom-0 right-0 bg-zinc-600 text-white rounded-full p-1 hover:bg-zinc-700">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                     </svg>
                   </div>
                 </div>
                 <div class="flex-1">
-                  <p class="text-xs text-gray-500">支持 JPG、PNG、GIF、WebP 格式，最大 2MB</p>
+                  <p class="text-xs text-zinc-400">支持 JPG、PNG、GIF、WebP 格式，最大 2MB</p>
                 </div>
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  class="hidden" 
+                <input
+                  type="file"
+                  accept="image/*"
+                  class="hidden"
                   ref="fileInput"
                   @change="handleAvatarUpload"
                 />
               </div>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">个人简介</label>
+              <label class="block text-sm font-medium text-zinc-600 mb-2">个人简介</label>
               <textarea
                 v-model="profileForm.bio"
                 rows="3"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-700 placeholder-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-200 focus:border-zinc-400 focus:bg-white transition-all"
                 placeholder="介绍一下你自己..."
                 maxlength="500"
               ></textarea>
-              <p class="mt-1 text-xs text-gray-500">{{ profileForm.bio?.length || 0 }}/500</p>
+              <p class="mt-1 text-xs text-zinc-400">{{ profileForm.bio?.length || 0 }}/500</p>
             </div>
             <button
               type="submit"
               :disabled="loading"
-              class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              class="px-6 py-2.5 text-white text-sm font-medium rounded-xl disabled:opacity-50 transition-all"
+              style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)"
             >
               {{ loading ? '保存中...' : '保存修改' }}
             </button>
@@ -120,19 +111,19 @@
         <div v-if="activeTab === 'password'" class="p-6">
           <form @submit.prevent="handleChangePassword" class="space-y-6 max-w-md">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">当前密码</label>
+              <label class="block text-sm font-medium text-zinc-600 mb-2">当前密码</label>
               <div class="relative">
                 <input
                   v-model="passwordForm.oldPassword"
                   :type="showOldPassword ? 'text' : 'password'"
-                  class="w-full px-4 py-2 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-4 py-2.5 pr-12 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-700 placeholder-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-200 focus:border-zinc-400 focus:bg-white transition-all"
                   placeholder="请输入当前密码"
                   required
                 />
                 <button
                   type="button"
                   @click="showOldPassword = !showOldPassword"
-                  class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-300 hover:text-zinc-500 transition-colors"
                 >
                   <svg v-if="!showOldPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -145,12 +136,12 @@
               </div>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">新密码</label>
+              <label class="block text-sm font-medium text-zinc-600 mb-2">新密码</label>
               <div class="relative">
                 <input
                   v-model="passwordForm.newPassword"
                   :type="showNewPassword ? 'text' : 'password'"
-                  class="w-full px-4 py-2 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-4 py-2.5 pr-12 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-700 placeholder-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-200 focus:border-zinc-400 focus:bg-white transition-all"
                   placeholder="请输入新密码"
                   required
                   @focus="showPasswordRules = true"
@@ -159,7 +150,7 @@
                 <button
                   type="button"
                   @click="showNewPassword = !showNewPassword"
-                  class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-300 hover:text-zinc-500 transition-colors"
                 >
                   <svg v-if="!showNewPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -173,11 +164,11 @@
               <!-- 密码强度 -->
               <div v-if="passwordForm.newPassword" class="mt-2">
                 <div class="flex gap-1 mb-1">
-                  <div 
-                    v-for="i in 4" 
-                    :key="i" 
+                  <div
+                    v-for="i in 4"
+                    :key="i"
                     class="h-1 flex-1 rounded-full transition-colors"
-                    :class="i <= passwordStrength.level ? passwordStrength.color : 'bg-gray-200'"
+                    :class="i <= passwordStrength.level ? passwordStrength.color : 'bg-zinc-100'"
                   ></div>
                 </div>
                 <p class="text-xs" :class="{
@@ -187,31 +178,31 @@
                 }">{{ passwordStrength.text }}</p>
               </div>
               <!-- 密码规则提示 -->
-              <div v-if="showPasswordRules" class="mt-2 p-3 bg-gray-50 rounded-lg">
-                <p class="text-xs text-gray-500 mb-1">密码要求：{{ PASSWORD_RULES.description }}</p>
+              <div v-if="showPasswordRules" class="mt-2 p-3 bg-zinc-50 rounded-lg">
+                <p class="text-xs text-zinc-400 mb-1">密码要求：{{ PASSWORD_RULES.description }}</p>
                 <div class="flex flex-wrap gap-2 mt-2">
-                  <span class="text-xs px-2 py-0.5 rounded" :class="passwordForm.newPassword.length >= 8 && passwordForm.newPassword.length <= 20 ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-500'">8-20位</span>
-                  <span class="text-xs px-2 py-0.5 rounded" :class="/[A-Z]/.test(passwordForm.newPassword) ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-500'">大写字母</span>
-                  <span class="text-xs px-2 py-0.5 rounded" :class="/[a-z]/.test(passwordForm.newPassword) ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-500'">小写字母</span>
-                  <span class="text-xs px-2 py-0.5 rounded" :class="/[0-9]/.test(passwordForm.newPassword) ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-500'">数字</span>
-                  <span class="text-xs px-2 py-0.5 rounded" :class="/[^a-zA-Z0-9]/.test(passwordForm.newPassword) ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-500'">特殊符号</span>
+                  <span class="text-xs px-2 py-0.5 rounded" :class="passwordForm.newPassword.length >= 8 && passwordForm.newPassword.length <= 20 ? 'bg-green-100 text-green-700' : 'bg-zinc-100 text-zinc-400'">8-20位</span>
+                  <span class="text-xs px-2 py-0.5 rounded" :class="/[A-Z]/.test(passwordForm.newPassword) ? 'bg-green-100 text-green-700' : 'bg-zinc-100 text-zinc-400'">大写字母</span>
+                  <span class="text-xs px-2 py-0.5 rounded" :class="/[a-z]/.test(passwordForm.newPassword) ? 'bg-green-100 text-green-700' : 'bg-zinc-100 text-zinc-400'">小写字母</span>
+                  <span class="text-xs px-2 py-0.5 rounded" :class="/[0-9]/.test(passwordForm.newPassword) ? 'bg-green-100 text-green-700' : 'bg-zinc-100 text-zinc-400'">数字</span>
+                  <span class="text-xs px-2 py-0.5 rounded" :class="/[^a-zA-Z0-9]/.test(passwordForm.newPassword) ? 'bg-green-100 text-green-700' : 'bg-zinc-100 text-zinc-400'">特殊符号</span>
                 </div>
               </div>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">确认新密码</label>
+              <label class="block text-sm font-medium text-zinc-600 mb-2">确认新密码</label>
               <div class="relative">
                 <input
                   v-model="passwordForm.confirmPassword"
                   :type="showConfirmPassword ? 'text' : 'password'"
-                  class="w-full px-4 py-2 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full px-4 py-2.5 pr-12 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-700 placeholder-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-200 focus:border-zinc-400 focus:bg-white transition-all"
                   placeholder="请再次输入新密码"
                   required
                 />
                 <button
                   type="button"
                   @click="showConfirmPassword = !showConfirmPassword"
-                  class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-300 hover:text-zinc-500 transition-colors"
                 >
                   <svg v-if="!showConfirmPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -226,7 +217,8 @@
             <button
               type="submit"
               :disabled="loading || passwordForm.newPassword !== passwordForm.confirmPassword"
-              class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              class="px-6 py-2.5 text-white text-sm font-medium rounded-xl disabled:opacity-50 transition-all"
+              style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)"
             >
               {{ loading ? '修改中...' : '修改密码' }}
             </button>
@@ -236,33 +228,33 @@
         <!-- 第三方账号绑定 -->
         <div v-if="activeTab === 'oauth'" class="p-6">
           <div class="space-y-4">
-            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+            <div class="flex items-center justify-between p-4 bg-zinc-50 rounded-xl border border-zinc-100">
               <div class="flex items-start gap-3 group relative">
-                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+                <svg class="w-8 h-8 text-zinc-700" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                 </svg>
                 <div>
-                  <div class="font-medium text-gray-900">GitHub</div>
-                  <div class="text-sm text-gray-500">
+                  <div class="font-medium text-zinc-700">GitHub</div>
+                  <div class="text-sm text-zinc-400">
                     {{ oauthAccounts.some(a => a.provider === 'github') ? '已绑定' : '未绑定' }}
                   </div>
                 </div>
-                <div v-if="githubAccount" class="absolute left-full top-0 ml-2 p-3 bg-gray-800 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-10 whitespace-nowrap">
+                <div v-if="githubAccount" class="absolute left-full top-0 ml-2 p-3 bg-zinc-800 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-10 whitespace-nowrap">
                   <div class="font-medium">{{ githubAccount.name }}</div>
-                  <a v-if="githubAccount.html_url" :href="githubAccount.html_url" target="_blank" class="text-blue-300 hover:text-blue-200" @click.stop>主页</a>
+                  <a v-if="githubAccount.html_url" :href="githubAccount.html_url" target="_blank" class="text-zinc-300 hover:text-white" @click.stop>主页</a>
                 </div>
               </div>
               <button
                 v-if="!oauthAccounts.some(a => a.provider === 'github')"
                 @click="handleBindGithub"
-                class="px-4 py-2 bg-gray-900 text-white text-sm rounded-lg hover:bg-gray-800"
+                class="px-4 py-2 bg-zinc-800 text-white text-sm rounded-lg hover:bg-zinc-700 transition-colors"
               >
                 绑定
               </button>
               <button
                 v-else
                 @click="handleUnbindGithub"
-                class="px-4 py-2 text-red-600 text-sm hover:text-red-700"
+                class="px-4 py-2 text-red-500 text-sm hover:text-red-600 transition-colors"
               >
                 解绑
               </button>
@@ -272,18 +264,18 @@
 
         <!-- 登录日志 -->
         <div v-if="activeTab === 'logs'" class="p-6">
-          <div v-if="loginLogs.length === 0" class="text-center py-8 text-gray-500">
+          <div v-if="loginLogs.length === 0" class="text-center py-8 text-zinc-400">
             暂无登录记录
           </div>
           <div v-else class="space-y-3">
             <div
               v-for="(log, index) in loginLogs"
               :key="index"
-              class="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+              class="flex items-center justify-between p-4 bg-zinc-50 rounded-xl border border-zinc-100"
             >
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full flex items-center justify-center"
-                  :class="log.status === 'success' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'"
+                  :class="log.status === 'success' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-500'"
                 >
                   <svg v-if="log.status === 'success'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -293,39 +285,39 @@
                   </svg>
                 </div>
                 <div>
-                  <div class="text-sm font-medium text-gray-900">
+                  <div class="text-sm font-medium text-zinc-700">
                     {{ log.login_method === 'email' ? '邮箱登录' : 'GitHub 登录' }}
                   </div>
-                  <div class="text-xs text-gray-500">
+                  <div class="text-xs text-zinc-400">
                     {{ log.ip_address }} · {{ log.device_type }} · {{ formatDate(log.login_at) }}
                   </div>
                 </div>
               </div>
-              <span 
+              <span
                 class="px-2 py-1 text-xs rounded-full"
-                :class="log.status === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
+                :class="log.status === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'"
               >
                 {{ log.status === 'success' ? '成功' : '失败' }}
               </span>
             </div>
           </div>
-          
+
           <!-- 分页 -->
           <div v-if="logsMeta.total > logsMeta.pageSize" class="flex justify-center mt-6 gap-2">
             <button
               @click="fetchLoginLogs(logsMeta.page - 1)"
               :disabled="logsMeta.page <= 1"
-              class="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50"
+              class="px-4 py-2 border border-zinc-200 rounded-lg text-zinc-500 hover:border-zinc-300 disabled:opacity-40 transition-colors"
             >
               上一页
             </button>
-            <span class="px-4 py-2 text-gray-600">
+            <span class="px-4 py-2 text-zinc-500">
               {{ logsMeta.page }} / {{ logsMeta.totalPages }}
             </span>
             <button
               @click="fetchLoginLogs(logsMeta.page + 1)"
               :disabled="logsMeta.page >= logsMeta.totalPages"
-              class="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50"
+              class="px-4 py-2 border border-zinc-200 rounded-lg text-zinc-500 hover:border-zinc-300 disabled:opacity-40 transition-colors"
             >
               下一页
             </button>

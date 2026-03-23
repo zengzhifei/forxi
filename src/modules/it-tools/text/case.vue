@@ -11,15 +11,15 @@
       </h3>
       <textarea 
         v-model="input" 
-        class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent font-mono text-sm"
+        class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent font-mono text-sm"
         rows="4"
         placeholder="请输入要转换的文本..."
       ></textarea>
       <div class="mt-4 flex flex-wrap gap-2">
-        <button @click="toUpperCase" class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors">转大写</button>
-        <button @click="toLowerCase" class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors">转小写</button>
-        <button @click="toCapitalCase" class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors">首字母大写</button>
-        <button @click="toSwapCase" class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors">大小写互换</button>
+        <button @click="toUpperCase" class="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-colors">转大写</button>
+        <button @click="toLowerCase" class="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-colors">转小写</button>
+        <button @click="toCapitalCase" class="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-colors">首字母大写</button>
+        <button @click="toSwapCase" class="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-colors">大小写互换</button>
         <button @click="copy(output)" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">复制</button>
       </div>
       <div v-if="output" class="mt-4">

@@ -11,12 +11,12 @@
       </h3>
       <textarea 
         v-model="input.text" 
-        class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+        class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent font-mono text-sm"
         rows="4"
         placeholder="请输入要转换的字符串..."
       ></textarea>
       <div class="mt-4 flex gap-3">
-        <button @click="encode" class="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg shadow-blue-500/25 font-medium">编码</button>
+        <button @click="encode" class="px-5 py-2.5 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-all font-medium">编码</button>
         <button @click="copy(output.text)" class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all font-medium" :disabled="!output.text">复制结果</button>
       </div>
       <div v-if="output.text" class="mt-4">
@@ -41,12 +41,12 @@
       </h3>
       <textarea 
         v-model="input.base64" 
-        class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono text-sm"
+        class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent font-mono text-sm"
         rows="4"
         placeholder="请输入 Base64 字符串..."
       ></textarea>
       <div class="mt-4 flex gap-3">
-        <button @click="decode" class="px-5 py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all shadow-lg shadow-green-500/25 font-medium">解码</button>
+        <button @click="decode" class="px-5 py-2.5 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-all font-medium">解码</button>
         <button @click="copy(output.decoded)" class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all font-medium" :disabled="!output.decoded">复制结果</button>
       </div>
       <div v-if="output.decoded" class="mt-4">

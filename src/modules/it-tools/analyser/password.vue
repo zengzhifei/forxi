@@ -11,7 +11,7 @@
     <input 
       type="text" 
       v-model="password" 
-      class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-lg"
+      class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent text-lg"
       placeholder="请输入密码..."
     />
     <div v-if="strength.score !== null" class="mt-6 space-y-4">

@@ -17,7 +17,7 @@
           <button 
             v-if="!isRunning"
             @click="start"
-            class="px-8 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-lg font-medium"
+            class="px-8 py-3 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-colors text-lg font-medium"
           >
             开始
           </button>
@@ -42,7 +42,7 @@
           :key="preset.minutes"
           @click="setPreset(preset.minutes)"
           class="px-4 py-2 rounded-lg transition-colors"
-          :class="timeLeft === preset.minutes * 60 ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+          :class="timeLeft === preset.minutes * 60 ? 'bg-zinc-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
         >
           {{ preset.label }}
         </button>

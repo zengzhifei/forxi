@@ -13,15 +13,15 @@
         <label class="block text-sm font-medium text-gray-700 mb-2">输入文本（每行一个元素）</label>
         <textarea 
           v-model="input" 
-          class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent font-mono text-sm"
+          class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent font-mono text-sm"
           rows="6"
           placeholder="每行输入一个元素..."
         ></textarea>
       </div>
       <div class="flex flex-wrap gap-2">
-        <button @click="toJsonArray" class="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors">JSON 数组</button>
-        <button @click="toComma" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">逗号分隔</button>
-        <button @click="toNewLine" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">换行分隔</button>
+        <button @click="toJsonArray" class="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-colors">JSON 数组</button>
+        <button @click="toComma" class="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-colors">逗号分隔</button>
+        <button @click="toNewLine" class="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-colors">换行分隔</button>
         <button @click="copy(output)" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">复制</button>
       </div>
       <div v-if="output">

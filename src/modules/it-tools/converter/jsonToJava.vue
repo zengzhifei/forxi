@@ -188,7 +188,7 @@ const isJsonValid = computed(() => !jsonError.value)
         :class="[
           'px-4 py-2 rounded-lg font-medium transition-colors',
           activeMode === 'jsonToJava'
-            ? 'bg-blue-500 text-white'
+            ? 'bg-zinc-600 text-white'
             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
         ]"
       >
@@ -199,7 +199,7 @@ const isJsonValid = computed(() => !jsonError.value)
         :class="[
           'px-4 py-2 rounded-lg font-medium transition-colors',
           activeMode === 'javaToJson'
-            ? 'bg-blue-500 text-white'
+            ? 'bg-zinc-600 text-white'
             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
         ]"
       >
@@ -219,7 +219,7 @@ const isJsonValid = computed(() => !jsonError.value)
           v-if="activeMode === 'jsonToJava'"
           v-model="jsonInput"
           @input="convert"
-          class="flex-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none font-mono text-sm"
+          class="flex-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400 resize-none font-mono text-sm"
           :class="{ 'border-red-300': jsonError }"
           placeholder="输入 JSON..."
         />
@@ -227,7 +227,7 @@ const isJsonValid = computed(() => !jsonError.value)
           v-else
           v-model="javaInput"
           @input="convert"
-          class="flex-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none font-mono text-sm"
+          class="flex-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400 resize-none font-mono text-sm"
           placeholder="输入 Java 代码..."
         />
       </div>
@@ -255,7 +255,7 @@ const isJsonValid = computed(() => !jsonError.value)
           />
           <button
             @click="copyToClipboard"
-            class="absolute top-2 right-2 px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600"
+            class="absolute top-2 right-2 px-3 py-1 bg-zinc-600 text-white text-xs rounded hover:bg-zinc-700"
           >
             复制
           </button>

@@ -78,7 +78,7 @@ function copyToClipboard() {
           type="number"
           min="1"
           max="20"
-          class="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          class="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400"
         />
       </div>
       <div>
@@ -88,7 +88,7 @@ function copyToClipboard() {
           type="number"
           min="1"
           max="20"
-          class="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          class="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400"
         />
       </div>
       <div class="flex items-end">
@@ -104,7 +104,7 @@ function copyToClipboard() {
         <h3 class="text-sm font-medium text-gray-700">生成结果</h3>
         <button
           @click="copyToClipboard"
-          class="px-4 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition-colors"
+          class="px-4 py-2 bg-zinc-600 text-white text-sm rounded-lg hover:bg-zinc-700 transition-colors"
         >
           复制文本
         </button>

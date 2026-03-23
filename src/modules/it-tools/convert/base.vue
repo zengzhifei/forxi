@@ -15,7 +15,7 @@
           type="text" 
           v-model="decimal" 
           @input="convertFromDecimal"
-          class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono"
+          class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent font-mono"
           placeholder="输入十进制数..."
         />
       </div>
@@ -25,7 +25,7 @@
           type="text" 
           v-model="binary" 
           @input="convertFromBinary"
-          class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono"
+          class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent font-mono"
           placeholder="输入二进制数..."
         />
       </div>
@@ -35,7 +35,7 @@
           type="text" 
           v-model="hex" 
           @input="convertFromHex"
-          class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono"
+          class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent font-mono"
           placeholder="输入十六进制数..."
         />
       </div>
@@ -45,7 +45,7 @@
           type="text" 
           v-model="octal" 
           @input="convertFromOctal"
-          class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono"
+          class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent font-mono"
           placeholder="输入八进制数..."
         />
       </div>

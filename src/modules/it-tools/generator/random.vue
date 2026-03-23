@@ -17,7 +17,7 @@
             v-model="length" 
             min="1"
             max="100"
-            class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent"
           />
         </div>
         <div>
@@ -27,7 +27,7 @@
             v-model="count" 
             min="1"
             max="100"
-            class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent"
           />
         </div>
       </div>
@@ -49,7 +49,7 @@
           <span class="text-sm text-gray-700">特殊字符 (!@#$%)</span>
         </label>
       </div>
-      <button @click="generate" class="w-full py-3 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-lg hover:from-indigo-600 hover:to-indigo-700 transition-all font-medium">
+      <button @click="generate" class="w-full py-3 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-all font-medium">
         生成随机字符串
       </button>
       <div v-if="results.length" class="space-y-2">

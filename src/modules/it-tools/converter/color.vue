@@ -15,7 +15,7 @@
           <input 
             type="text" 
             v-model="colorInput" 
-            class="w-full p-4 pl-12 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+            class="w-full p-4 pl-12 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400"
             placeholder="#FF5733"
           />
           <div class="absolute left-4 top-1/2 -translate-y-1/2">
@@ -25,7 +25,7 @@
             ></div>
           </div>
         </div>
-        <button @click="convert" class="px-6 py-3 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-lg hover:from-pink-600 hover:to-orange-600 transition-all shadow-lg shadow-pink-500/25 font-medium">转换</button>
+        <button @click="convert" class="px-6 py-3 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-all font-medium">转换</button>
       </div>
     </div>
     <div v-if="output" class="space-y-4">

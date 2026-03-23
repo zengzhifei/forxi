@@ -13,14 +13,14 @@
         <label class="block text-sm font-medium text-gray-700 mb-2">输入文本（每行一个）</label>
         <textarea 
           v-model="input" 
-          class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+          class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent"
           rows="6"
           placeholder="每行输入一个字符串..."
         ></textarea>
       </div>
       <div class="flex flex-wrap gap-2">
-        <button @click="sortAsc" class="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors">升序</button>
-        <button @click="sortDesc" class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors">降序</button>
+        <button @click="sortAsc" class="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-colors">升序</button>
+        <button @click="sortDesc" class="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-colors">降序</button>
         <button @click="reverse" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">反转</button>
         <button @click="copy(output)" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">复制</button>
       </div>

@@ -19,7 +19,7 @@
               readonly
               class="flex-1 p-3 border border-gray-200 rounded-lg bg-gray-50 font-mono text-lg text-center"
             />
-            <button @click="refresh" class="px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600">
+            <button @click="refresh" class="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
@@ -32,10 +32,10 @@
             <input 
               type="text" 
               v-model="timestampInput" 
-              class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent font-mono"
+              class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent font-mono"
               placeholder="输入时间戳..."
             />
-            <button @click="timestampToDate" class="mt-2 w-full px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600">转换</button>
+            <button @click="timestampToDate" class="mt-2 w-full px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700">转换</button>
             <p v-if="dateOutput" class="mt-2 p-3 bg-gray-50 rounded-lg font-mono text-sm">{{ dateOutput }}</p>
           </div>
           <div>
@@ -43,9 +43,9 @@
             <input 
               type="datetime-local" 
               v-model="dateInput" 
-              class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+              class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent"
             />
-            <button @click="dateToTimestamp" class="mt-2 w-full px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600">转换</button>
+            <button @click="dateToTimestamp" class="mt-2 w-full px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700">转换</button>
             <p v-if="timestampOutput" class="mt-2 p-3 bg-gray-50 rounded-lg font-mono text-sm">{{ timestampOutput }}</p>
           </div>
         </div>

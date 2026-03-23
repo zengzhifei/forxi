@@ -44,7 +44,7 @@ function copyToClipboard(text) {
       <input
         v-model="urlToParse"
         type="text"
-        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm"
+        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400 font-mono text-sm"
         placeholder="输入要解析的 URL..."
       />
       <p v-if="!isValid && urlToParse" class="mt-1 text-sm text-red-500">无效的 URL 格式</p>
@@ -65,7 +65,7 @@ function copyToClipboard(text) {
               />
               <button
                 @click="copyToClipboard(urlParsed[prop.key])"
-                class="px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
+                class="px-2 py-1 text-xs bg-zinc-600 text-white rounded hover:bg-zinc-700"
               >
                 复制
               </button>
@@ -87,12 +87,12 @@ function copyToClipboard(text) {
             </thead>
             <tbody>
               <tr v-for="param in searchParams" :key="param.key" class="border-t border-gray-100">
-                <td class="px-3 py-2 font-mono text-blue-600">{{ param.key }}</td>
+                <td class="px-3 py-2 font-mono text-zinc-600">{{ param.key }}</td>
                 <td class="px-3 py-2 font-mono text-gray-600 break-all">{{ param.value }}</td>
                 <td class="px-3 py-2 text-right">
                   <button
                     @click="copyToClipboard(param.value)"
-                    class="text-blue-500 hover:text-blue-700"
+                    class="text-zinc-600 hover:text-zinc-800"
                   >
                     复制
                   </button>

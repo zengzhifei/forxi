@@ -79,7 +79,7 @@ function formatJson(value) {
         </div>
         <textarea
           v-model="json1"
-          class="w-full h-48 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none font-mono text-sm"
+          class="w-full h-48 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400 resize-none font-mono text-sm"
           :class="{ 'border-red-300': error1 }"
           placeholder="输入第一个 JSON..."
         />
@@ -91,7 +91,7 @@ function formatJson(value) {
         </div>
         <textarea
           v-model="json2"
-          class="w-full h-48 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none font-mono text-sm"
+          class="w-full h-48 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400 resize-none font-mono text-sm"
           :class="{ 'border-red-300': error2 }"
           placeholder="输入第二个 JSON..."
         />

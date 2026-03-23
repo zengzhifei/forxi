@@ -14,12 +14,12 @@
         <input 
           type="text" 
           v-model="input" 
-          class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+          class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent"
           placeholder="请输入要转换的文本..."
         />
       </div>
       <div class="flex flex-wrap gap-2">
-        <button @click="slugify" class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors">转换为 Slug</button>
+        <button @click="slugify" class="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-colors">转换为 Slug</button>
         <button @click="copy(output)" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">复制</button>
       </div>
       <div v-if="output">

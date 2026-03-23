@@ -1,54 +1,54 @@
 <template>
   <div class="space-y-6">
-    <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8">
+    <div class="bg-white rounded-2xl shadow-sm border border-zinc-100 p-6 sm:p-8">
       <div class="flex items-center gap-3 mb-6">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)">
           <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
           </svg>
         </div>
         <div>
-          <h2 class="text-xl font-bold text-gray-800">文生图</h2>
-          <p class="text-sm text-gray-500">输入文字描述，AI 为你生成精美图片</p>
+          <h2 class="text-xl font-bold text-zinc-700">文生图</h2>
+          <p class="text-sm text-zinc-400">输入文字描述，AI 为你生成精美图片</p>
         </div>
       </div>
       
       <div class="space-y-5">
         <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
+          <label class="block text-sm font-semibold text-zinc-600 mb-2">
             提示词 <span class="text-red-500">*</span>
           </label>
-          <textarea 
-            :value="prompt" 
+          <textarea
+            :value="prompt"
             @input="emit('update:prompt', $event.target.value)"
             rows="4"
             maxlength="2000"
-            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-all"
+            class="w-full px-4 py-3 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-zinc-200 focus:border-zinc-400 focus:outline-none resize-none transition-all bg-zinc-50 focus:bg-white text-zinc-700 placeholder-zinc-300"
             placeholder="描述你想要的图片，如：一只可爱的橘猫，萌萌的大眼睛，毛茸茸的耳朵，温暖的光线..."
           ></textarea>
-          <div class="text-right text-xs text-gray-400 mt-1">{{ prompt?.length || 0 }}/2000</div>
+          <div class="text-right text-xs text-zinc-400 mt-1">{{ prompt?.length || 0 }}/2000</div>
         </div>
 
         <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
+          <label class="block text-sm font-semibold text-zinc-600 mb-2">
             负面提示词
-            <span class="text-gray-400 font-normal">(可选)</span>
+            <span class="text-zinc-400 font-normal">(可选)</span>
           </label>
-          <input 
-            :value="negativePrompt" 
+          <input
+            :value="negativePrompt"
             @input="emit('update:negativePrompt', $event.target.value)"
             type="text"
             maxlength="2000"
-            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+            class="w-full px-4 py-3 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-zinc-200 focus:border-zinc-400 focus:outline-none transition-all bg-zinc-50 focus:bg-white text-zinc-700 placeholder-zinc-300"
             placeholder="不想出现的元素，如：模糊、变形、低质量..."
           >
-          <div class="text-right text-xs text-gray-400 mt-1">{{ negativePrompt?.length || 0 }}/2000</div>
+          <div class="text-right text-xs text-zinc-400 mt-1">{{ negativePrompt?.length || 0 }}/2000</div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">模型</label>
-            <select :value="selectedModel" @change="emit('update:selectedModel', $event.target.value)" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white">
+            <label class="block text-sm font-semibold text-zinc-600 mb-2">模型</label>
+            <select :value="selectedModel" @change="emit('update:selectedModel', $event.target.value)" class="w-full px-4 py-3 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-zinc-200 focus:border-zinc-400 focus:outline-none bg-white text-zinc-700">
               <option value="" disabled>选择模型</option>
               <option v-for="model in models" :key="model.id" :value="model.id" :title="'使用量：' + formatNumber(model.downloads) + (model.description ? '，描述：' + model.description : '')">
                 {{ model.display_name }}
@@ -56,8 +56,8 @@
             </select>
           </div>
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">尺寸</label>
-            <select :value="size" @change="emit('update:size', $event.target.value)" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white">
+            <label class="block text-sm font-semibold text-zinc-600 mb-2">尺寸</label>
+            <select :value="size" @change="emit('update:size', $event.target.value)" class="w-full px-4 py-3 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-zinc-200 focus:border-zinc-400 focus:outline-none bg-white text-zinc-700">
               <option value="1024x1024">1024×1024</option>
               <option value="1152x864">1152×864</option>
               <option value="1216x832">1216×832</option>
@@ -68,10 +68,11 @@
           </div>
         </div>
 
-        <button 
-          @click="emit('generate')" 
+        <button
+          @click="emit('generate')"
           :disabled="!prompt.trim() || !selectedModel || generating"
-          class="w-full py-4 px-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 disabled:opacity-40 disabled:cursor-not-allowed flex flex-col items-center justify-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl"
+          class="w-full py-4 px-6 text-white font-semibold rounded-xl disabled:opacity-40 disabled:cursor-not-allowed flex flex-col items-center justify-center gap-2 transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-zinc-300/40 hover:scale-[1.01]"
+          style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)"
         >
           <span v-if="generating">AI 创作中...</span>
           <span v-else>🎨 开始创作</span>
@@ -79,43 +80,43 @@
       </div>
     </div>
 
-    <div v-if="generating" id="result-section" class="bg-white rounded-2xl shadow-lg overflow-hidden">
+    <div v-if="generating" id="result-section" class="bg-white rounded-2xl shadow-sm border border-zinc-100 overflow-hidden">
       <div class="p-6">
-        <div class="flex justify-center items-center min-h-[400px] bg-gray-100 rounded-xl">
+        <div class="flex justify-center items-center min-h-[400px] bg-zinc-50 rounded-xl">
           <div class="text-center">
             <div class="relative w-32 h-32 mx-auto mb-4">
               <svg class="w-full h-full transform -rotate-90">
-                <circle cx="64" cy="64" r="56" stroke="#e5e7eb" stroke-width="8" fill="none"/>
-                <circle cx="64" cy="64" r="56" stroke="#3b82f6" stroke-width="8" fill="none" stroke-linecap="round"
+                <circle cx="64" cy="64" r="56" stroke="#e4e4e7" stroke-width="8" fill="none"/>
+                <circle cx="64" cy="64" r="56" stroke="#52525b" stroke-width="8" fill="none" stroke-linecap="round"
                   :stroke-dasharray="351.86" :stroke-dashoffset="351.86 - (351.86 * progress / 100)"
                   class="transition-all duration-500"/>
               </svg>
               <div class="absolute inset-0 flex items-center justify-center">
-                <span class="text-2xl font-bold text-blue-500">{{ progress }}%</span>
+                <span class="text-2xl font-bold text-zinc-600">{{ progress }}%</span>
               </div>
             </div>
-            <p class="text-gray-600">正在生成中，请稍后...</p>
+            <p class="text-zinc-500">正在生成中，请稍后...</p>
           </div>
         </div>
       </div>
     </div>
 
     <transition name="fade-slide">
-      <div v-if="generatedImage" class="bg-white rounded-2xl shadow-lg overflow-hidden">
-        <div class="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-          <h3 class="font-semibold text-gray-800 flex items-center gap-2">
-            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+      <div v-if="generatedImage" class="bg-white rounded-2xl shadow-sm border border-zinc-100 overflow-hidden">
+        <div class="bg-zinc-50 px-6 py-4 border-b border-zinc-100 flex items-center justify-between">
+          <h3 class="font-semibold text-zinc-700 flex items-center gap-2">
+            <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
             生成完成
           </h3>
-          <span class="text-sm text-gray-500">{{ currentTime }}</span>
+          <span class="text-sm text-zinc-400">{{ currentTime }}</span>
         </div>
         <div class="p-6">
           <div class="flex justify-center">
             <div class="relative group">
               <img :src="generatedImage" class="max-w-full max-h-[600px] rounded-xl shadow-md" />
               <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center gap-4">
-                <a 
-                  :href="generatedImage" 
+                <a
+                  :href="generatedImage"
                   target="_blank"
                   class="p-3 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-colors"
                   title="在新窗口打开"
@@ -124,8 +125,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
                 </a>
-                <button 
-                  @click="emit('download')" 
+                <button
+                  @click="emit('download')"
                   class="p-3 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-colors"
                   title="下载图片"
                 >
@@ -136,11 +137,12 @@
               </div>
             </div>
           </div>
-          
+
           <div class="mt-6 flex justify-center">
-            <button 
-              @click="emit('regenerate')" 
-              class="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-xl hover:from-blue-700 hover:to-purple-700 flex items-center gap-2 transition-all"
+            <button
+              @click="emit('regenerate')"
+              class="px-6 py-3 text-white font-medium rounded-xl flex items-center gap-2 transition-all hover:shadow-md hover:shadow-zinc-300/40 hover:scale-[1.01]"
+              style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)"
             >
               <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />

@@ -15,7 +15,7 @@
           :key="lang.id"
           @click="selectedLang = lang.id"
           class="px-3 py-1.5 text-sm rounded-lg transition-colors"
-          :class="selectedLang === lang.id ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+          :class="selectedLang === lang.id ? 'bg-zinc-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
         >
           {{ lang.name }}
         </button>
@@ -24,13 +24,13 @@
         <label class="block text-sm font-medium text-gray-700 mb-2">输入代码</label>
         <textarea 
           v-model="input" 
-          class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+          class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent font-mono text-sm"
           :rows="10"
           :placeholder="'请输入 ' + currentLangName + ' 代码...'"
         ></textarea>
       </div>
       <div class="flex flex-wrap gap-2">
-        <button @click="format" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">格式化</button>
+        <button @click="format" class="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-colors">格式化</button>
         <button @click="minify" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">压缩</button>
         <button @click="copy(output)" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">复制</button>
         <button @click="clear" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">清空</button>

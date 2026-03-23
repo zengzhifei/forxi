@@ -53,7 +53,7 @@ function downloadQRCode() {
         <label class="block text-sm font-medium text-gray-700 mb-2">文本内容</label>
         <textarea
           v-model="text"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400 resize-none"
           rows="3"
           placeholder="请输入文本或链接..."
         />
@@ -96,7 +96,7 @@ function downloadQRCode() {
         <label class="block text-sm font-medium text-gray-700 mb-2">纠错级别</label>
         <select
           v-model="errorCorrectionLevel"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400"
         >
           <option v-for="level in errorCorrectionLevels" :key="level.value" :value="level.value">
             {{ level.label }}
@@ -115,7 +115,7 @@ function downloadQRCode() {
       <button
         @click="downloadQRCode"
         :disabled="!qrCodeUrl"
-        class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+        class="px-6 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
       >
         下载二维码
       </button>

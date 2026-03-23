@@ -13,14 +13,14 @@
         <label class="block text-sm font-medium text-gray-700 mb-2">输入文本</label>
         <textarea 
           v-model="input" 
-          class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+          class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent"
           rows="4"
           placeholder="请输入要反转的文本..."
         ></textarea>
       </div>
       <div class="flex flex-wrap gap-2">
-        <button @click="reverse" class="px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-colors">反转文本</button>
-        <button @click="reverseWords" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">单词顺序反转</button>
+        <button @click="reverse" class="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-colors">反转文本</button>
+        <button @click="reverseWords" class="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-colors">单词顺序反转</button>
         <button @click="copy(output)" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">复制</button>
       </div>
       <div v-if="output">

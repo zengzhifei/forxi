@@ -107,7 +107,7 @@ function copyToClipboard(text) {
         <p class="text-sm text-gray-500 mb-3">查找 MIME 类型对应的文件扩展名</p>
         <select
           v-model="selectedMime"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400"
         >
           <option value="">选择 MIME 类型...</option>
           <option v-for="opt in mimeTypeOptions" :key="opt.value" :value="opt.value">
@@ -116,7 +116,7 @@ function copyToClipboard(text) {
         </select>
         <div v-if="extensionsForMime.length > 0" class="mt-3">
           <span class="text-sm text-gray-600">扩展名: </span>
-          <span v-for="ext in extensionsForMime" :key="ext" class="inline-block px-2 py-1 mr-1 mb-1 bg-blue-100 text-blue-700 rounded text-sm">
+          <span v-for="ext in extensionsForMime" :key="ext" class="inline-block px-2 py-1 mr-1 mb-1 bg-zinc-100 text-zinc-700 rounded text-sm">
             .{{ ext }}
           </span>
         </div>
@@ -127,7 +127,7 @@ function copyToClipboard(text) {
         <p class="text-sm text-gray-500 mb-3">查找文件扩展名对应的 MIME 类型</p>
         <select
           v-model="selectedExtension"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-300 focus:border-zinc-400"
         >
           <option value="">选择扩展名...</option>
           <option v-for="opt in extensionOptions" :key="opt.value" :value="opt.value">
@@ -136,7 +136,7 @@ function copyToClipboard(text) {
         </select>
         <div v-if="mimeForExtension" class="mt-3">
           <span class="text-sm text-gray-600">MIME 类型: </span>
-          <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-sm font-mono">
+          <span class="px-2 py-1 bg-zinc-100 text-zinc-700 rounded text-sm font-mono">
             {{ mimeForExtension }}
           </span>
         </div>
@@ -155,7 +155,7 @@ function copyToClipboard(text) {
           </thead>
           <tbody>
             <tr v-for="item in allMimeTypes" :key="item.mime" class="border-t border-gray-100">
-              <td class="px-4 py-2 font-mono text-blue-600">{{ item.mime }}</td>
+              <td class="px-4 py-2 font-mono text-zinc-600">{{ item.mime }}</td>
               <td class="px-4 py-2">
                 <span v-for="ext in item.extensions" :key="ext" class="inline-block px-1.5 py-0.5 mr-1 mb-1 bg-gray-100 text-gray-700 rounded text-xs">
                   .{{ ext }}

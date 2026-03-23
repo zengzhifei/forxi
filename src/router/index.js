@@ -24,9 +24,9 @@ const routes = [
     name: 'home',
     component: HomeView,
     meta: {
-      title: 'Forxi - 首页',
-      description: 'Forxi提供多种在线工具，包括文件预览、图片处理、IT工具集合等，免费在线使用，无需安装。',
-      keywords: 'Forxi,在线工具,文件预览,图片处理,IT工具,JetBrains'
+      title: 'Forxi - 免费内容平台',
+      description: 'Forxi 提供文件预览、图片处理、AI 创作、IT 开发工具箱等免费在线工具，无需安装，打开即用。',
+      keywords: 'Forxi,在线工具,文件预览,图片处理,AI绘画,IT工具箱,免费工具,开发工具'
     }
   },
   {
@@ -34,8 +34,8 @@ const routes = [
     name: 'auth',
     component: AuthView,
     meta: {
-      title: 'Forxi - 登录注册',
-      description: '登录Forxi账号，享受更多在线工具服务，保存您的工作记录。',
+      title: 'Forxi - 登录 / 注册',
+      description: '登录或注册 Forxi 账号，享受文件预览、图片处理、AI 创作等在线工具服务。',
       keywords: 'Forxi,登录,注册,账号'
     }
   },
@@ -44,9 +44,9 @@ const routes = [
     name: 'profile',
     component: ProfileView,
     meta: {
-      title: 'Forxi - 用户中心',
-      description: '管理您的Forxi账户信息，查看使用记录和偏好设置。',
-      keywords: 'Forxi,用户中心,账户管理',
+      title: 'Forxi - 个人中心',
+      description: '管理您的 Forxi 账户信息、修改密码、绑定第三方账号。',
+      keywords: 'Forxi,个人中心,账户管理,修改密码',
       requiresAuth: true
     }
   },
@@ -55,9 +55,9 @@ const routes = [
     name: 'reset-password',
     component: ResetPasswordView,
     meta: {
-      title: 'Forxi - 重置密码',
-      description: '重置您的Forxi账户密码，快速找回账户访问权限。',
-      keywords: 'Forxi,重置密码,找回密码'
+      title: 'Forxi - 找回密码',
+      description: '通过绑定邮箱找回并重置您的 Forxi 账户密码。',
+      keywords: 'Forxi,找回密码,重置密码'
     }
   },
   {
@@ -66,8 +66,8 @@ const routes = [
     component: GithubCallbackView,
     meta: {
       title: 'Forxi - 登录中',
-      description: '正在处理您的登录请求，请稍候...',
-      keywords: 'Forxi,OAuth,登录'
+      description: '正在处理登录请求，请稍候...',
+      keywords: 'Forxi,登录'
     }
   },
   {
@@ -75,9 +75,9 @@ const routes = [
     name: 'file-preview',
     component: FilePreviewView,
     meta: {
-      title: 'Forxi - 在线文件预览',
-      description: '支持PDF、图片、Office文档、视频等多种文件格式的在线预览，无需下载即可查看。',
-      keywords: '在线文件预览,PDF预览,图片预览,Office预览,视频预览,文件查看'
+      title: 'Forxi - 文件预览',
+      description: '免费在线预览 PDF、Word、Excel、PPT、图片、视频等多种文件格式，无需下载，打开即览。',
+      keywords: '在线文件预览,PDF预览,Word预览,Excel预览,PPT预览,图片预览,免费文件预览'
     }
   },
   {
@@ -85,9 +85,9 @@ const routes = [
     name: 'image-processing',
     component: ImageProcessingView,
     meta: {
-      title: 'Forxi - 在线图片处理',
-      description: '免费在线图片处理工具，支持压缩、裁剪、旋转、水印、滤镜等功能，操作简单。',
-      keywords: '在线图片处理,图片压缩,图片裁剪,图片旋转,图片水印,图片滤镜,图片编辑'
+      title: 'Forxi - 图片处理',
+      description: '免费在线图片处理，支持压缩、裁剪、旋转、加水印、调滤镜、格式转换，纯本地处理保护隐私。',
+      keywords: '在线图片处理,图片压缩,图片裁剪,图片旋转,图片水印,图片格式转换,免费图片编辑'
     }
   },
   {
@@ -95,9 +95,9 @@ const routes = [
     name: 'ai',
     component: AIView,
     meta: {
-      title: 'Forxi - AI趣玩',
-      description: '免费在线AI工具，文生图、图生图等多种AI功能。',
-      keywords: 'AI趣玩,文生图,图生图,AI绘画'
+      title: 'Forxi - AI 趣玩',
+      description: '免费在线 AI 工具，支持文生图、图生图、AI 智能对话，让创意轻松落地。',
+      keywords: 'AI趣玩,文生图,图生图,AI绘画,AI对话,AI创作,免费AI工具'
     }
   },
   {
@@ -105,9 +105,9 @@ const routes = [
     name: 'it-tools',
     component: ItToolsView,
     meta: {
-      title: 'Forxi - IT 工具集合',
-      description: '提供多种IT开发常用工具，包括MIME类型查询、编码转换、正则表达式测试等。',
-      keywords: 'IT工具,开发工具,MIME类型,编码转换,正则表达式,JSON格式化,Base64编码'
+      title: 'Forxi - IT 工具箱',
+      description: '开发者常用工具集合，包含 Base64 编解码、JSON 格式化、UUID 生成、颜色转换、正则测试、时间戳转换等实用工具。',
+      keywords: 'IT工具箱,开发工具,Base64编码,JSON格式化,UUID生成,颜色转换,正则表达式,时间戳转换,URL编码,MD5'
     }
   },
   {
@@ -115,9 +115,9 @@ const routes = [
     name: 'jetbrains',
     component: JetbrainsView,
     meta: {
-      title: 'Forxi - JetBrains 工具',
-      description: 'JetBrains IDE激活码生成工具，支持IntelliJ IDEA、PyCharm、WebStorm等。',
-      keywords: 'JetBrains,激活码,IntelliJ IDEA,PyCharm,WebStorm,IDE激活'
+      title: 'Forxi - JetBrains 激活',
+      description: 'JetBrains 系列 IDE 激活服务，支持 IntelliJ IDEA、PyCharm、WebStorm、GoLand 等。',
+      keywords: 'JetBrains激活,IntelliJ IDEA,PyCharm,WebStorm,GoLand,Rider,CLion,IDE激活'
     }
   },
   {
@@ -125,9 +125,9 @@ const routes = [
     name: 'not-found',
     component: NotFoundView,
     meta: {
-      title: 'Forxi - 页面未找到',
-      description: '抱歉，您访问的页面不存在。',
-      keywords: 'Forxi,404,页面未找到'
+      title: 'Forxi - 页面不存在',
+      description: '您访问的页面不存在，请返回首页继续探索 Forxi 在线工具。',
+      keywords: 'Forxi,404'
     }
   }
 ]
@@ -141,16 +141,24 @@ const router = createRouter({
 // 路由守卫，设置页面标题和登录验证
 router.beforeEach((to) => {
   // 设置页面标题
-  document.title = to.meta.title || 'Forxi - 工具集合'
-  
+  document.title = to.meta.title || 'Forxi - 免费内容平台'
+
   // 动态设置 meta 标签
   if (to.meta.description) {
     updateMetaTag('description', to.meta.description)
+    updateOgTag('og:description', to.meta.description)
   }
   if (to.meta.keywords) {
     updateMetaTag('keywords', to.meta.keywords)
   }
-  
+
+  // 更新 og:title 和 og:url
+  updateOgTag('og:title', to.meta.title || 'Forxi - 免费内容平台')
+  updateOgTag('og:url', `https://forxi.cn${to.path}`)
+
+  // 更新 canonical
+  updateCanonical(`https://forxi.cn${to.path}`)
+
   // 检查是否需要登录
   if (to.meta.requiresAuth) {
     const token = localStorage.getItem('access_token')
@@ -158,7 +166,7 @@ router.beforeEach((to) => {
       return { path: '/auth', query: { redirect: to.fullPath } }
     }
   }
-  
+
   return true
 })
 
@@ -171,6 +179,28 @@ function updateMetaTag(name, content) {
     document.head.appendChild(metaTag)
   }
   metaTag.content = content
+}
+
+// 更新或创建 og 标签
+function updateOgTag(property, content) {
+  let tag = document.querySelector(`meta[property="${property}"]`)
+  if (!tag) {
+    tag = document.createElement('meta')
+    tag.setAttribute('property', property)
+    document.head.appendChild(tag)
+  }
+  tag.content = content
+}
+
+// 更新 canonical 链接
+function updateCanonical(href) {
+  let link = document.querySelector('link[rel="canonical"]')
+  if (!link) {
+    link = document.createElement('link')
+    link.rel = 'canonical'
+    document.head.appendChild(link)
+  }
+  link.href = href
 }
 
 export default router

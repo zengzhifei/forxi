@@ -13,7 +13,7 @@
         <label class="block text-sm font-medium text-gray-700 mb-2">输入文本</label>
         <textarea 
           v-model="input" 
-          class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent font-mono text-sm"
+          class="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent font-mono text-sm"
           rows="4"
           placeholder="请输入要加密/解密的文本..."
         ></textarea>
@@ -23,13 +23,13 @@
         <input 
           type="text" 
           v-model="key" 
-          class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent font-mono"
+          class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent font-mono"
           placeholder="请输入密钥..."
         />
       </div>
       <div class="flex flex-wrap gap-2">
-        <button @click="encrypt" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">加密</button>
-        <button @click="decrypt" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">解密</button>
+        <button @click="encrypt" class="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-colors">加密</button>
+        <button @click="decrypt" class="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-colors">解密</button>
         <button @click="copy(output)" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">复制</button>
       </div>
       <div v-if="output">
