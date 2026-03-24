@@ -3,22 +3,19 @@
     <AppHeader />
 
     <main class="flex-1">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 lg:hidden">
-        <h1 class="text-xl font-bold text-zinc-600 text-center">AI趣玩</h1>
-      </div>
       <div class="max-w-7xl mx-auto py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-6">
           <div class="w-full lg:w-64 flex-shrink-0">
             <div class="bg-white rounded-2xl shadow-sm border border-zinc-100 p-2 lg:p-4 sticky top-16 lg:top-20 z-10">
               <h3 class="hidden lg:block text-lg font-bold text-zinc-700 mb-4 px-3">AI趣玩</h3>
-              <div class="flex lg:flex-col gap-1 lg:space-y-1 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
+              <div class="flex lg:flex-col gap-1 lg:space-y-1 overflow-x-auto lg:overflow-visible">
+                <span class="lg:hidden flex-shrink-0 text-sm font-bold text-zinc-400 px-3 py-2 self-center">AI</span>
                 <button
                   v-for="item in menuItems"
                   :key="item.id"
                   @click="activeMenu = item.id"
                   class="flex-shrink-0 text-left px-4 py-2 lg:py-3 rounded-xl text-sm font-medium transition-all duration-200 flex items-center gap-2 whitespace-nowrap"
-                  :class="activeMenu === item.id ? 'text-white shadow-md' : 'text-zinc-500 hover:bg-zinc-50'"
-                  :style="activeMenu === item.id ? 'background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)' : ''"
+                  :class="activeMenu === item.id ? 'bg-zinc-100 text-zinc-700 shadow-sm' : 'text-zinc-500 hover:bg-zinc-50'"
                 >
                   <span v-html="item.icon" class="w-4 h-4 lg:w-5 lg:h-5 flex-shrink-0"></span>
                   <span>{{ item.name }}</span>
@@ -89,9 +86,8 @@
     <button
       v-if="activeMenu !== 'chat'"
       @click="scrollToTop"
-      class="fixed bottom-8 right-8 w-12 h-12 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 z-50"
+      class="fixed bottom-8 right-8 w-12 h-12 bg-zinc-500 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 hover:bg-zinc-600 z-50"
       :class="{ 'opacity-100': showBackToTop, 'opacity-0 pointer-events-none': !showBackToTop }"
-      style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)"
     >
       <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
@@ -248,8 +244,6 @@ const sendChatMessage = async () => {
 你是一个 AI 技术助理。
 - 回答问题时使用简明、专业的中文
 - 输出示例代码时使用 Markdown 代码块，并指定语言
-- 多行代码必须保留换行，不要用空格代替
-- 请在回答中，用 <NL> 表示换行，不要直接换行
 - 如果回答涉及列表，保证每一项单独占一行
 - 不要在 JSON 或代码块里加入解释文字
 - 如果无法准确回答，说明原因，不要编造内容
@@ -276,46 +270,50 @@ const sendChatMessage = async () => {
       model: chatModel.value,
       messages
     })
-    
-    if (response.status === 429) {
-      chatMessages.value[chatMessages.value.length - 1].content = '模型配额已用完，请更换模型重试'
+
+    if (!response.ok) {
+      const data = await response.json();
+      chatMessages.value[chatMessages.value.length - 1].content = data.message || '请求失败'
       chatLoading.value = false
       return
-    }
-    if (!response.ok) {
-      throw new Error('请求失败')
     }
     
     const reader = response.body.getReader()
     const decoder = new TextDecoder()
+    let buffer = ''
     let currentEvent = ''
-    let currentData = ''
-    
-    while (true) {
+    let dataLines = []
+    let isDone = false
+
+    while (!isDone) {
       const { done, value } = await reader.read()
       if (done) break
-      
-      const text = decoder.decode(value, { stream: true })
-      const lines = text.split('\n')
-      
+
+      buffer += decoder.decode(value, { stream: true })
+      const lines = buffer.split('\n')
+      buffer = lines.pop() || ''
+
       for (const line of lines) {
+        // 空行 = SSE 事件分派点
+        if (line.trim() === '') {
+          if (currentEvent === 'done') {
+            isDone = true
+            break
+          }
+          if (dataLines.length > 0 && currentEvent === 'message') {
+            // 同一事件内的多条 data: 行用 \n 拼接（SSE 规范）
+            const text = dataLines.join('\n')
+            chatMessages.value[chatMessages.value.length - 1].content += text
+          }
+          currentEvent = ''
+          dataLines = []
+          continue
+        }
+
         if (line.startsWith('event:')) {
           currentEvent = line.slice(6).trim()
         } else if (line.startsWith('data:')) {
-          currentData = line.slice(5).replace(/<NL>/g, "\n")
-          if (currentData === "") {
-            currentData = "\n"
-          }
-          if (currentEvent === 'message') {
-            try {
-              const parsed = JSON.parse(currentData)
-              chatMessages.value[chatMessages.value.length - 1].content += parsed.message || parsed.content || ''
-            } catch (e) {
-              chatMessages.value[chatMessages.value.length - 1].content += currentData
-            }
-          } else if (currentEvent === 'done') {
-            break
-          }
+          dataLines.push(line.slice(5))
         }
       }
     }

@@ -14,7 +14,7 @@
             class="w-20 h-20 rounded-full object-cover border-2 border-zinc-100"
             @error="handleAvatarError"
           />
-          <div v-else class="w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl font-bold" style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)">
+          <div v-else class="w-20 h-20 rounded-full flex items-center justify-center bg-zinc-100 text-zinc-500 text-2xl font-bold">
             {{ userInfo.nickname?.charAt(0)?.toUpperCase() || 'U' }}
           </div>
           <div>
@@ -64,7 +64,7 @@
                     class="w-20 h-20 rounded-full object-cover border-2 border-zinc-100"
                     @error="handleAvatarError"
                   />
-                  <div v-else class="w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl font-bold" style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)">
+                  <div v-else class="w-20 h-20 rounded-full flex items-center justify-center bg-zinc-100 text-zinc-500 text-2xl font-bold">
                     {{ userInitial }}
                   </div>
                   <div class="absolute bottom-0 right-0 bg-zinc-600 text-white rounded-full p-1 hover:bg-zinc-700">
@@ -99,8 +99,7 @@
             <button
               type="submit"
               :disabled="loading"
-              class="px-6 py-2.5 text-white text-sm font-medium rounded-xl disabled:opacity-50 transition-all"
-              style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)"
+              class="px-6 py-2.5 bg-zinc-500 hover:bg-zinc-600 text-white text-sm font-medium rounded-xl disabled:opacity-50 transition-all"
             >
               {{ loading ? '保存中...' : '保存修改' }}
             </button>
@@ -217,8 +216,7 @@
             <button
               type="submit"
               :disabled="loading || passwordForm.newPassword !== passwordForm.confirmPassword"
-              class="px-6 py-2.5 text-white text-sm font-medium rounded-xl disabled:opacity-50 transition-all"
-              style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)"
+              class="px-6 py-2.5 bg-zinc-500 hover:bg-zinc-600 text-white text-sm font-medium rounded-xl disabled:opacity-50 transition-all"
             >
               {{ loading ? '修改中...' : '修改密码' }}
             </button>

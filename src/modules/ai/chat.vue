@@ -1,12 +1,12 @@
 <template>
   <div
-    class="bg-white rounded-2xl shadow-sm border border-zinc-100 p-6 sm:p-8 overflow-hidden flex flex-col"
+    class="bg-white rounded-2xl shadow-sm border border-zinc-100 p-4 sm:p-8 overflow-hidden flex flex-col"
     :class="{ 'fixed inset-0 z-50 rounded-none': isFullscreen }"
     :style="{ height: isFullscreen ? '100dvh' : 'auto', minHeight: isMobile ? '60vh' : '500px' }"
   >
-    <div class="flex items-center gap-3 mb-6">
-      <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)">
-        <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div class="hidden lg:flex items-center gap-3 mb-6">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-zinc-100">
+        <svg class="w-5 h-5 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
         </svg>
       </div>
@@ -14,37 +14,33 @@
         <h2 class="text-xl font-bold text-zinc-700">聊一聊</h2>
         <p class="text-sm text-zinc-400">智能对话，解答你的问题</p>
       </div>
-      <button
-        v-if="isMobile"
-        @click="toggleFullscreen"
-        class="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors"
-        :title="isFullscreen ? '退出全屏' : '全屏'"
-      >
-        <svg v-if="!isFullscreen" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-        </svg>
-        <svg v-else class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" />
-        </svg>
-      </button>
     </div>
-    
+
     <div class="space-y-5">
       <div class="flex gap-3 items-end">
         <div class="flex-1">
           <label class="block text-sm font-semibold text-zinc-600 mb-2">模型</label>
-          <select
-            :value="model"
-            @change="emit('update:model', $event.target.value)"
-            class="w-full px-4 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-zinc-200 focus:border-zinc-400 bg-white text-zinc-700"
-          >
-            <option value="" disabled>选择模型</option>
-            <option v-for="m in models" :key="m.id" :value="m.id">
-              {{ m.display_name }}
-            </option>
-          </select>
+          <SearchSelect
+            :modelValue="model"
+            @update:modelValue="emit('update:model', $event)"
+            :options="models"
+            placeholder="选择模型"
+          />
         </div>
-        <button @click="emit('clearChat')" class="px-4 py-3 text-white text-sm font-medium rounded-xl transition-all hover:shadow-md hover:shadow-zinc-300/40" style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)">
+        <button
+          v-if="isMobile"
+          @click="toggleFullscreen"
+          class="px-3 py-3 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-xl transition-colors"
+          :title="isFullscreen ? '退出全屏' : '全屏'"
+        >
+          <svg v-if="!isFullscreen" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+          </svg>
+          <svg v-else class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" />
+          </svg>
+        </button>
+        <button @click="emit('clearChat')" class="px-4 py-3 bg-zinc-500 hover:bg-zinc-600 text-white text-sm font-medium rounded-xl transition-all hover:shadow-md hover:shadow-zinc-300/40">
           新对话
         </button>
       </div>
@@ -71,12 +67,12 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
                 </svg>
               </button>
-              <div class="px-4 py-2.5 rounded-2xl whitespace-pre-wrap text-white text-sm" style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)">
+              <div class="px-4 py-2.5 rounded-2xl whitespace-pre-wrap text-white text-sm" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)">
                 {{ msg.content }}
               </div>
             </div>
           </div>
-          <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)">
             <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
@@ -110,8 +106,7 @@
         <button
           @click="emit('send')"
           :disabled="!model || !input?.trim() || loading"
-          class="px-4 py-1.5 text-white font-semibold rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center hover:shadow-md hover:shadow-zinc-300/40"
-          style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)"
+          class="px-4 py-1.5 bg-zinc-500 hover:bg-zinc-600 text-white font-semibold rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center hover:shadow-md hover:shadow-zinc-300/40"
         >
           <svg v-if="loading" class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -126,28 +121,9 @@
 
 <script setup>
 import { ref, watch, nextTick, onMounted, onUnmounted } from 'vue'
+import SearchSelect from '../../components/SearchSelect.vue'
 import MarkdownIt from 'markdown-it'
-import hljs from 'highlight.js/lib/core'
-import javascript from 'highlight.js/lib/languages/javascript'
-import python from 'highlight.js/lib/languages/python'
-import css from 'highlight.js/lib/languages/css'
-import xml from 'highlight.js/lib/languages/xml'
-import json from 'highlight.js/lib/languages/json'
-import sql from 'highlight.js/lib/languages/sql'
-import bash from 'highlight.js/lib/languages/bash'
-import java from 'highlight.js/lib/languages/java'
-import go from 'highlight.js/lib/languages/go'
-
-hljs.registerLanguage('javascript', javascript)
-hljs.registerLanguage('python', python)
-hljs.registerLanguage('css', css)
-hljs.registerLanguage('xml', xml)
-hljs.registerLanguage('html', xml)
-hljs.registerLanguage('json', json)
-hljs.registerLanguage('sql', sql)
-hljs.registerLanguage('bash', bash)
-hljs.registerLanguage('java', java)
-hljs.registerLanguage('go', go)
+import hljs from 'highlight.js/lib/common'
 
 const copyCode = async (btn) => {
   const wrapper = btn.closest('.code-block-wrapper')
@@ -186,7 +162,11 @@ const md = new MarkdownIt({
         highlighted = md.utils.escapeHtml(str)
       }
     } else {
-      highlighted = md.utils.escapeHtml(str)
+      try {
+        highlighted = hljs.highlightAuto(str).value
+      } catch (_) {
+        highlighted = md.utils.escapeHtml(str)
+      }
     }
     return `<div class="code-block-wrapper"><pre class="hljs"><code class="language-${lang || ''}">${highlighted}</code></pre><button class="copy-btn" onclick="copyCode(this)">复制</button></div>`
   }

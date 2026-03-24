@@ -71,8 +71,8 @@
             <div class="page" style="z-index: 5;">
               <div class="front">
                 <div class="cover h-full flex flex-col overflow-hidden rounded-xl">
-                  <div class="cover-top flex-1 flex items-center justify-center transition-colors duration-300" :class="[tool.bgDefault, tool.bgHover]">
-                    <component :is="tool.icon" class="w-12 h-12 transition-colors duration-300" :class="tool.iconColor" />
+                  <div class="cover-top flex-1 flex items-center justify-center transition-colors duration-300" :class="[activeBook === index ? tool.bgActive : tool.bgDefault, tool.bgHover]">
+                    <component :is="tool.icon" class="w-12 h-12 transition-colors duration-300" :class="[activeBook === index ? tool.iconActive : tool.iconDefault, tool.iconHover]" />
                   </div>
                   <div class="cover-bottom flex-1 bg-white p-6 sm:p-8 flex flex-col">
                     <h3 class="text-xl font-semibold text-zinc-700 mb-3">{{ tool.title }}</h3>
@@ -206,7 +206,10 @@ const tools = [
     icon: FileIcon,
     bgDefault: 'bg-zinc-50',
     bgHover: 'group-hover:bg-blue-100',
-    iconColor: 'text-zinc-300 group-hover:text-blue-600',
+    bgActive: 'bg-blue-100',
+    iconDefault: 'text-zinc-300',
+    iconHover: 'group-hover:text-blue-600',
+    iconActive: 'text-blue-600',
     buttonText: '未展知意',
     onClick: () => navigateTo('/file-preview')
   },
@@ -216,7 +219,10 @@ const tools = [
     icon: ImageIcon,
     bgDefault: 'bg-zinc-50',
     bgHover: 'group-hover:bg-emerald-100',
-    iconColor: 'text-zinc-300 group-hover:text-emerald-600',
+    bgActive: 'bg-emerald-100',
+    iconDefault: 'text-zinc-300',
+    iconHover: 'group-hover:text-emerald-600',
+    iconActive: 'text-emerald-600',
     buttonText: '所见皆新',
     onClick: () => navigateTo('/image-processing')
   },
@@ -226,7 +232,10 @@ const tools = [
     icon: AIIcon,
     bgDefault: 'bg-zinc-50',
     bgHover: 'group-hover:bg-violet-100',
-    iconColor: 'text-zinc-300 group-hover:text-violet-600',
+    bgActive: 'bg-violet-100',
+    iconDefault: 'text-zinc-300',
+    iconHover: 'group-hover:text-violet-600',
+    iconActive: 'text-violet-600',
     buttonText: '妙想成趣',
     onClick: () => navigateTo('/ai')
   },
@@ -236,7 +245,10 @@ const tools = [
     icon: ToolsIcon,
     bgDefault: 'bg-zinc-50',
     bgHover: 'group-hover:bg-orange-100',
-    iconColor: 'text-zinc-300 group-hover:text-orange-600',
+    bgActive: 'bg-orange-100',
+    iconDefault: 'text-zinc-300',
+    iconHover: 'group-hover:text-orange-600',
+    iconActive: 'text-orange-600',
     buttonText: '执简驭繁',
     onClick: () => navigateTo('/it-tools')
   },
@@ -246,7 +258,10 @@ const tools = [
     icon: JetbrainsIcon,
     bgDefault: 'bg-zinc-50',
     bgHover: 'group-hover:bg-yellow-100',
-    iconColor: 'text-zinc-300 group-hover:text-yellow-600',
+    bgActive: 'bg-yellow-100',
+    iconDefault: 'text-zinc-300',
+    iconHover: 'group-hover:text-yellow-600',
+    iconActive: 'text-yellow-600',
     buttonText: '巧用魔法',
     onClick: () => navigateTo('/jetbra')
   },
@@ -256,7 +271,10 @@ const tools = [
     icon: ComingIcon,
     bgDefault: 'bg-zinc-50',
     bgHover: 'group-hover:bg-zinc-100',
-    iconColor: 'text-zinc-300',
+    bgActive: 'bg-zinc-100',
+    iconDefault: 'text-zinc-300',
+    iconHover: '',
+    iconActive: '',
     buttonText: '未来即来',
     onClick: () => {}
   }

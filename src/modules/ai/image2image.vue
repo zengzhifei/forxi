@@ -1,9 +1,9 @@
 <template>
   <div class="space-y-6">
     <div class="bg-white rounded-2xl shadow-sm border border-zinc-100 p-6 sm:p-8">
-      <div class="flex items-center gap-3 mb-6">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)">
-          <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div class="hidden lg:flex items-center gap-3 mb-6">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-zinc-100">
+          <svg class="w-5 h-5 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
         </div>
@@ -89,12 +89,12 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-sm font-semibold text-zinc-600 mb-2">模型</label>
-            <select :value="selectedModel" @change="emit('update:selectedModel', $event.target.value)" class="w-full px-4 py-3 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-zinc-200 focus:border-zinc-400 focus:outline-none bg-white text-zinc-700">
-              <option value="" disabled>选择模型</option>
-              <option v-for="model in models" :key="model.id" :value="model.id" :title="'使用量：' + formatNumber(model.downloads) + (model.description ? '，描述：' + model.description : '')">
-                {{ model.display_name }}
-              </option>
-            </select>
+            <SearchSelect
+              :modelValue="selectedModel"
+              @update:modelValue="emit('update:selectedModel', $event)"
+              :options="models"
+              placeholder="选择模型"
+            />
           </div>
 
           <div>
@@ -113,8 +113,7 @@
         <button
           @click="emit('generate')"
           :disabled="!prompt.trim() || !inputImageFile || !selectedModel || generating"
-          class="w-full py-4 px-6 text-white font-semibold rounded-xl disabled:opacity-40 disabled:cursor-not-allowed flex flex-col items-center justify-center gap-2 transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-zinc-300/40 hover:scale-[1.01]"
-          style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)"
+          class="w-full py-4 px-6 bg-zinc-500 hover:bg-zinc-600 text-white font-semibold rounded-xl disabled:opacity-40 disabled:cursor-not-allowed flex flex-col items-center justify-center gap-2 transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-zinc-300/40 hover:scale-[1.01]"
         >
           <span v-if="generating">AI 处理中...</span>
           <span v-else>✨ 开始改造</span>
@@ -187,8 +186,7 @@
           <div class="mt-6 flex justify-center">
             <button
               @click="emit('regenerate')"
-              class="px-6 py-3 text-white font-medium rounded-xl flex items-center gap-2 transition-all hover:shadow-md hover:shadow-zinc-300/40 hover:scale-[1.01]"
-              style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)"
+              class="px-6 py-3 bg-zinc-500 hover:bg-zinc-600 text-white font-medium rounded-xl flex items-center gap-2 transition-all hover:shadow-md hover:shadow-zinc-300/40 hover:scale-[1.01]"
             >
               <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -218,6 +216,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import SearchSelect from '../../components/SearchSelect.vue'
 
 const props = defineProps({
   models: Array,

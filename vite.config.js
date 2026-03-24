@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => {
           manualChunks: {
             'vendor-vue': ['vue', 'vue-router'],
             'vendor-md': ['markdown-it'],
-            'vendor-hljs': ['highlight.js/lib/core', 'highlight.js/lib/languages/javascript', 'highlight.js/lib/languages/python', 'highlight.js/lib/languages/css', 'highlight.js/lib/languages/xml', 'highlight.js/lib/languages/json', 'highlight.js/lib/languages/sql', 'highlight.js/lib/languages/bash', 'highlight.js/lib/languages/java', 'highlight.js/lib/languages/go']
+            'vendor-hljs': ['highlight.js/lib/common']
           }
         }
       }
