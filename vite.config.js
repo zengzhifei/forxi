@@ -1,10 +1,63 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { resolve } from 'path'
+import { resolve, join } from 'path'
+import { createRequire } from 'module'
+import { existsSync } from 'fs'
+
+const require = createRequire(import.meta.url)
+const vitePrerender = require('vite-plugin-prerender')
+const Renderer = vitePrerender.PuppeteerRenderer
+
+// 自动检测系统 Chrome/Chromium 路径，支持环境变量覆盖
+function findChrome() {
+  if (process.env.CHROME_PATH) return process.env.CHROME_PATH
+  const candidates = {
+    darwin: [
+      '/Applications/Chromium.app/Contents/MacOS/Chromium',
+      '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+    ],
+    linux: [
+      '/usr/bin/chromium',
+      '/usr/bin/chromium-browser',
+      '/usr/bin/google-chrome-stable',
+      '/usr/bin/google-chrome'
+    ],
+    win32: [
+      'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+      'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
+    ]
+  }
+  for (const p of candidates[process.platform] || []) {
+    if (existsSync(p)) return p
+  }
+  return undefined // 回退到 puppeteer 内置 Chromium
+}
 
 export default defineConfig(({ mode }) => {
   return {
-    plugins: [vue()],
+    plugins: [
+      vue(),
+      vitePrerender({
+        staticDir: join(__dirname, 'dist'),
+        routes: ['/', '/file-preview', '/image-processing', '/ai', '/it-tools', '/jetbra'],
+        renderer: new Renderer({
+          maxConcurrentRoutes: 2,
+          renderAfterDocumentEvent: 'app-rendered',
+          headless: true,
+          executablePath: findChrome(),
+          args: ['--no-sandbox', '--disable-setuid-sandbox']
+        }),
+        postProcess(renderedRoute) {
+          renderedRoute.route = renderedRoute.originalRoute
+          // 移除预渲染时注入的百度统计脚本，避免运行时重复
+          renderedRoute.html = renderedRoute.html.replace(
+            /<script[^>]*hm\.baidu\.com[^>]*><\/script>/gi,
+            ''
+          )
+          return renderedRoute
+        }
+      })
+    ],
     resolve: {
       alias: {
         '@': resolve(__dirname, './src')

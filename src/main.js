@@ -13,5 +13,8 @@ const app = createApp(App)
 // 使用路由
 app.use(router)
 
-// 挂载应用
-app.mount('#app')
+// 等待路由就绪后挂载，确保预渲染时 meta 标签已设置
+router.isReady().then(() => {
+  app.mount('#app')
+  document.dispatchEvent(new Event('app-rendered'))
+})
