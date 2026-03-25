@@ -270,7 +270,7 @@
 import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuth } from '../composable/useAuth'
-import api from '../utils/api'
+import sso from '../utils/sso'
 import { validatePassword, PASSWORD_RULES, getPasswordStrength } from '../utils/validate'
 
 const router = useRouter()
@@ -279,7 +279,7 @@ const { login, register, sendVerificationCode, loading } = useAuth()
 
 const handleGithubLogin = async () => {
   try {
-    const authUrl = await api.getGithubAuthUrl()
+    const authUrl = await sso.getOAuthUrl('github')
     if (authUrl) {
       window.location.href = authUrl
     } else {
@@ -365,7 +365,7 @@ const handleSubmit = async () => {
   try {
     if (activeTab.value === 'login') {
       await login(form.email, form.password)
-      router.push('/')
+      router.push(route.query.redirect || '/')
     } else {
       if (!form.nickname) {
         error.value = '请输入昵称'

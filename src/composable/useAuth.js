@@ -1,16 +1,17 @@
 import { ref, computed } from 'vue'
 import api from '../utils/api'
+import sso from '../utils/sso'
 
 const user = ref(null)
 const loading = ref(false)
 
 export function useAuth() {
   const isAuthenticated = computed(() => !!user.value)
-  
+
   const sendVerificationCode = async (email) => {
     loading.value = true
     try {
-      const data = await api.sendVerificationCode(email)
+      const data = await sso.sendVerificationCode(email)
       return data
     } finally {
       loading.value = false
@@ -20,9 +21,10 @@ export function useAuth() {
   const login = async (email, password) => {
     loading.value = true
     try {
-      const data = await api.login(email, password)
-      user.value = data.user
-      return data
+      await sso.login(email, password)
+      const profile = await api.getProfile()
+      user.value = profile
+      return profile
     } finally {
       loading.value = false
     }
@@ -31,7 +33,7 @@ export function useAuth() {
   const register = async (email, password, nickname, verificationCode) => {
     loading.value = true
     try {
-      const data = await api.register(email, password, nickname, verificationCode)
+      const data = await sso.register(email, password, nickname, verificationCode)
       return data
     } finally {
       loading.value = false
@@ -39,11 +41,6 @@ export function useAuth() {
   }
 
   const fetchProfile = async () => {
-    if (!api.isAuthenticated()) {
-      user.value = null
-      return
-    }
-    
     loading.value = true
     try {
       const data = await api.getProfile()
@@ -59,7 +56,7 @@ export function useAuth() {
   const logout = async () => {
     loading.value = true
     try {
-      await api.logout()
+      await sso.logout()
     } finally {
       user.value = null
       loading.value = false
@@ -80,7 +77,7 @@ export function useAuth() {
   const changePassword = async (oldPassword, newPassword) => {
     loading.value = true
     try {
-      const data = await api.changePassword(oldPassword, newPassword)
+      const data = await sso.changePassword(oldPassword, newPassword)
       return data
     } finally {
       loading.value = false
@@ -90,7 +87,7 @@ export function useAuth() {
   const requestPasswordReset = async (email) => {
     loading.value = true
     try {
-      const data = await api.requestPasswordReset(email)
+      const data = await sso.requestPasswordReset(email)
       return data
     } finally {
       loading.value = false
@@ -100,7 +97,7 @@ export function useAuth() {
   const confirmPasswordReset = async (token, password) => {
     loading.value = true
     try {
-      const data = await api.confirmPasswordReset(token, password)
+      const data = await sso.confirmPasswordReset(token, password)
       return data
     } finally {
       loading.value = false
@@ -110,7 +107,7 @@ export function useAuth() {
   const getLoginLogs = async (page, pageSize) => {
     loading.value = true
     try {
-      const data = await api.getLoginLogs(page, pageSize)
+      const data = await sso.getLoginLogs(page, pageSize)
       return data
     } finally {
       loading.value = false

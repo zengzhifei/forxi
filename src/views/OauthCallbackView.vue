@@ -174,6 +174,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import api from '../utils/api'
+import sso from '../utils/sso'
 import { validatePassword, PASSWORD_RULES, getPasswordStrength } from '../utils/validate'
 
 const router = useRouter()
@@ -202,11 +203,8 @@ const passwordStrength = computed(() => getPasswordStrength(password.value))
 const providerName = 'GitHub'
 
 onMounted(async () => {
-  const accessToken = route.query.access_token
-  const refreshToken = route.query.refresh_token
   const errorParam = route.query.error
   const needsBind = route.query.needs_email_bind
-  const bindType = route.query.bind_type
   bindToken.value = route.query.bind_token || ''
 
   if (errorParam) {
@@ -222,29 +220,20 @@ onMounted(async () => {
     return
   }
 
-  if (accessToken) {
-    localStorage.setItem('access_token', accessToken)
-    if (refreshToken) {
-      localStorage.setItem('refresh_token', refreshToken)
-    }
+  // Cookie已由服务端设置，直接验证登录状态
+  try {
+    await api.getProfile()
 
-    try {
-      await api.getProfile()
-
-      if (bindType === 'bind') {
-        router.push('/profile')
-      } else {
-        router.push('/')
-      }
-    } catch (err) {
-      console.error('获取用户信息失败:', err)
-      error.value = true
-      errorMessage.value = '获取用户信息失败'
-      loading.value = false
+    const from = route.query.from
+    if (from === 'bind') {
+      router.push('/profile')
+    } else {
+      router.push('/')
     }
-  } else {
+  } catch (err) {
+    console.error('获取用户信息失败:', err)
     error.value = true
-    errorMessage.value = '没有access_token'
+    errorMessage.value = '登录状态验证失败'
     loading.value = false
   }
 })
@@ -278,7 +267,7 @@ const handleBindEmail = async () => {
   bindError.value = ''
 
   try {
-    await api.bindEmail({
+    await sso.bindEmail({
       bind_token: bindToken.value,
       email: email.value,
       email_code: emailCode.value,
@@ -304,7 +293,7 @@ const sendEmailCode = async () => {
   bindError.value = ''
 
   try {
-    await api.sendVerificationCode(email.value)
+    await sso.sendVerificationCode(email.value)
     countdown.value = 60
     const timer = setInterval(() => {
       countdown.value--

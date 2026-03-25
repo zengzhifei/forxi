@@ -333,6 +333,7 @@ import { ref, reactive, computed, onMounted, inject, watch, onUnmounted } from '
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../composable/useAuth'
 import api from '../utils/api'
+import sso from '../utils/sso'
 import { validatePassword, PASSWORD_RULES, getPasswordStrength } from '../utils/validate'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
@@ -355,12 +356,14 @@ onMounted(async () => {
   updateHash()
   window.addEventListener('hashchange', updateHash)
   await fetchUserInfo()
-  if (user.value) {
-    userInfo.value = { ...user.value }
-    profileForm.nickname = user.value.nickname || ''
-    profileForm.avatar = user.value.avatar ? user.value.avatar.trim() : ''
-    profileForm.bio = user.value.bio || ''
+  if (!user.value) {
+    router.replace({ path: '/auth', query: { redirect: '/profile' } })
+    return
   }
+  userInfo.value = { ...user.value }
+  profileForm.nickname = user.value.nickname || ''
+  profileForm.avatar = user.value.avatar ? user.value.avatar.trim() : ''
+  profileForm.bio = user.value.bio || ''
   await fetchOauthAccounts()
   await fetchLoginLogs(1)
 })
@@ -449,7 +452,7 @@ const logsMeta = ref({
 
 const fetchOauthAccounts = async () => {
   try {
-    const res = await api.getOauthAccounts()
+    const res = await sso.getOauthAccounts()
     oauthAccounts.value = Array.isArray(res) ? res : (res.data || [])
   } catch (err) {
     console.error('获取OAuth账号失败:', err)
@@ -458,7 +461,7 @@ const fetchOauthAccounts = async () => {
 
 const fetchLoginLogs = async (page) => {
   try {
-    const res = await api.getLoginLogs(page, logsMeta.value.pageSize)
+    const res = await sso.getLoginLogs(page, logsMeta.value.pageSize)
     const logs = Array.isArray(res) ? res : (res.data || [])
     loginLogs.value = logs
     logsMeta.value = { page, pageSize: logsMeta.value.pageSize, total: logs.length, totalPages: 1 }
@@ -499,13 +502,11 @@ const handleChangePassword = async () => {
   
   loading.value = true
   try {
-    await api.changePassword(passwordForm.oldPassword, passwordForm.newPassword)
+    await sso.changePassword(passwordForm.oldPassword, passwordForm.newPassword)
     toast.success('密码修改成功，请重新登录')
     passwordForm.oldPassword = ''
     passwordForm.newPassword = ''
     passwordForm.confirmPassword = ''
-    localStorage.removeItem('access_token')
-    localStorage.removeItem('refresh_token')
     setTimeout(() => {
       router.push('/auth')
     }, 1500)
@@ -518,7 +519,7 @@ const handleChangePassword = async () => {
 
 const handleBindGithub = async () => {
   try {
-    const authUrl = await api.getGithubAuthUrl()
+    const authUrl = await sso.getOAuthUrl('github')
     if (authUrl) {
       window.location.href = authUrl
     }
@@ -532,7 +533,7 @@ const handleUnbindGithub = async () => {
   if (!ok) return
   
   try {
-    await api.unbindOAuth('github')
+    await sso.unbindOAuth('github')
     toast.success('解绑成功')
     fetchOauthAccounts()
   } catch (err) {

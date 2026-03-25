@@ -10,17 +10,18 @@
   },
   "dependencies": {
     "@vueuse/core": "^14.2.1",
+    "axios": "^1.13.6",
     "browser-image-compression": "^2.0.2",
     "colord": "^2.9.3",
     "crypto-js": "^4.2.0",
+    "highlight.js": "^11.9.0",
     "js-base64": "^3.7.8",
     "json5": "^2.2.3",
     "lodash": "^4.17.23",
+    "markdown-it": "^14.0.0",
     "qrcode": "^1.5.4",
     "uuid": "^13.0.0",
     "vue": "^3.4.0",
-    "highlight.js": "^11.9.0",
-    "markdown-it": "^14.0.0",
     "vue-router": "^5.0.3"
   },
   "devDependencies": {

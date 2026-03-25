@@ -159,14 +159,6 @@ router.beforeEach((to) => {
   // 更新 canonical
   updateCanonical(`https://forxi.cn${to.path}`)
 
-  // 检查是否需要登录
-  if (to.meta.requiresAuth) {
-    const token = localStorage.getItem('access_token')
-    if (!token) {
-      return { path: '/auth', query: { redirect: to.fullPath } }
-    }
-  }
-
   return true
 })
 
