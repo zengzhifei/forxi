@@ -76,10 +76,10 @@ export const sso = {
 
   /**
    * 用户注册
-   * 路由：POST /sso/user/register
+   * 路由：POST /sso/register
    */
   async register(email, password, nickname, verificationCode) {
-    const res = await ssoClient.post('/user/register', {
+    const res = await ssoClient.post('/register', {
       email,
       password,
       nickname,
