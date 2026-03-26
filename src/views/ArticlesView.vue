@@ -4,7 +4,7 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <div class="flex gap-6">
-        <aside class="w-64 flex-shrink-0">
+        <aside class="hidden lg:block w-64 flex-shrink-0">
           <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sticky top-24">
             <h3 class="text-sm font-semibold text-gray-500 mb-3">文章分类</h3>
             <nav class="space-y-1">
@@ -29,8 +29,8 @@
         </aside>
 
         <main class="flex-1 min-w-0">
-          <div v-if="!isDetailView" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <div class="flex items-center gap-4 mb-4">
+          <div v-if="!isDetailView" class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
+            <div class="hidden lg:flex items-center gap-4 mb-4">
               <h2 class="text-lg font-semibold text-gray-800">{{ currentCategoryName }}</h2>
               <div class="flex-1"></div>
               <div class="relative">
@@ -45,6 +45,29 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
+            </div>
+
+            <button
+              @click="showMobileCategory = true"
+              class="lg:hidden flex items-center gap-2 w-full px-3 py-2 border border-gray-200 rounded-lg text-sm mb-4"
+            >
+              <span class="text-gray-500">{{ currentCategoryName }}</span>
+              <svg class="w-4 h-4 text-gray-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            <div class="lg:hidden relative mb-4">
+              <input
+                v-model="searchQuery"
+                type="text"
+                placeholder="搜索文章..."
+                class="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:border-transparent"
+                @keyup.enter="handleSearch"
+              />
+              <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
             </div>
 
             <div v-if="articles.length === 0 && !loading" class="text-center text-gray-400 py-8">
@@ -72,7 +95,7 @@
             </div>
           </div>
 
-          <div v-else-if="selectedArticle" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div v-else-if="selectedArticle" class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
             <button
               @click="goBack"
               class="flex items-center text-gray-600 hover:text-gray-800 mb-4 transition-colors"
@@ -84,7 +107,7 @@
             </button>
 
             <article>
-              <h1 class="text-2xl font-bold text-gray-800 mb-2">{{ selectedArticle.title }}</h1>
+              <h1 class="text-xl sm:text-2xl font-bold text-gray-800 mb-2">{{ selectedArticle.title }}</h1>
               <div class="text-sm text-gray-400 mb-6">{{ selectedArticle.author_name }} · {{ formatDate(selectedArticle.updated_at) }}</div>
               <div class="prose prose-zinc max-w-none article-content" v-html="renderedContent"></div>
             </article>
@@ -96,6 +119,50 @@
         </main>
       </div>
     </div>
+
+    <div v-if="showMobileCategory" class="fixed inset-0 z-50 lg:hidden" @click.self="showMobileCategory = false">
+      <div class="absolute inset-0 bg-black/50" @click="showMobileCategory = false"></div>
+      <div class="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl p-4 max-h-[70vh] overflow-y-auto">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-gray-800">选择分类</h3>
+          <button @click="showMobileCategory = false" class="p-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <nav class="space-y-1">
+          <button
+            @click="selectCategory(''); showMobileCategory = false"
+            class="w-full text-left px-3 py-3 rounded-lg text-sm transition-colors"
+            :class="selectedCategory === '' ? 'bg-zinc-100 text-zinc-700 font-medium' : 'text-gray-600 hover:bg-gray-50'"
+          >
+            全部
+          </button>
+          <button
+            v-for="cat in categories"
+            :key="cat.code"
+            @click="selectCategory(cat.code); showMobileCategory = false"
+            class="w-full text-left px-3 py-3 rounded-lg text-sm transition-colors"
+            :class="selectedCategory === cat.code ? 'bg-zinc-100 text-zinc-700 font-medium' : 'text-gray-600 hover:bg-gray-50'"
+          >
+            {{ cat.name }}
+          </button>
+        </nav>
+      </div>
+    </div>
+
+    <transition name="fade">
+      <button
+        v-if="showBackToTop"
+        @click="scrollToTop"
+        class="fixed bottom-6 right-6 w-12 h-12 bg-white border border-gray-200 rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors z-40"
+      >
+        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+      </button>
+    </transition>
   </div>
 </template>
 
@@ -174,8 +241,22 @@ const loading = ref(false)
 const noMore = ref(false)
 const loadMoreTrigger = ref(null)
 const searchQuery = ref('')
+const showMobileCategory = ref(false)
+const showBackToTop = ref(false)
 
 const renderedMermaidIds = ref(new Set())
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+const handleScroll = () => {
+  showBackToTop.value = window.scrollY > 400
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
 
 const isDetailView = computed(() => {
   return route.params.category && route.params.id
@@ -394,6 +475,7 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
   if (mermaid) {
     mermaid.cleanup()
   }
@@ -556,5 +638,15 @@ onUnmounted(() => {
 .article-content th {
   background: #fafafa;
   font-weight: 600;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
