@@ -16,6 +16,7 @@ const AuthView = () => import('../views/AuthView.vue')
 const ProfileView = () => import('../views/ProfileView.vue')
 const ResetPasswordView = () => import('../views/ResetPasswordView.vue')
 const GithubCallbackView = () => import('../views/OauthCallbackView.vue')
+const ArticlesView = () => import('../views/ArticlesView.vue')
 
 // 路由配置
 const routes = [
@@ -118,6 +119,26 @@ const routes = [
       title: 'Forxi - JetBrains 激活',
       description: 'JetBrains 系列 IDE 激活服务，支持 IntelliJ IDEA、PyCharm、WebStorm、GoLand 等。',
       keywords: 'JetBrains激活,IntelliJ IDEA,PyCharm,WebStorm,GoLand,Rider,CLion,IDE激活'
+    }
+  },
+  {
+    path: '/articles',
+    name: 'articles',
+    component: ArticlesView,
+    meta: {
+      title: 'Forxi - 文章',
+      description: '技术文章、随笔杂谈、经验总结，涵盖前端开发、后端技术、DevOps 等领域。',
+      keywords: '技术文章,随笔,经验总结,前端,后端,DevOps'
+    }
+  },
+  {
+    path: '/articles/:category/:id',
+    name: 'article-detail',
+    component: ArticlesView,
+    meta: {
+      title: 'Forxi - 文章',
+      description: '技术文章、随笔杂谈、经验总结，涵盖前端开发、后端技术、DevOps 等领域。',
+      keywords: '技术文章,随笔,经验总结,前端,后端,DevOps'
     }
   },
   {

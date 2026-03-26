@@ -196,6 +196,41 @@ export const api = {
     return response
   },
 
+  // ==================== 文章接口 ====================
+
+  /**
+   * 获取文章分类列表
+   * 路由：GET /api/article/categories
+   */
+  async getArticleCategories() {
+    const res = await apiClient.get('/article/categories')
+    return res.data
+  },
+
+  /**
+   * 获取文章列表
+   * 路由：GET /api/article/list
+   * @param {Object} options - 查询参数
+   * @param {number} options.page - 页码
+   * @param {number} options.pageSize - 每页数量
+   * @param {string} options.query - 搜索关键词
+   * @param {string} options.category - 分类筛选
+   * @param {number} options.id - 文章ID筛选
+   */
+  async getArticleList(options = {}) {
+    const params = {
+      page: options.page || 1,
+      pageSize: options.pageSize || 10,
+      query: options.query || '',
+      category: options.category || ''
+    }
+    if (options.id) {
+      params.id = options.id
+    }
+    const res = await apiClient.get('/article/list', { params })
+    return res.data
+  },
+
   // ==================== 文件上传接口 ====================
 
   /**

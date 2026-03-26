@@ -81,6 +81,34 @@
             AI 趣玩
           </router-link>
 
+          <!-- 内容集下拉 -->
+          <div class="relative" @mouseleave="contentOpen = false">
+            <button
+              class="inline-flex items-center px-3 py-1 border-b-2 text-sm font-medium transition-colors"
+              :class="isContentActive ? 'border-zinc-500 text-zinc-700' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'"
+              @mouseenter="contentOpen = true"
+            >
+              内容集
+            </button>
+
+            <!-- 下拉面板 -->
+            <div
+              v-show="contentOpen"
+              class="absolute top-full left-1/2 -translate-x-1/2 w-36 bg-white rounded-xl shadow-lg border border-zinc-100 py-1.5 z-50"
+              @mouseenter="contentOpen = true"
+            >
+              <router-link
+                v-for="item in contentItems"
+                :key="item.path"
+                :to="item.path"
+                class="flex items-center px-4 py-2.5 text-sm transition-colors"
+                :class="$route.path === item.path ? 'text-zinc-700 bg-zinc-50' : 'text-gray-500 hover:text-zinc-700 hover:bg-zinc-50'"
+              >
+                {{ item.name }}
+              </router-link>
+            </div>
+          </div>
+
           <!-- JetBrains -->
           <router-link
             to="/jetbra"
@@ -171,6 +199,23 @@
 
           <div class="mx-3 h-px bg-zinc-100"></div>
 
+          <!-- 内容集分组 -->
+          <div class="px-3">
+            <div class="px-3 py-1.5 text-xs font-semibold text-zinc-400 tracking-wider">内容集</div>
+            <router-link
+              v-for="item in contentItems"
+              :key="item.path"
+              :to="item.path"
+              @click="menuOpen = false"
+              class="flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors"
+              :class="$route.path === item.path ? 'bg-zinc-100 text-zinc-700' : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-700'"
+            >
+              {{ item.name }}
+            </router-link>
+          </div>
+
+          <div class="mx-3 h-px bg-zinc-100"></div>
+
           <div class="px-3">
             <router-link
               to="/jetbra"
@@ -206,8 +251,17 @@ const isToolboxActive = computed(() =>
   toolboxItems.some(item => item.path === route.path)
 )
 
+const contentItems = [
+  { name: '文章', path: '/articles' }
+]
+
+const isContentActive = computed(() =>
+  contentItems.some(item => item.path === route.path)
+)
+
 const menuOpen = ref(false)
 const toolboxOpen = ref(false)
+const contentOpen = ref(false)
 
 function toggleMenu() {
   menuOpen.value = !menuOpen.value
