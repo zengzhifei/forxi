@@ -105,18 +105,26 @@ import { useRoute, useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
 import MarkdownIt from 'markdown-it'
 import hljs from 'highlight.js/lib/common'
-import mermaid from 'mermaid'
 import { useIntersectionObserver } from '@vueuse/core'
 import api from '../utils/api'
 
-mermaid.initialize({
-  startOnLoad: false,
-  theme: 'neutral',
-  securityLevel: 'loose'
-})
-
 const route = useRoute()
 const router = useRouter()
+
+let mermaid = null
+
+const initMermaid = async () => {
+  if (!mermaid) {
+    const Mermaid = (await import('mermaid')).default
+    Mermaid.initialize({
+      startOnLoad: false,
+      theme: 'neutral',
+      securityLevel: 'loose'
+    })
+    mermaid = Mermaid
+  }
+  return mermaid
+}
 
 const copyCode = async (btn) => {
   const wrapper = btn.closest('.code-block-wrapper')
@@ -331,6 +339,8 @@ const renderMermaidCharts = async () => {
   const mermaidElements = articleContent.querySelectorAll('.mermaid')
   if (mermaidElements.length === 0) return
 
+  const mermaidLib = await initMermaid()
+
   const currentIds = new Set()
 
   for (let i = 0; i < mermaidElements.length; i++) {
@@ -345,7 +355,7 @@ const renderMermaidCharts = async () => {
 
     try {
       const renderId = `mermaid-render-${Date.now()}-${i}`
-      const { svg } = await mermaid.render(renderId, graphDefinition)
+      const { svg } = await mermaidLib.render(renderId, graphDefinition)
       element.innerHTML = svg
       renderedMermaidIds.value.add(elementId)
     } catch (err) {
@@ -384,7 +394,9 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
-  mermaid.cleanup()
+  if (mermaid) {
+    mermaid.cleanup()
+  }
 })
 </script>
 

@@ -72,8 +72,7 @@ export default defineConfig(({ mode }) => {
           manualChunks: {
             'vendor-vue': ['vue', 'vue-router'],
             'vendor-md': ['markdown-it'],
-            'vendor-hljs': ['highlight.js/lib/common'],
-            'vendor-mermaid': ['mermaid']
+            'vendor-hljs': ['highlight.js/lib/common']
           }
         }
       }
