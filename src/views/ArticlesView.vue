@@ -329,6 +329,8 @@ const renderMermaidCharts = async () => {
   if (!articleContent) return
 
   const mermaidElements = articleContent.querySelectorAll('.mermaid')
+  if (mermaidElements.length === 0) return
+
   const currentIds = new Set()
 
   for (let i = 0; i < mermaidElements.length; i++) {

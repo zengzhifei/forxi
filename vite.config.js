@@ -39,7 +39,7 @@ export default defineConfig(({ mode }) => {
       vue(),
       vitePrerender({
         staticDir: join(__dirname, 'dist'),
-        routes: ['/', '/file-preview', '/image-processing', '/ai', '/it-tools', '/jetbra'],
+        routes: ['/', '/file-preview', '/image-processing', '/ai', '/it-tools', '/jetbra', '/articles'],
         renderer: new Renderer({
           maxConcurrentRoutes: 2,
           renderAfterDocumentEvent: 'app-rendered',
@@ -72,7 +72,8 @@ export default defineConfig(({ mode }) => {
           manualChunks: {
             'vendor-vue': ['vue', 'vue-router'],
             'vendor-md': ['markdown-it'],
-            'vendor-hljs': ['highlight.js/lib/common']
+            'vendor-hljs': ['highlight.js/lib/common'],
+            'vendor-mermaid': ['mermaid']
           }
         }
       }
