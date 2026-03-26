@@ -473,7 +473,7 @@ const fetchLoginLogs = async (page) => {
 const handleUpdateProfile = async () => {
   loading.value = true
   try {
-    await api.updateProfile({
+    await sso.updateProfile({
       nickname: profileForm.nickname,
       avatar: profileForm.avatar,
       bio: profileForm.bio

@@ -1,5 +1,4 @@
 import { ref, computed } from 'vue'
-import api from '../utils/api'
 import sso from '../utils/sso'
 
 const user = ref(null)
@@ -22,7 +21,7 @@ export function useAuth() {
     loading.value = true
     try {
       await sso.login(email, password)
-      const profile = await api.getProfile()
+      const profile = await sso.getProfile()
       user.value = profile
       return profile
     } finally {
@@ -43,7 +42,7 @@ export function useAuth() {
   const fetchProfile = async () => {
     loading.value = true
     try {
-      const data = await api.getProfile()
+      const data = await sso.getProfile()
       user.value = data
     } catch (error) {
       console.error('获取用户信息失败:', error)
@@ -66,7 +65,7 @@ export function useAuth() {
   const updateProfile = async (profileData) => {
     loading.value = true
     try {
-      const data = await api.updateProfile(profileData)
+      const data = await sso.updateProfile(profileData)
       user.value = data
       return data
     } finally {

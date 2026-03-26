@@ -173,7 +173,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import api from '../utils/api'
 import sso from '../utils/sso'
 import { validatePassword, PASSWORD_RULES, getPasswordStrength } from '../utils/validate'
 
@@ -222,7 +221,7 @@ onMounted(async () => {
 
   // Cookie已由服务端设置，直接验证登录状态
   try {
-    await api.getProfile()
+    await sso.getProfile()
 
     const from = route.query.from
     if (from === 'bind') {

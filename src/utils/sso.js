@@ -17,7 +17,7 @@ ssoClient.interceptors.response.use(
     return data
   },
   (error) => {
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && !error.config?.skipAuthRedirect) {
       window.location.href = '/auth'
     }
     throw error.response?.data?.message
@@ -27,6 +27,28 @@ ssoClient.interceptors.response.use(
 )
 
 export const sso = {
+  // ==================== 用户接口 ====================
+
+  /**
+   * 获取用户信息
+   * 路由：GET /sso/user/profile
+   */
+  async getProfile() {
+    const res = await ssoClient.get('/user/profile', { skipAuthRedirect: true })
+    return res.data
+  },
+
+  /**
+   * 更新用户资料
+   * 路由：PUT /sso/user/profile
+   */
+  async updateProfile(profileData) {
+    const res = await ssoClient.put('/user/profile', profileData)
+    return res.data
+  },
+
+  // ==================== 认证接口 ====================
+
   /**
    * 统一授权登录（邮箱）
    * 路由：POST /sso/authorize
@@ -98,10 +120,10 @@ export const sso = {
 
   /**
    * 修改密码
-   * 路由：POST /sso/password/change
+   * 路由：POST /sso/user/password/change
    */
   async changePassword(oldPassword, newPassword) {
-    const res = await ssoClient.post('/password/change', {
+    const res = await ssoClient.post('/user/password/change', {
       old_password: oldPassword,
       new_password: newPassword
     })
@@ -118,49 +140,43 @@ export const sso = {
 
   /**
    * GitHub 绑定邮箱
-   * 路由：POST /sso/oauth/github/bind-email (Form Data)
+   * 路由：POST /sso/oauth/github/bind-email (JSON)
    */
   async bindEmail(params) {
-    const formData = new URLSearchParams()
-    formData.append('bind_token', params.bind_token)
-    formData.append('email', params.email)
-    formData.append('email_code', params.email_code)
-    formData.append('password', params.password)
-    formData.append('confirm_password', params.confirm_password)
-    if (params.nickname) {
-      formData.append('nickname', params.nickname)
-    }
-
-    const res = await ssoClient.post('/oauth/github/bind-email', formData, {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    const res = await ssoClient.post('/oauth/github/bind-email', {
+      bind_token: params.bind_token,
+      email: params.email,
+      email_code: params.email_code,
+      password: params.password,
+      confirm_password: params.confirm_password
     })
     return res.data
   },
 
   /**
    * 获取 OAuth 账号列表
-   * 路由：GET /sso/oauth/accounts
+   * 路由：GET /sso/user/oauth/accounts
    */
   async getOauthAccounts() {
-    const res = await ssoClient.get('/oauth/accounts')
+    const res = await ssoClient.get('/user/oauth/accounts')
     return res.data
   },
 
   /**
    * 解绑 OAuth 账号
-   * 路由：POST /sso/oauth/unbind
+   * 路由：POST /sso/user/oauth/unbind
    */
   async unbindOAuth(provider) {
-    const res = await ssoClient.post('/oauth/unbind', { provider })
+    const res = await ssoClient.post('/user/oauth/unbind', { provider })
     return res.data
   },
 
   /**
    * 获取登录日志
-   * 路由：GET /sso/login/logs
+   * 路由：GET /sso/user/login/logs
    */
   async getLoginLogs(page = 1, pageSize = 10) {
-    const res = await ssoClient.get('/login/logs', {
+    const res = await ssoClient.get('/user/login/logs', {
       params: { page, page_size: pageSize }
     })
     return res.data

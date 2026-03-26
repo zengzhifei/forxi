@@ -24,26 +24,6 @@ apiClient.interceptors.response.use(
 )
 
 export const api = {
-  // ==================== 用户接口 ====================
-
-  /**
-   * 获取用户信息
-   * 路由：GET /api/users/profile
-   */
-  async getProfile() {
-    const res = await apiClient.get('/users/profile')
-    return res.data
-  },
-
-  /**
-   * 更新用户资料
-   * 路由：PUT /api/users/profile
-   */
-  async updateProfile(profileData) {
-    const res = await apiClient.put('/users/profile', profileData)
-    return res.data
-  },
-
   // ==================== 文件预览接口 ====================
 
   /**
