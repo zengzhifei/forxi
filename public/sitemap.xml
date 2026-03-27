@@ -39,6 +39,14 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
+
+  <!-- 文章列表 -->
+  <url>
+    <loc>https://forxi.cn/articles/</loc>
+    <lastmod>2026-03-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
   
   <!-- JetBrains工具 -->
   <url>
@@ -63,4 +71,20 @@
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
-</urlset>
+
+  <!-- 隐私政策 -->
+  <url>
+    <loc>https://forxi.cn/privacy/</loc>
+    <lastmod>2026-03-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- 服务条款 -->
+  <url>
+    <loc>https://forxi.cn/terms/</loc>
+    <lastmod>2026-03-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+</url>

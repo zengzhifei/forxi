@@ -247,9 +247,9 @@
 
         <p class="text-center mt-6 text-xs text-zinc-300">
           登录即表示同意我们的
-          <a href="#" class="text-zinc-400 hover:text-zinc-600 transition-colors">服务条款</a>
+          <router-link to="/terms" class="text-zinc-400 hover:text-zinc-600 transition-colors">服务条款</router-link>
           和
-          <a href="#" class="text-zinc-400 hover:text-zinc-600 transition-colors">隐私政策</a>
+          <router-link to="/privacy" class="text-zinc-400 hover:text-zinc-600 transition-colors">隐私政策</router-link>
         </p>
 
         <!-- 暂不登录 -->

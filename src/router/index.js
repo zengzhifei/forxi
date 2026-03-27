@@ -17,6 +17,8 @@ const ProfileView = () => import('../views/ProfileView.vue')
 const ResetPasswordView = () => import('../views/ResetPasswordView.vue')
 const GithubCallbackView = () => import('../views/OauthCallbackView.vue')
 const ArticlesView = () => import('../views/ArticlesView.vue')
+const TermsView = () => import('../views/TermsView.vue')
+const PrivacyView = () => import('../views/PrivacyView.vue')
 
 // 路由配置
 const routes = [
@@ -139,6 +141,26 @@ const routes = [
       title: 'Forxi - 文章',
       description: '技术文章、随笔杂谈、经验总结，涵盖前端开发、后端技术、DevOps 等领域。',
       keywords: '技术文章,随笔,经验总结,前端,后端,DevOps'
+    }
+  },
+  {
+    path: '/privacy',
+    name: 'privacy',
+    component: PrivacyView,
+    meta: {
+      title: 'Forxi - 隐私政策',
+      description: 'Forxi 隐私政策，说明我们如何收集、使用、保护您的个人信息。',
+      keywords: 'Forxi,隐私政策,个人信息保护'
+    }
+  },
+  {
+    path: '/terms',
+    name: 'terms',
+    component: TermsView,
+    meta: {
+      title: 'Forxi - 服务条款',
+      description: 'Forxi 服务条款，规定了用户使用本服务的权利和义务。',
+      keywords: 'Forxi,服务条款,用户协议'
     }
   },
   {
