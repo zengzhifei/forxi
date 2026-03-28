@@ -49,6 +49,10 @@ export default defineConfig(({ mode }) => {
         }),
         postProcess(renderedRoute) {
           renderedRoute.route = renderedRoute.originalRoute
+          // 将首页预渲染结果输出到 dist/home/index.html，避免覆盖 dist/index.html（SPA fallback 入口）
+          if (renderedRoute.route === '/') {
+            renderedRoute.outputPath = join(__dirname, 'dist', 'home', 'index.html')
+          }
           // 移除预渲染时注入的百度统计脚本，避免运行时重复
           renderedRoute.html = renderedRoute.html.replace(
             /<script[^>]*hm\.baidu\.com[^>]*><\/script>/gi,
