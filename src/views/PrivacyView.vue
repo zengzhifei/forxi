@@ -7,7 +7,7 @@
         <div class="bg-white rounded-2xl border border-zinc-100 shadow-sm overflow-hidden">
           <div class="px-6 sm:px-8 py-6 border-b border-zinc-100">
             <h1 class="text-2xl font-semibold text-zinc-700">隐私政策</h1>
-            <p class="mt-1 text-sm text-zinc-400">最后更新：2025年1月1日</p>
+            <p class="mt-1 text-sm text-zinc-400">最后更新：2026年3月26日</p>
           </div>
 
           <div class="px-6 sm:px-8 py-6 sm:py-8 prose prose-zinc max-w-none text-sm sm:text-base">
