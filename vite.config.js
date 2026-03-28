@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { resolve } from 'path'
+import { resolve, join } from 'path'
 import { createRequire } from 'module'
 import { existsSync } from 'fs'
 
