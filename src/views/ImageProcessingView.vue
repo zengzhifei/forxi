@@ -1399,7 +1399,6 @@ const handleAIRemoveBackground = async () => {
     }
   } catch (error) {
     console.error('AI抠图失败:', error)
-    toast.error('处理失败: ' + (error.message || '未知错误'))
   } finally {
     aiProcessing.value = false
   }
@@ -1422,7 +1421,6 @@ const handleAITransparent = async () => {
     }
   } catch (error) {
     console.error('背景透明化失败:', error)
-    toast.error('处理失败: ' + (error.message || '未知错误'))
   } finally {
     aiProcessing.value = false
   }
@@ -1455,7 +1453,6 @@ const handleAICrop = async () => {
     }
   } catch (error) {
     console.error('AI裁剪失败:', error)
-    toast.error('处理失败: ' + (error.message || '未知错误'))
   } finally {
     aiProcessing.value = false
   }
@@ -1643,7 +1640,6 @@ const handleAIPhoto = async () => {
     }
   } catch (error) {
     console.error('AI证件照失败:', error)
-    toast.error('处理失败: ' + (error.message || '未知错误'))
   } finally {
     aiProcessing.value = false
   }

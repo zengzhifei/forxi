@@ -401,7 +401,6 @@ const previewByUrl = async () => {
     }
   } catch (error) {
     console.error('预览失败:', error)
-    toast.error(error.message || '预览失败，请检查URL是否正确')
   } finally {
     loading.value = false
   }

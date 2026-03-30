@@ -5,10 +5,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, provide } from 'vue'
 import Toast from './components/Toast.vue'
 import ConfirmDialog from './components/ConfirmDialog.vue'
-import { provide } from 'vue'
+import { setToastFunction } from './utils/api'
 
 const toastRef = ref(null)
 const confirmRef = ref(null)
@@ -18,6 +18,10 @@ function showToast(message, type = 'info', duration = 3000) {
     toastRef.value.show(message, type, duration)
   }
 }
+
+onMounted(() => {
+  setToastFunction(showToast)
+})
 
 provide('toast', {
   show: showToast,

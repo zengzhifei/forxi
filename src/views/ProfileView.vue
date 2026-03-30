@@ -584,7 +584,7 @@ const handleAvatarUpload = async (event) => {
       // 不显示提示信息，直接显示新头像
     }
   } catch (err) {
-    toast.error(err.message || '上传失败')
+    console.error('头像上传失败:', err)
   } finally {
     uploading.value = false
     // 清除文件输入

@@ -3,6 +3,7 @@
  * 定义应用的所有路由
  */
 import { createRouter, createWebHistory } from 'vue-router'
+import sso from '../utils/sso'
 
 // 懒加载页面组件
 const HomeView = () => import('../views/HomeView.vue')
@@ -182,7 +183,7 @@ const router = createRouter({
 })
 
 // 路由守卫，设置页面标题和登录验证
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
   // 设置页面标题
   document.title = to.meta.title || 'Forxi - 免费内容平台'
 
@@ -201,6 +202,15 @@ router.beforeEach((to) => {
 
   // 更新 canonical
   updateCanonical(`https://forxi.cn${to.path}`)
+
+  // 需要登录的页面，未登录则跳转到登录页
+  if (to.meta.requiresAuth) {
+    try {
+      await sso.getProfile()
+    } catch {
+      return { path: '/auth', query: { redirect: to.fullPath } }
+    }
+  }
 
   return true
 })

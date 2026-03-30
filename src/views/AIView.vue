@@ -473,7 +473,6 @@ const generateImage = async () => {
     }
   } catch (err) {
     error.value = err.message || '生成失败，请重试'
-    toast.error(error.value)
     generating.value = false
   }
 }

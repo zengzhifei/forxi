@@ -8,18 +8,31 @@ const apiClient = axios.create({
   }
 })
 
+let toastFunc = null
+
+export function setToastFunction(callback) {
+  toastFunc = callback
+}
+
 apiClient.interceptors.response.use(
   (response) => {
     const data = response.data
     if (data.code !== 0) {
-      throw new Error(data.message || '请求失败')
+      const error = new Error(data.message || '请求失败')
+      error.code = data.code
+      if (!response.config._silent && toastFunc) {
+        toastFunc(data.message || '请求失败', 'error')
+      }
+      throw error
     }
     return data
   },
   (error) => {
-    throw error.response?.data?.message
-      ? new Error(error.response.data.message)
-      : error
+    if (!error.config?._silent) {
+      const message = error.response?.data?.message || error.message || '网络错误'
+      if (toastFunc) toastFunc(message, 'error')
+    }
+    throw error
   }
 )
 
@@ -46,7 +59,8 @@ export const api = {
     formData.append('file', file)
 
     const res = await apiClient.post('/filereview/local', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
+      headers: { 'Content-Type': 'multipart/form-data' },
+      _silent: true
     })
     return res.data
   },
@@ -124,7 +138,8 @@ export const api = {
    */
   async getAiModels(task) {
     const res = await apiClient.get('/ai/models', {
-      params: { task }
+      params: { task },
+      _silent: true
     })
     return res.data
   },
@@ -174,7 +189,8 @@ export const api = {
    */
   async queryTask(taskId) {
     const res = await apiClient.get('/ai/query/task', {
-      params: { taskId }
+      params: { taskId },
+      _silent: true
     })
     return res.data
   },
@@ -203,7 +219,7 @@ export const api = {
    * 路由：GET /api/article/categories
    */
   async getArticleCategories() {
-    const res = await apiClient.get('/article/categories')
+    const res = await apiClient.get('/article/categories', { _silent: true })
     return res.data
   },
 
@@ -227,7 +243,7 @@ export const api = {
     if (options.id) {
       params.id = options.id
     }
-    const res = await apiClient.get('/article/list', { params })
+    const res = await apiClient.get('/article/list', { params, _silent: true })
     return res.data
   },
 
@@ -274,7 +290,7 @@ export const api = {
     const res = await apiClient.post('/interact/view', {
       target_type: targetType,
       target_id: targetId
-    })
+    }, { _silent: true })
     return res.data
   },
 
@@ -290,7 +306,8 @@ export const api = {
       params: {
         target_type: targetType,
         target_ids: ids
-      }
+      },
+      _silent: true
     })
     return res.data
   }
