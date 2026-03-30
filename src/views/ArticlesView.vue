@@ -88,6 +88,19 @@
                   <span v-if="article.category">{{ getCategoryName(article.category) }}</span>
                   <span v-if="article.category">·</span>
                   {{ article.author_name }} · {{ formatDate(article.updated_at) }}
+                  <span class="ml-auto flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    {{ articleStats[article.id]?.view_count || 0 }}
+                    <span class="ml-2 flex items-center gap-1">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                      {{ articleStats[article.id]?.like_count || 0 }}
+                    </span>
+                  </span>
                 </div>
               </div>
             </div>
@@ -111,10 +124,30 @@
 
             <article>
               <h1 class="text-xl sm:text-2xl font-bold text-gray-800 mb-2">{{ selectedArticle.title }}</h1>
-              <div class="text-sm text-gray-400 mb-6 flex items-center gap-2">
+              <div class="text-sm text-gray-400 mb-4 flex items-center gap-2">
                 <span v-if="selectedArticle.category">{{ getCategoryName(selectedArticle.category) }}</span>
                 <span v-if="selectedArticle.category">·</span>
                 {{ selectedArticle.author_name }} · {{ formatDate(selectedArticle.updated_at) }}
+              </div>
+              <div class="flex items-center gap-4 mb-6 pb-4 border-b border-gray-100">
+                <div class="flex items-center gap-1.5 text-sm text-gray-500">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                  <span>{{ viewCount }}</span>
+                </div>
+                <button
+                  @click="toggleLike"
+                  :disabled="isLiking"
+                  class="flex items-center gap-1.5 text-sm transition-colors"
+                  :class="isLiked ? 'text-red-500' : 'text-gray-500 hover:text-red-500'"
+                >
+                  <svg class="w-4 h-4" :fill="isLiked ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                  <span>{{ likeCount }}</span>
+                </button>
               </div>
               <div class="prose prose-zinc max-w-none article-content" v-html="renderedContent"></div>
             </article>
@@ -242,6 +275,7 @@ const categories = ref([])
 const selectedCategory = ref('')
 const selectedArticle = ref(null)
 const articles = ref([])
+const articleStats = ref({})
 const page = ref(1)
 const pageSize = 10
 const total = ref(0)
@@ -253,6 +287,11 @@ const showMobileCategory = ref(false)
 const showBackToTop = ref(false)
 
 const renderedMermaidIds = ref(new Set())
+
+const likeCount = ref(0)
+const viewCount = ref(0)
+const isLiked = ref(false)
+const isLiking = ref(false)
 
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -337,6 +376,7 @@ async function loadArticles(reset = false) {
   if (reset) {
     page.value = 1
     articles.value = []
+    articleStats.value = {}
     noMore.value = false
   }
 
@@ -363,11 +403,31 @@ async function loadArticles(reset = false) {
     } else {
       page.value++
     }
+
+    await loadArticlesStats()
   } catch (e) {
     console.error('Failed to load articles:', e.message || e)
     noMore.value = true
   } finally {
     loading.value = false
+  }
+}
+
+async function loadArticlesStats() {
+  try {
+    const ids = articles.value.map(a => Number(a.id))
+    if (ids.length === 0) return
+
+    const res = await api.getInteractStats('article', ids)
+    const stats = Array.isArray(res) ? res : (res.data || [])
+
+    const statsMap = {}
+    stats.forEach(s => {
+      statsMap[s.target_id] = s
+    })
+    articleStats.value = statsMap
+  } catch (e) {
+    console.error('Failed to load articles stats:', e.message || e)
   }
 }
 
@@ -390,9 +450,54 @@ async function loadArticleDetail(id) {
         addCopyButtons()
         renderMermaidCharts()
       })
+      await loadArticleStats(id)
+      await recordArticleView(id)
     }
   } catch (e) {
     console.error('Failed to load article:', e.message || e)
+  }
+}
+
+async function loadArticleStats(id) {
+  try {
+    const res = await api.getInteractStats('article', Number(id))
+    const stats = Array.isArray(res) ? res : (res.data || [])
+    const stat = stats.find(s => s.target_id === Number(id))
+    if (stat) {
+      likeCount.value = stat.like_count || 0
+      viewCount.value = stat.view_count || 0
+      isLiked.value = stat.is_liked || false
+    }
+  } catch (e) {
+    console.error('Failed to load stats:', e.message || e)
+  }
+}
+
+async function recordArticleView(id) {
+  try {
+    const res = await api.view('article', Number(id))
+    if (res && res.view_count !== undefined) {
+      viewCount.value = res.view_count
+    }
+  } catch (e) {
+    console.error('Failed to record view:', e.message || e)
+  }
+}
+
+async function toggleLike() {
+  if (isLiking.value || !selectedArticle.value) return
+
+  isLiking.value = true
+  try {
+    const res = await api.like('article', Number(selectedArticle.value.id))
+    if (res) {
+      isLiked.value = res.liked
+      likeCount.value = res.like_count
+    }
+  } catch (e) {
+    console.error('Failed to toggle like:', e.message || e)
+  } finally {
+    isLiking.value = false
   }
 }
 

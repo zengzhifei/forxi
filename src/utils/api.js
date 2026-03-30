@@ -246,6 +246,53 @@ export const api = {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
     return res.data
+  },
+
+  // ==================== 互动接口 ====================
+
+  /**
+   * 点赞/取消点赞
+   * 路由：POST /api/interact/like
+   * @param {string} targetType - 目标类型 (article/comment)
+   * @param {number} targetId - 目标ID
+   */
+  async like(targetType, targetId) {
+    const res = await apiClient.post('/interact/like', {
+      target_type: targetType,
+      target_id: targetId
+    })
+    return res.data
+  },
+
+  /**
+   * 记录浏览量
+   * 路由：POST /api/interact/view
+   * @param {string} targetType - 目标类型 (article/comment)
+   * @param {number} targetId - 目标ID
+   */
+  async view(targetType, targetId) {
+    const res = await apiClient.post('/interact/view', {
+      target_type: targetType,
+      target_id: targetId
+    })
+    return res.data
+  },
+
+  /**
+   * 获取互动统计
+   * 路由：GET /api/interact/stats
+   * @param {string} targetType - 目标类型
+   * @param {number[]|string} targetIds - 目标ID列表，逗号分隔或数组
+   */
+  async getInteractStats(targetType, targetIds) {
+    const ids = Array.isArray(targetIds) ? targetIds.join(',') : String(targetIds)
+    const res = await apiClient.get('/interact/stats', {
+      params: {
+        target_type: targetType,
+        target_ids: ids
+      }
+    })
+    return res.data
   }
 }
 
