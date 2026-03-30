@@ -19,10 +19,11 @@
                 v-for="cat in categories"
                 :key="cat.code"
                 @click="selectCategory(cat.code)"
-                class="w-full text-left px-3 py-2 rounded-lg text-sm transition-colors"
+                class="w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center justify-between"
                 :class="selectedCategory === cat.code ? 'bg-zinc-100 text-zinc-700 font-medium' : 'text-gray-600 hover:bg-gray-50'"
               >
-                {{ cat.name }}
+                <span>{{ cat.name }}</span>
+                <span v-if="cat.count !== undefined" class="text-xs text-gray-400">{{ cat.count }}</span>
               </button>
             </nav>
           </div>
@@ -83,7 +84,9 @@
               >
                 <h3 class="font-medium text-gray-800 mb-1">{{ article.title }}</h3>
                 <p v-if="article.summary" class="text-sm text-gray-500 mb-2 line-clamp-2">{{ article.summary }}</p>
-                <div class="mt-auto text-xs text-gray-400">
+                <div class="mt-auto text-xs text-gray-400 flex items-center gap-2">
+                  <span v-if="article.category">{{ getCategoryName(article.category) }}</span>
+                  <span v-if="article.category">·</span>
                   {{ article.author_name }} · {{ formatDate(article.updated_at) }}
                 </div>
               </div>
@@ -108,7 +111,11 @@
 
             <article>
               <h1 class="text-xl sm:text-2xl font-bold text-gray-800 mb-2">{{ selectedArticle.title }}</h1>
-              <div class="text-sm text-gray-400 mb-6">{{ selectedArticle.author_name }} · {{ formatDate(selectedArticle.updated_at) }}</div>
+              <div class="text-sm text-gray-400 mb-6 flex items-center gap-2">
+                <span v-if="selectedArticle.category">{{ getCategoryName(selectedArticle.category) }}</span>
+                <span v-if="selectedArticle.category">·</span>
+                {{ selectedArticle.author_name }} · {{ formatDate(selectedArticle.updated_at) }}
+              </div>
               <div class="prose prose-zinc max-w-none article-content" v-html="renderedContent"></div>
             </article>
           </div>
@@ -143,10 +150,11 @@
             v-for="cat in categories"
             :key="cat.code"
             @click="selectCategory(cat.code); showMobileCategory = false"
-            class="w-full text-left px-3 py-3 rounded-lg text-sm transition-colors"
+            class="w-full text-left px-3 py-3 rounded-lg text-sm transition-colors flex items-center justify-between"
             :class="selectedCategory === cat.code ? 'bg-zinc-100 text-zinc-700 font-medium' : 'text-gray-600 hover:bg-gray-50'"
           >
-            {{ cat.name }}
+            <span>{{ cat.name }}</span>
+            <span v-if="cat.count !== undefined" class="text-xs text-gray-400">{{ cat.count }}</span>
           </button>
         </nav>
       </div>
@@ -304,6 +312,12 @@ const currentCategoryName = computed(() => {
   const cat = categories.value.find(c => c.code === selectedCategory.value)
   return cat ? cat.name : ''
 })
+
+const getCategoryName = (code) => {
+  if (!code) return ''
+  const cat = categories.value.find(c => c.code === code)
+  return cat ? cat.name : ''
+}
 
 async function loadCategories() {
   try {
