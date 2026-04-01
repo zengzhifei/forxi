@@ -157,6 +157,14 @@ const ImageIcon = {
   }
 }
 
+const OcrIcon = {
+  render() {
+    return h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
+      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-width': '2', d: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2zM9 4h6v6H9V4z' })
+    ])
+  }
+}
+
 const AIIcon = {
   render() {
     return h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
@@ -233,6 +241,19 @@ const tools = [
     iconActive: 'text-emerald-600',
     buttonText: '所见皆新',
     onClick: () => navigateTo('/image-processing')
+  },
+  {
+    title: '图片 OCR',
+    description: '一键提取图片中的文字，支持多语言自动识别',
+    icon: OcrIcon,
+    bgDefault: 'bg-zinc-50',
+    bgHover: 'group-hover:bg-teal-100',
+    bgActive: 'bg-teal-100',
+    iconDefault: 'text-zinc-300',
+    iconHover: 'group-hover:text-teal-600',
+    iconActive: 'text-teal-600',
+    buttonText: '图文转换',
+    onClick: () => navigateTo('/ocr')
   },
   {
     title: 'AI 趣玩',

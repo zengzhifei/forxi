@@ -10,6 +10,7 @@ const HomeView = () => import('../views/HomeView.vue')
 const FilePreviewView = () => import('../views/FilePreviewView.vue')
 const ImageProcessingView = () => import('../views/ImageProcessingView.vue')
 const AIView = () => import('../views/AIView.vue')
+const OcrView = () => import('../views/OcrView.vue')
 const ItToolsView = () => import('../views/ItToolsView.vue')
 const JetbrainsView = () => import('../views/JetbrainsView.vue')
 const NotFoundView = () => import('../views/NotFoundView.vue')
@@ -92,6 +93,16 @@ const routes = [
       title: 'Forxi - 图片处理',
       description: '免费在线图片处理，支持压缩、裁剪、旋转、加水印、调滤镜、格式转换，纯本地处理保护隐私。',
       keywords: '在线图片处理,图片压缩,图片裁剪,图片旋转,图片水印,图片格式转换,免费图片编辑'
+    }
+  },
+  {
+    path: '/ocr',
+    name: 'ocr',
+    component: OcrView,
+    meta: {
+      title: 'Forxi - 图片OCR',
+      description: '免费在线图片文字识别工具，支持中文、英文等多种语言识别，纯前端处理，保护隐私。',
+      keywords: '图片OCR,文字识别,图片转文字,在线OCR,中文识别'
     }
   },
   {
