@@ -548,6 +548,24 @@ watch(renderedContent, () => {
   })
 })
 
+function updateSeoMeta({ title, description, keywords }) {
+  document.title = title
+  const setMeta = (name, content) => {
+    let tag = document.querySelector(`meta[name="${name}"]`)
+    if (!tag) { tag = document.createElement('meta'); tag.name = name; document.head.appendChild(tag) }
+    tag.content = content
+  }
+  const setOg = (property, content) => {
+    let tag = document.querySelector(`meta[property="${property}"]`)
+    if (!tag) { tag = document.createElement('meta'); tag.setAttribute('property', property); document.head.appendChild(tag) }
+    tag.content = content
+  }
+  setMeta('description', description)
+  setMeta('keywords', keywords)
+  setOg('og:title', title)
+  setOg('og:description', description)
+}
+
 watch(() => route.params, async (newParams) => {
   if (newParams.category && newParams.id) {
     await loadArticleDetail(newParams.id)
@@ -558,6 +576,28 @@ watch(() => route.params, async (newParams) => {
     loadArticles(true)
   }
 }, { immediate: true })
+
+watch([selectedArticle, categories], () => {
+  if (selectedArticle.value) {
+    const article = selectedArticle.value
+    const catName = getCategoryName(article.category)
+    const titleParts = ['Forxi', '内容集', '文章']
+    if (catName) titleParts.push(catName)
+    if (article.title) titleParts.push(article.title)
+    const title = titleParts.join(' - ')
+    const description = article.summary || article.title || '阅读文章详情'
+    const keywords = [article.title, catName, '文章', 'Forxi'].filter(Boolean).join(',')
+    updateSeoMeta({ title, description, keywords })
+  } else if (route.params.category) {
+    const catName = getCategoryName(route.params.category)
+    const title = catName ? `Forxi - 内容集 - 文章 - ${catName}` : 'Forxi - 内容集 - 文章'
+    const description = catName
+      ? `${catName}分类文章列表，技术文章、随笔杂谈、经验总结。`
+      : '技术文章、随笔杂谈、经验总结，涵盖前端开发、后端技术、DevOps 等领域。'
+    const keywords = [catName, '技术文章', '随笔', 'Forxi'].filter(Boolean).join(',')
+    updateSeoMeta({ title, description, keywords })
+  }
+})
 
 useIntersectionObserver(loadMoreTrigger, ([{ isIntersecting }]) => {
   if (isIntersecting && !isDetailView.value && !loading.value && !noMore.value) {

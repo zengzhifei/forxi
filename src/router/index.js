@@ -16,6 +16,7 @@ const Image2ImageView = () => import('../views/Image2ImageView.vue')
 const OcrView = () => import('../views/OcrView.vue')
 const ItToolsView = () => import('../views/ItToolsView.vue')
 const JetbrainsView = () => import('../views/JetbrainsView.vue')
+const FlowFactoryView = () => import('../views/FlowFactoryView.vue')
 const NotFoundView = () => import('../views/NotFoundView.vue')
 const AuthView = () => import('../views/AuthView.vue')
 const ProfileView = () => import('../views/ProfileView.vue')
@@ -149,6 +150,16 @@ const routes = [
       title: 'Forxi - 百宝箱 - IT 工具箱',
       description: '开发者常用工具集合，包含 Base64 编解码、JSON 格式化、UUID 生成、颜色转换、正则测试、时间戳转换等实用工具。',
       keywords: 'IT工具箱,开发工具,Base64编码,JSON格式化,UUID生成,颜色转换,正则表达式,时间戳转换,URL编码,MD5'
+    }
+  },
+  {
+    path: '/hub/flow-factory',
+    name: 'flow-factory',
+    component: FlowFactoryView,
+    meta: {
+      title: 'Forxi - 百宝箱 - 流程工厂',
+      description: '免费在线流程图制作工具，支持节点添加、连接、拖拽、删除、属性编辑，可导出 PNG、JPEG 图片格式。',
+      keywords: '流程图,流程工厂,在线流程图,flowchart,流程制作'
     }
   },
   {

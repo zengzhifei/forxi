@@ -242,6 +242,61 @@
           </div>
         </div>
 
+        <div class="h-px bg-zinc-200"></div>
+
+        <!-- 流程工厂 -->
+        <div class="flex flex-col md:flex-row items-start gap-4 md:gap-10">
+          <div class="w-full md:w-1/3 flex-shrink-0">
+            <!-- Mobile: compact -->
+            <div class="flex md:hidden items-center gap-3 p-3.5 bg-violet-50 rounded-xl">
+              <div class="w-9 h-9 rounded-lg bg-violet-100 text-violet-500 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" /></svg>
+              </div>
+              <span class="font-semibold text-zinc-700 text-sm flex-1">流程工厂</span>
+              <router-link to="/hub/flow-factory" class="inline-flex items-center gap-1 px-3 py-1.5 bg-violet-500 text-white text-xs font-medium rounded-lg whitespace-nowrap">
+                立即使用
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </router-link>
+            </div>
+            <!-- Desktop: full card -->
+            <div class="hidden md:flex bg-violet-50 rounded-2xl p-8 flex-col items-center text-center">
+              <div class="w-14 h-14 rounded-xl bg-violet-100 text-violet-500 flex items-center justify-center mb-4">
+                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" /></svg>
+              </div>
+              <h3 class="text-lg font-semibold text-zinc-700 mb-2">流程工厂</h3>
+              <router-link to="/hub/flow-factory" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-violet-500 text-white text-sm font-medium rounded-lg hover:bg-violet-600 transition-colors">
+                立即使用
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </router-link>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">可视化流程图制作</h3>
+            <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">在线制作流程图，支持开始、结束、流程、判断、输入、输出等多种节点类型。拖拽连接即可完成流程设计，支持导出 PNG、JPEG 等图片格式，方便嵌入文档或演示文稿。</p>
+            <div class="space-y-2 text-sm text-zinc-500">
+              <h4 class="font-medium text-zinc-600 mb-2">使用说明</h4>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">1</span>
+                <span>从右侧属性面板选择要添加的节点类型</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">2</span>
+                <span>拖拽节点到画布中，并调整位置</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">3</span>
+                <span>点击节点边缘拖拽连接到其他节点，完成流程设计</span>
+              </div>
+            </div>
+            <div class="mt-3 sm:mt-4 flex flex-wrap gap-2">
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">拖拽连接</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">6种节点</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">导出图片</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">在线编辑</span>
+            </div>
+          </div>
+        </div>
+
       </section>
 
       <!-- Highlights -->
