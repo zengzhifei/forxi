@@ -266,7 +266,13 @@ const routes = [
 // 创建路由实例
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    }
+    return { top: 0 }
+  }
 })
 
 // 路由守卫，设置页面标题和登录验证

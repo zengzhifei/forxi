@@ -277,7 +277,7 @@ const tools = [
 
 const aiTools = [
   {
-    title: 'AI 聊一聊',
+    title: '聊一聊',
     description: '与 AI 智能对话，解答问题、编写代码、创作文案',
     icon: AIIcon,
     bgDefault: 'bg-zinc-50',
@@ -329,7 +329,7 @@ const otherTools = [
     iconHover: 'group-hover:text-yellow-600',
     iconActive: 'text-yellow-600',
     buttonText: '巧用魔法',
-    onClick: () => navigateTo('/jetbra')
+    onClick: () => navigateTo('/explore/jetbra')
   },
 ]
 
@@ -345,7 +345,7 @@ const contentTools = [
     iconHover: '',
     iconActive: '',
     buttonText: '与你分享',
-    onClick: () => navigateTo('/explore/articles')
+    onClick: () => navigateTo('/idea/articles/')
   }
 ]
 
@@ -361,12 +361,12 @@ const categories = [
     subStyle: 'color: #c4b5fd',
   },
   {
-    label: '内容集', en: 'Idea', path: '/explore/', tools: contentTools,
+    label: '内容集', en: 'Idea', path: '/idea/', tools: contentTools,
     accentStyle: 'background: linear-gradient(180deg, #6ee7b7 0%, #10b981 100%)',
     subStyle: 'color: #6ee7b7',
   },
   {
-    label: '探索', en: 'Explore', path: '/jetbra', tools: otherTools,
+    label: '探索', en: 'Explore', path: '/explore/', tools: otherTools,
     accentStyle: 'background: linear-gradient(180deg, #fcd34d 0%, #f59e0b 100%)',
     subStyle: 'color: #fcd34d',
   },
@@ -382,9 +382,7 @@ const flatIndex = (ci, index) => {
 const totalBooks = categories.reduce((sum, c) => sum + c.tools.length, 0)
 
 const navigateTo = (path) => {
-  router.push(path).then(() => {
-    window.scrollTo(0, 0)
-  })
+  router.push(path)
 }
 
 const scrollToTools = () => {
