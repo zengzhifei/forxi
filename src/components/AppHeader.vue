@@ -34,107 +34,147 @@
         </div>
 
         <!-- PC端菜单 -->
-        <nav class="flex-1 flex justify-center space-x-1 items-center">
+        <nav class="flex-1 flex justify-center space-x-2 items-center">
           <!-- 首页 -->
           <router-link
             to="/"
-            class="inline-flex items-center px-3 py-1 border-b-2 text-sm font-medium"
-            :class="$route.path === '/' ? 'border-zinc-500 text-zinc-700' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'"
+            class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+            :class="$route.path === '/' ? 'bg-zinc-100 text-zinc-800' : 'text-gray-500 hover:bg-zinc-50 hover:text-gray-700'"
           >
             首页
           </router-link>
 
           <!-- 百宝箱下拉 -->
           <div class="relative" @mouseleave="toolboxOpen = false">
-            <button
-              class="inline-flex items-center gap-1 px-3 py-1 border-b-2 text-sm font-medium transition-colors"
-              :class="isToolboxActive ? 'border-zinc-500 text-zinc-700' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'"
+            <router-link
+              to="/hub/"
+              class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+              :class="isToolboxActive ? 'bg-zinc-100 text-zinc-800' : 'text-gray-500 hover:bg-zinc-50 hover:text-gray-700'"
               @mouseenter="toolboxOpen = true"
             >
               百宝箱
-              <svg class="w-3.5 h-3.5 transition-transform duration-200" :class="toolboxOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
+            </router-link>
 
-            <!-- 鼠标桥接层，防止移入面板时意外关闭 -->
             <div v-show="toolboxOpen" class="absolute top-full left-1/2 -translate-x-1/2 w-48 h-2" @mouseenter="toolboxOpen = true"></div>
 
-            <!-- 下拉面板 -->
             <Transition name="dropdown">
               <div
                 v-if="toolboxOpen"
-                class="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-48 bg-white rounded-xl shadow-xl border border-zinc-100 py-1.5 z-50 overflow-hidden"
+                class="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-52 bg-white rounded-xl shadow-lg shadow-zinc-200/50 border border-zinc-100 py-2 z-50 overflow-hidden"
                 @mouseenter="toolboxOpen = true"
               >
                 <router-link
                   v-for="item in toolboxItems"
                   :key="item.path"
                   :to="item.path"
-                  class="flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors"
+                  class="flex items-center gap-3 px-4 py-2.5 text-sm transition-all duration-150"
                   :class="$route.path === item.path ? 'text-zinc-800 bg-zinc-50' : 'text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50'"
                 >
-                  <span class="flex-shrink-0 w-5 h-5 flex items-center justify-center" v-html="item.icon"></span>
+                  <span class="flex-shrink-0 w-6 h-6 rounded-md bg-zinc-50 flex items-center justify-center" v-html="item.icon"></span>
                   {{ item.name }}
                 </router-link>
               </div>
             </Transition>
           </div>
 
-          <!-- AI 趣玩 -->
-          <router-link
-            to="/ai"
-            class="inline-flex items-center px-3 py-1 border-b-2 text-sm font-medium"
-            :class="$route.path === '/ai' ? 'border-zinc-500 text-zinc-700' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'"
-          >
-            AI 趣玩
-          </router-link>
+          <!-- AI 趣玩下拉 -->
+          <div class="relative" @mouseleave="aiOpen = false">
+            <router-link
+              to="/ai/"
+              class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+              :class="isAiActive ? 'bg-zinc-100 text-zinc-800' : 'text-gray-500 hover:bg-zinc-50 hover:text-gray-700'"
+              @mouseenter="aiOpen = true"
+            >
+              AI 趣玩
+            </router-link>
+
+            <div v-show="aiOpen" class="absolute top-full left-1/2 -translate-x-1/2 w-48 h-2" @mouseenter="aiOpen = true"></div>
+
+            <Transition name="dropdown">
+              <div
+                v-if="aiOpen"
+                class="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-52 bg-white rounded-xl shadow-lg shadow-zinc-200/50 border border-zinc-100 py-2 z-50 overflow-hidden"
+                @mouseenter="aiOpen = true"
+              >
+                <router-link
+                  v-for="item in aiItems"
+                  :key="item.path"
+                  :to="item.path"
+                  class="flex items-center gap-3 px-4 py-2.5 text-sm transition-all duration-150"
+                  :class="$route.path === item.path ? 'text-zinc-800 bg-zinc-50' : 'text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50'"
+                >
+                  <span class="flex-shrink-0 w-6 h-6 rounded-md bg-zinc-50 flex items-center justify-center" v-html="item.icon"></span>
+                  {{ item.name }}
+                </router-link>
+              </div>
+            </Transition>
+          </div>
 
           <!-- 内容集下拉 -->
           <div class="relative" @mouseleave="contentOpen = false">
-            <button
-              class="inline-flex items-center gap-1 px-3 py-1 border-b-2 text-sm font-medium transition-colors"
-              :class="isContentActive ? 'border-zinc-500 text-zinc-700' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'"
+            <router-link
+              to="/idea/"
+              class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+              :class="isContentActive ? 'bg-zinc-100 text-zinc-800' : 'text-gray-500 hover:bg-zinc-50 hover:text-gray-700'"
               @mouseenter="contentOpen = true"
             >
               内容集
-              <svg class="w-3.5 h-3.5 transition-transform duration-200" :class="contentOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
+            </router-link>
 
-            <!-- 鼠标桥接层 -->
             <div v-show="contentOpen" class="absolute top-full left-1/2 -translate-x-1/2 w-48 h-2" @mouseenter="contentOpen = true"></div>
 
-            <!-- 下拉面板 -->
             <Transition name="dropdown">
               <div
                 v-if="contentOpen"
-                class="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-48 bg-white rounded-xl shadow-xl border border-zinc-100 py-1.5 z-50 overflow-hidden"
+                class="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-52 bg-white rounded-xl shadow-lg shadow-zinc-200/50 border border-zinc-100 py-2 z-50 overflow-hidden"
                 @mouseenter="contentOpen = true"
               >
                 <router-link
                   v-for="item in contentItems"
                   :key="item.path"
                   :to="item.path"
-                  class="flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors"
+                  class="flex items-center gap-3 px-4 py-2.5 text-sm transition-all duration-150"
                   :class="$route.path === item.path ? 'text-zinc-800 bg-zinc-50' : 'text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50'"
                 >
-                  <span class="flex-shrink-0 w-5 h-5 flex items-center justify-center" v-html="item.icon"></span>
+                  <span class="flex-shrink-0 w-6 h-6 rounded-md bg-zinc-50 flex items-center justify-center" v-html="item.icon"></span>
                   {{ item.name }}
                 </router-link>
               </div>
             </Transition>
           </div>
 
-          <!-- JetBrains -->
-          <router-link
-            to="/jetbra"
-            class="inline-flex items-center px-3 py-1 border-b-2 text-sm font-medium"
-            :class="$route.path === '/jetbra' ? 'border-zinc-500 text-zinc-700' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'"
-          >
-            JetBrains
-          </router-link>
+          <!-- 探索下拉 -->
+          <div class="relative" @mouseleave="exploreOpen = false">
+            <router-link
+              to="/explore/"
+              class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+              :class="isExploreActive ? 'bg-zinc-100 text-zinc-800' : 'text-gray-500 hover:bg-zinc-50 hover:text-gray-700'"
+              @mouseenter="exploreOpen = true"
+            >
+              探索
+            </router-link>
+
+            <div v-show="exploreOpen" class="absolute top-full left-1/2 -translate-x-1/2 w-48 h-2" @mouseenter="exploreOpen = true"></div>
+
+            <Transition name="dropdown">
+              <div
+                v-if="exploreOpen"
+                class="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-52 bg-white rounded-xl shadow-lg shadow-zinc-200/50 border border-zinc-100 py-2 z-50 overflow-hidden"
+                @mouseenter="exploreOpen = true"
+              >
+                <router-link
+                  v-for="item in exploreItems"
+                  :key="item.path"
+                  :to="item.path"
+                  class="flex items-center gap-3 px-4 py-2.5 text-sm transition-all duration-150"
+                  :class="$route.path === item.path ? 'text-zinc-800 bg-zinc-50' : 'text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50'"
+                >
+                  <span class="flex-shrink-0 w-6 h-6 rounded-md bg-zinc-50 flex items-center justify-center" v-html="item.icon"></span>
+                  {{ item.name }}
+                </router-link>
+              </div>
+            </Transition>
+          </div>
         </nav>
 
         <!-- 用户菜单 -->
@@ -157,7 +197,7 @@
     <transition name="slide">
       <div
         v-if="isMobile && menuOpen"
-        class="fixed top-0 left-0 h-full w-64 bg-white z-50 flex flex-col shadow-xl"
+        class="fixed top-0 left-0 h-full w-60 bg-white z-50 flex flex-col shadow-xl"
       >
         <!-- 抽屉顶部 -->
         <div class="flex items-center justify-between px-5 h-16 border-b border-zinc-100 flex-shrink-0">
@@ -173,8 +213,8 @@
         </div>
 
         <!-- 菜单内容 -->
-        <nav class="flex-1 overflow-y-auto py-3 space-y-1">
-          <div class="px-3">
+        <nav class="flex-1 overflow-y-auto py-3">
+          <div class="px-3 mb-1">
             <router-link
               to="/"
               @click="menuOpen = false"
@@ -185,64 +225,120 @@
             </router-link>
           </div>
 
-          <div class="mx-3 h-px bg-zinc-100"></div>
-
           <!-- 百宝箱分组 -->
-          <div class="px-3">
-            <div class="px-3 py-1.5 text-xs font-semibold text-zinc-400 tracking-wider">百宝箱</div>
-            <router-link
-              v-for="item in toolboxItems"
-              :key="item.path"
-              :to="item.path"
-              @click="menuOpen = false"
-              class="flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors"
-              :class="$route.path === item.path ? 'bg-zinc-100 text-zinc-700' : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-700'"
-            >
-              {{ item.name }}
-            </router-link>
+          <div class="mt-2">
+            <div class="mx-3 h-px bg-zinc-100"></div>
+            <div class="px-3 pt-3 pb-1">
+              <router-link
+                to="/hub/"
+                @click="menuOpen = false"
+                class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-colors"
+                :class="$route.path === '/hub/' ? 'text-zinc-800' : 'text-zinc-500 hover:text-zinc-800'"
+              >
+                百宝箱
+                <svg class="w-3 h-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              </router-link>
+            </div>
+            <div class="px-3 pb-2">
+              <router-link
+                v-for="item in toolboxItems"
+                :key="item.path"
+                :to="item.path"
+                @click="menuOpen = false"
+                class="flex items-center gap-2.5 pl-8 pr-3 py-2 rounded-lg text-sm transition-colors"
+                :class="$route.path === item.path ? 'bg-zinc-100 text-zinc-700 font-medium' : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-600'"
+              >
+                <span class="flex-shrink-0 w-4 h-4 flex items-center justify-center opacity-70" v-html="item.icon"></span>
+                {{ item.name }}
+              </router-link>
+            </div>
           </div>
 
-          <div class="mx-3 h-px bg-zinc-100"></div>
-
-          <div class="px-3">
-            <router-link
-              to="/ai"
-              @click="menuOpen = false"
-              class="flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors"
-              :class="$route.path === '/ai' ? 'bg-zinc-100 text-zinc-700' : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-700'"
-            >
-              AI 趣玩
-            </router-link>
+          <!-- AI 趣玩分组 -->
+          <div class="mt-1">
+            <div class="mx-3 h-px bg-zinc-100"></div>
+            <div class="px-3 pt-3 pb-1">
+              <router-link
+                to="/ai/"
+                @click="menuOpen = false"
+                class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-colors"
+                :class="$route.path === '/ai/' ? 'text-zinc-800' : 'text-zinc-500 hover:text-zinc-800'"
+              >
+                AI 趣玩
+                <svg class="w-3 h-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              </router-link>
+            </div>
+            <div class="px-3 pb-2">
+              <router-link
+                v-for="item in aiItems"
+                :key="item.path"
+                :to="item.path"
+                @click="menuOpen = false"
+                class="flex items-center gap-2.5 pl-8 pr-3 py-2 rounded-lg text-sm transition-colors"
+                :class="$route.path === item.path ? 'bg-zinc-100 text-zinc-700 font-medium' : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-600'"
+              >
+                <span class="flex-shrink-0 w-4 h-4 flex items-center justify-center opacity-70" v-html="item.icon"></span>
+                {{ item.name }}
+              </router-link>
+            </div>
           </div>
-
-          <div class="mx-3 h-px bg-zinc-100"></div>
 
           <!-- 内容集分组 -->
-          <div class="px-3">
-            <div class="px-3 py-1.5 text-xs font-semibold text-zinc-400 tracking-wider">内容集</div>
-            <router-link
-              v-for="item in contentItems"
-              :key="item.path"
-              :to="item.path"
-              @click="menuOpen = false"
-              class="flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors"
-              :class="$route.path === item.path ? 'bg-zinc-100 text-zinc-700' : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-700'"
-            >
-              {{ item.name }}
-            </router-link>
+          <div class="mt-1">
+            <div class="mx-3 h-px bg-zinc-100"></div>
+            <div class="px-3 pt-3 pb-1">
+              <router-link
+                to="/idea/"
+                @click="menuOpen = false"
+                class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-colors"
+                :class="$route.path === '/idea/' ? 'text-zinc-800' : 'text-zinc-500 hover:text-zinc-800'"
+              >
+                内容集
+                <svg class="w-3 h-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              </router-link>
+            </div>
+            <div class="px-3 pb-2">
+              <router-link
+                v-for="item in contentItems"
+                :key="item.path"
+                :to="item.path"
+                @click="menuOpen = false"
+                class="flex items-center gap-2.5 pl-8 pr-3 py-2 rounded-lg text-sm transition-colors"
+                :class="$route.path === item.path ? 'bg-zinc-100 text-zinc-700 font-medium' : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-600'"
+              >
+                <span class="flex-shrink-0 w-4 h-4 flex items-center justify-center opacity-70" v-html="item.icon"></span>
+                {{ item.name }}
+              </router-link>
+            </div>
           </div>
 
-          <div class="mx-3 h-px bg-zinc-100"></div>
-
-          <div class="px-3">
-            <router-link
-              to="/jetbra"
-              @click="menuOpen = false"
-              class="flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors"
-              :class="$route.path === '/jetbra' ? 'bg-zinc-100 text-zinc-700' : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-700'"
-            >
-              JetBrains
-            </router-link>
+          <!-- 探索分组 -->
+          <div class="mt-1">
+            <div class="mx-3 h-px bg-zinc-100"></div>
+            <div class="px-3 pt-3 pb-1">
+              <router-link
+                to="/explore/"
+                @click="menuOpen = false"
+                class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-colors"
+                :class="isExploreActive ? 'text-zinc-800' : 'text-zinc-500 hover:text-zinc-800'"
+              >
+                探索
+                <svg class="w-3 h-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              </router-link>
+            </div>
+            <div class="px-3 pb-2">
+              <router-link
+                v-for="item in exploreItems"
+                :key="item.path"
+                :to="item.path"
+                @click="menuOpen = false"
+                class="flex items-center gap-2.5 pl-8 pr-3 py-2 rounded-lg text-sm transition-colors"
+                :class="$route.path === item.path ? 'bg-zinc-100 text-zinc-700 font-medium' : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-600'"
+              >
+                <span class="flex-shrink-0 w-4 h-4 flex items-center justify-center opacity-70" v-html="item.icon"></span>
+                {{ item.name }}
+              </router-link>
+            </div>
           </div>
         </nav>
       </div>
@@ -262,45 +358,81 @@ const route = useRoute()
 const toolboxItems = [
   {
     name: '文件预览',
-    path: '/file-preview',
+    path: '/hub/file-preview',
     icon: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>`
   },
   {
     name: '图片处理',
-    path: '/image-processing',
+    path: '/hub/image-processing',
     icon: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`
   },
   {
     name: '图片OCR',
-    path: '/ocr',
+    path: '/hub/ocr',
     icon: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2zM9 4h6v6H9V4z"/></svg>`
   },
   {
     name: 'IT 工具箱',
-    path: '/it-tools',
+    path: '/hub/it-tools',
     icon: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>`
   },
 ]
 
 const isToolboxActive = computed(() =>
-  toolboxItems.some(item => item.path === route.path)
+  route.path.startsWith('/hub')
 )
 
 const contentItems = [
   {
     name: '文章',
-    path: '/articles',
+    path: '/idea/articles/',
     icon: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>`
   }
 ]
 
 const isContentActive = computed(() =>
-  contentItems.some(item => item.path === route.path)
+  route.path.startsWith('/idea')
+)
+
+const exploreItems = [
+  {
+    name: 'JetBrains',
+    path: '/explore/jetbra',
+    icon: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>`
+  }
+]
+
+const isExploreActive = computed(() =>
+  route.path.startsWith('/explore')
+)
+
+const aiItems = [
+  {
+    name: '聊一聊',
+    path: '/ai/chat',
+    icon: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>`
+  },
+  {
+    name: '文生图',
+    path: '/ai/text2image',
+    icon: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>`
+  },
+  {
+    name: '图生图',
+    path: '/ai/image2image',
+    icon: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`
+  }
+]
+
+const isAiActive = computed(() =>
+  route.path.startsWith('/ai')
 )
 
 const menuOpen = ref(false)
 const toolboxOpen = ref(false)
+const aiOpen = ref(false)
 const contentOpen = ref(false)
+const exploreOpen = ref(false)
 
 function toggleMenu() {
   menuOpen.value = !menuOpen.value

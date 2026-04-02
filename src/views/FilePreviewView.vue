@@ -183,24 +183,12 @@
       </div>
     </main>
 
-    <!-- 回到顶部按钮 -->
-    <button
-      v-show="showBackToTop"
-      @click="scrollToTop"
-      class="fixed bottom-8 right-8 z-50 w-14 h-14 text-white rounded-full shadow-lg transition-all duration-300 flex items-center justify-center hover:scale-110 hover:shadow-zinc-300/50"
-      style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)"
-    >
-      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-      </svg>
-    </button>
-
     <AppFooter />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, inject, onMounted, onUnmounted } from 'vue'
+import { ref, computed, inject } from 'vue'
 import api from '../utils/api'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
@@ -214,27 +202,8 @@ const loading = ref(false)
 const uploadStatus = ref(null)
 const isDragging = ref(false)
 const previewData = ref(null)
-const showBackToTop = ref(false)
 
 // API_DOMAIN 从 api.js 导入
-
-// 回到顶部功能
-const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
-
-// 监听滚动事件
-const handleScroll = () => {
-  showBackToTop.value = window.scrollY > 300
-}
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
 
 const processedPreviewData = computed(() => {
   if (!previewData.value) return null

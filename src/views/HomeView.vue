@@ -54,58 +54,67 @@
         <div class="text-center mb-16">
           <h2 class="text-xl sm:text-2xl font-bold text-zinc-600 mb-4">此中有真意</h2>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:gap-8 max-w-5xl mx-auto">
-          <div
-            v-for="(tool, index) in tools"
-            :key="tool.title"
-            :ref="el => { if (el) bookRefs[index] = el }"
-            class="book group relative w-full cursor-pointer transition-all duration-700 hover:shadow-lg hover:shadow-zinc-300/30 hover:-translate-y-2"
-            :style="{ animationDelay: `${index * 0.1}s`, perspective: '1400px' }"
-            :class="[index >= 3 ? 'opacity-0 animate-fade-in-up' : '', activeBook === index ? 'is-in-view' : '']"
-            @click="tool.onClick"
-          >
-            <!-- 书页厚度 -->
-            <div class="absolute top-0 right-0 w-12 h-full rounded-r-xl bg-gradient-to-r from-zinc-300 to-zinc-200 shadow-inner"></div>
-            
-            <!-- 封面 -->
-            <div class="page" style="z-index: 5;">
-              <div class="front">
-                <div class="cover h-full flex flex-col overflow-hidden rounded-xl">
-                  <div class="cover-top flex-1 flex items-center justify-center transition-colors duration-300" :class="[activeBook === index ? tool.bgActive : tool.bgDefault, tool.bgHover]">
-                    <component :is="tool.icon" class="w-12 h-12 transition-colors duration-300" :class="[activeBook === index ? tool.iconActive : tool.iconDefault, tool.iconHover]" />
-                  </div>
-                  <div class="cover-bottom flex-1 bg-white p-6 sm:p-8 flex flex-col">
-                    <h3 class="text-xl font-semibold text-zinc-700 mb-3">{{ tool.title }}</h3>
-                    <p class="text-zinc-400 mb-4 leading-relaxed text-sm">{{ tool.description }}</p>
-                    <span class="inline-flex items-center gap-2 text-sm font-medium text-zinc-500 mt-auto">
-                      {{ tool.buttonText }}
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                    </span>
+
+        <div v-for="(category, ci) in categories" :key="category.label" class="max-w-5xl mx-auto" :class="ci > 0 ? 'mt-20' : ''">
+          <div class="flex items-end justify-between mb-10">
+            <div class="flex items-stretch gap-4">
+              <div class="w-0.5 rounded-full" :style="category.accentStyle"></div>
+              <div>
+                <p class="text-[10px] tracking-[0.3em] uppercase mb-1" :style="category.subStyle">{{ category.en }}</p>
+                <h3 class="font-serif text-2xl tracking-wide text-zinc-700 leading-none">{{ category.label }}</h3>
+              </div>
+            </div>
+            <router-link :to="category.path" class="group flex items-center gap-1.5 text-xs tracking-widest text-zinc-300 hover:text-zinc-500 transition-colors duration-300 pb-0.5">
+              <span>查看全部</span>
+              <svg class="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+            </router-link>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:gap-8">
+            <div
+              v-for="(tool, index) in category.tools"
+              :key="tool.title"
+              :ref="el => { if (el) bookRefs[flatIndex(ci, index)] = el }"
+              class="book group relative w-full cursor-pointer transition-all duration-700 hover:shadow-lg hover:shadow-zinc-300/30 hover:-translate-y-2 opacity-0 animate-fade-in-up"
+              :style="{ animationDelay: `${flatIndex(ci, index) * 0.1}s`, perspective: '1400px' }"
+              :class="[activeBook === flatIndex(ci, index) ? 'is-in-view' : '']"
+              @click="tool.onClick"
+            >
+              <div class="absolute top-0 right-0 w-12 h-full rounded-r-xl bg-gradient-to-r from-zinc-300 to-zinc-200 shadow-inner"></div>
+              <div class="page" style="z-index: 5;">
+                <div class="front">
+                  <div class="cover h-full flex flex-col overflow-hidden rounded-xl">
+                    <div class="cover-top flex-1 flex items-center justify-center transition-colors duration-300" :class="[activeBook === flatIndex(ci, index) ? tool.bgActive : tool.bgDefault, tool.bgHover]">
+                      <component :is="tool.icon" class="w-12 h-12 transition-colors duration-300" :class="[activeBook === flatIndex(ci, index) ? tool.iconActive : tool.iconDefault, tool.iconHover]" />
+                    </div>
+                    <div class="cover-bottom flex-1 bg-white p-6 sm:p-8 flex flex-col">
+                      <h3 class="text-xl font-semibold text-zinc-700 mb-3">{{ tool.title }}</h3>
+                      <p class="text-zinc-400 mb-4 leading-relaxed text-sm">{{ tool.description }}</p>
+                      <span class="inline-flex items-center gap-2 text-sm font-medium text-zinc-500 mt-auto">
+                        {{ tool.buttonText }}
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                      </span>
+                    </div>
                   </div>
                 </div>
+                <div class="back bg-zinc-100 rounded-xl"></div>
               </div>
-              <div class="back bg-zinc-100 rounded-xl"></div>
-            </div>
-            
-            <!-- 内页 -->
-            <div class="page" style="z-index: 4;">
-              <div class="front bg-white rounded-xl border-r border-zinc-100 p-4"></div>
-              <div class="back bg-zinc-100 rounded-xl"></div>
-            </div>
-            
-            <div class="page" style="z-index: 3;">
-              <div class="front bg-white rounded-xl border-r border-zinc-100 p-4"></div>
-              <div class="back bg-zinc-100 rounded-xl"></div>
-            </div>
-            
-            <div class="page" style="z-index: 2;">
-              <div class="front bg-white rounded-xl border-r border-zinc-100 p-4"></div>
-              <div class="back bg-zinc-100 rounded-xl"></div>
-            </div>
-            
-            <div class="page" style="z-index: 1;">
-              <div class="front bg-white rounded-xl border-r border-zinc-100 p-4"></div>
-              <div class="back bg-zinc-100 rounded-xl"></div>
+              <div class="page" style="z-index: 4;">
+                <div class="front bg-white rounded-xl border-r border-zinc-100 p-4"></div>
+                <div class="back bg-zinc-100 rounded-xl"></div>
+              </div>
+              <div class="page" style="z-index: 3;">
+                <div class="front bg-white rounded-xl border-r border-zinc-100 p-4"></div>
+                <div class="back bg-zinc-100 rounded-xl"></div>
+              </div>
+              <div class="page" style="z-index: 2;">
+                <div class="front bg-white rounded-xl border-r border-zinc-100 p-4"></div>
+                <div class="back bg-zinc-100 rounded-xl"></div>
+              </div>
+              <div class="page" style="z-index: 1;">
+                <div class="front bg-white rounded-xl border-r border-zinc-100 p-4"></div>
+                <div class="back bg-zinc-100 rounded-xl"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -114,17 +123,6 @@
 
     <AppFooter />
 
-    <Transition name="fade-slide">
-      <button
-        v-if="showBackToTop"
-        @click="scrollToTop"
-        class="fixed bottom-8 right-8 w-14 h-14 bg-zinc-800 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-zinc-700 transition-all duration-300 hover:scale-110 z-50 group"
-      >
-        <svg class="w-6 h-6 transition-transform duration-300 group-hover:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-        </svg>
-      </button>
-    </Transition>
   </div>
 </template>
 
@@ -135,7 +133,6 @@ import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
 
 const router = useRouter()
-const showBackToTop = ref(false)
 const bookRefs = ref([])
 const activeBook = ref(-1)
 let rafId = null
@@ -173,6 +170,22 @@ const AIIcon = {
   }
 }
 
+const Text2ImageIcon = {
+  render() {
+    return h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
+      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-width': '2', d: 'M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z' })
+    ])
+  }
+}
+
+const Image2ImageIcon = {
+  render() {
+    return h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
+      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-width': '2', d: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' })
+    ])
+  }
+}
+
 const ToolsIcon = {
   render() {
     return h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
@@ -198,14 +211,6 @@ const JetbrainsIcon = {
   }
 }
 
-const ComingIcon = {
-  render() {
-    return h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
-      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-width': '2', d: 'M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z' })
-    ])
-  }
-}
-
 const BookIcon = {
   render() {
     return h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
@@ -227,7 +232,7 @@ const tools = [
     iconHover: 'group-hover:text-blue-600',
     iconActive: 'text-blue-600',
     buttonText: '未展知意',
-    onClick: () => navigateTo('/file-preview')
+    onClick: () => navigateTo('/hub/file-preview')
   },
   {
     title: '图片处理',
@@ -240,7 +245,7 @@ const tools = [
     iconHover: 'group-hover:text-emerald-600',
     iconActive: 'text-emerald-600',
     buttonText: '所见皆新',
-    onClick: () => navigateTo('/image-processing')
+    onClick: () => navigateTo('/hub/image-processing')
   },
   {
     title: '图片 OCR',
@@ -253,20 +258,7 @@ const tools = [
     iconHover: 'group-hover:text-teal-600',
     iconActive: 'text-teal-600',
     buttonText: '图文转换',
-    onClick: () => navigateTo('/ocr')
-  },
-  {
-    title: 'AI 趣玩',
-    description: '文生图、图生图、AI 对话，让想象力找到出口',
-    icon: AIIcon,
-    bgDefault: 'bg-zinc-50',
-    bgHover: 'group-hover:bg-violet-100',
-    bgActive: 'bg-violet-100',
-    iconDefault: 'text-zinc-300',
-    iconHover: 'group-hover:text-violet-600',
-    iconActive: 'text-violet-600',
-    buttonText: '妙想成趣',
-    onClick: () => navigateTo('/ai')
+    onClick: () => navigateTo('/hub/ocr')
   },
   {
     title: 'IT 工具',
@@ -279,11 +271,56 @@ const tools = [
     iconHover: 'group-hover:text-orange-600',
     iconActive: 'text-orange-600',
     buttonText: '执简驭繁',
-    onClick: () => navigateTo('/it-tools')
+    onClick: () => navigateTo('/hub/it-tools')
+  },
+]
+
+const aiTools = [
+  {
+    title: 'AI 聊一聊',
+    description: '与 AI 智能对话，解答问题、编写代码、创作文案',
+    icon: AIIcon,
+    bgDefault: 'bg-zinc-50',
+    bgHover: 'group-hover:bg-violet-100',
+    bgActive: 'bg-violet-100',
+    iconDefault: 'text-zinc-300',
+    iconHover: 'group-hover:text-violet-600',
+    iconActive: 'text-violet-600',
+    buttonText: '妙想成趣',
+    onClick: () => navigateTo('/ai/chat')
   },
   {
+    title: '文生图',
+    description: '输入文字描述，AI 为你生成精美图片',
+    icon: Text2ImageIcon,
+    bgDefault: 'bg-zinc-50',
+    bgHover: 'group-hover:bg-indigo-100',
+    bgActive: 'bg-indigo-100',
+    iconDefault: 'text-zinc-300',
+    iconHover: 'group-hover:text-indigo-600',
+    iconActive: 'text-indigo-600',
+    buttonText: '以文绘图',
+    onClick: () => navigateTo('/ai/text2image')
+  },
+  {
+    title: '图生图',
+    description: '上传图片并描述变化，AI 帮你改造图片',
+    icon: Image2ImageIcon,
+    bgDefault: 'bg-zinc-50',
+    bgHover: 'group-hover:bg-pink-100',
+    bgActive: 'bg-pink-100',
+    iconDefault: 'text-zinc-300',
+    iconHover: 'group-hover:text-pink-600',
+    iconActive: 'text-pink-600',
+    buttonText: '以图换图',
+    onClick: () => navigateTo('/ai/image2image')
+  },
+]
+
+const otherTools = [
+  {
     title: 'JetBrains',
-    description: '懂的都懂 😏',
+    description: '懂的都懂',
     icon: JetbrainsIcon,
     bgDefault: 'bg-zinc-50',
     bgHover: 'group-hover:bg-yellow-100',
@@ -294,8 +331,11 @@ const tools = [
     buttonText: '巧用魔法',
     onClick: () => navigateTo('/jetbra')
   },
+]
+
+const contentTools = [
   {
-    title: '内容集合',
+    title: '文章',
     description: '整理日常输出，分享所学所得',
     icon: BookIcon,
     bgDefault: 'bg-emerald-50',
@@ -305,20 +345,41 @@ const tools = [
     iconHover: '',
     iconActive: '',
     buttonText: '与你分享',
-    onClick: () => navigateTo('/articles')
+    onClick: () => navigateTo('/explore/articles')
   }
 ]
 
+const categories = [
+  {
+    label: '百宝箱', en: 'hub', path: '/hub/', tools,
+    accentStyle: 'background: linear-gradient(180deg, #93c5fd 0%, #3b82f6 100%)',
+    subStyle: 'color: #93c5fd',
+  },
+  {
+    label: 'AI 趣玩', en: 'ai', path: '/ai/', tools: aiTools,
+    accentStyle: 'background: linear-gradient(180deg, #c4b5fd 0%, #8b5cf6 100%)',
+    subStyle: 'color: #c4b5fd',
+  },
+  {
+    label: '内容集', en: 'Idea', path: '/explore/', tools: contentTools,
+    accentStyle: 'background: linear-gradient(180deg, #6ee7b7 0%, #10b981 100%)',
+    subStyle: 'color: #6ee7b7',
+  },
+  {
+    label: '探索', en: 'Explore', path: '/jetbra', tools: otherTools,
+    accentStyle: 'background: linear-gradient(180deg, #fcd34d 0%, #f59e0b 100%)',
+    subStyle: 'color: #fcd34d',
+  },
+]
 
-
-
-const handleScroll = () => {
-  showBackToTop.value = window.scrollY > 500
+const flatIndex = (ci, index) => {
+  let offset = 0
+  for (let i = 0; i < ci; i++) offset += categories[i].tools.length
+  return offset + index
 }
 
-const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
+
+const totalBooks = categories.reduce((sum, c) => sum + c.tools.length, 0)
 
 const navigateTo = (path) => {
   router.push(path).then(() => {
@@ -335,7 +396,6 @@ const scrollToTools = () => {
 
 onMounted(() => {
   window.scrollTo(0, 0)
-  window.addEventListener('scroll', handleScroll)
 
   // 移动端：用 scroll + rAF 实时计算离屏幕中心最近的卡片并激活
   const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
@@ -390,7 +450,6 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
   if (bookObserver) bookObserver.disconnect()
 })
 </script>

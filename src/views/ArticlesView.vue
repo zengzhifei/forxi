@@ -193,17 +193,6 @@
       </div>
     </div>
 
-    <transition name="fade">
-      <button
-        v-if="showBackToTop"
-        @click="scrollToTop"
-        class="fixed bottom-6 right-6 w-12 h-12 bg-white border border-gray-200 rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors z-40"
-      >
-        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
-        </svg>
-      </button>
-    </transition>
   </div>
 </template>
 
@@ -284,7 +273,6 @@ const noMore = ref(false)
 const loadMoreTrigger = ref(null)
 const searchQuery = ref('')
 const showMobileCategory = ref(false)
-const showBackToTop = ref(false)
 
 const renderedMermaidIds = ref(new Set())
 
@@ -292,18 +280,6 @@ const likeCount = ref(0)
 const viewCount = ref(0)
 const isLiked = ref(false)
 const isLiking = ref(false)
-
-const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
-
-const handleScroll = () => {
-  showBackToTop.value = window.scrollY > 400
-}
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-})
 
 const isDetailView = computed(() => {
   return route.params.category && route.params.id
@@ -502,14 +478,13 @@ async function toggleLike() {
 }
 
 function selectCategory(category) {
-  selectedCategory.value = category
   selectedArticle.value = null
   noMore.value = false
   searchQuery.value = ''
-  if (route.params.category && route.params.id) {
-    router.push('/articles')
+  if (category === '') {
+    router.push('/idea/articles/')
   } else {
-    loadArticles(true)
+    router.push(`/idea/articles/${category}/`)
   }
 }
 
@@ -520,7 +495,7 @@ function handleSearch() {
 
 function viewArticle(article) {
   const category = article.category || selectedCategory.value || 'all'
-  router.push(`/articles/${category}/${article.id}`)
+  router.push(`/idea/articles/${category}/${article.id}`)
 }
 
 function goBack() {
@@ -579,6 +554,7 @@ watch(() => route.params, async (newParams) => {
   } else {
     selectedArticle.value = null
     noMore.value = false
+    selectedCategory.value = newParams.category || ''
     loadArticles(true)
   }
 }, { immediate: true })
@@ -594,7 +570,6 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
   if (mermaid) {
     mermaid.cleanup()
   }

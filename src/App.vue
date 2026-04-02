@@ -2,12 +2,14 @@
   <router-view />
   <Toast ref="toastRef" />
   <ConfirmDialog ref="confirmRef" />
+  <BackTop />
 </template>
 
 <script setup>
 import { ref, onMounted, provide } from 'vue'
 import Toast from './components/Toast.vue'
 import ConfirmDialog from './components/ConfirmDialog.vue'
+import BackTop from './components/BackTop.vue'
 import { setToastFunction } from './utils/api'
 
 const toastRef = ref(null)

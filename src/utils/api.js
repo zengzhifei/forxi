@@ -82,14 +82,14 @@ export const api = {
   },
 
   /**
-   * 图片抠图（背景透明）
-   * 路由：POST /api/image/transparent
+   * 智能抠图（生成透明前景图 + 修复背景图）
+   * 路由：POST /api/image/cutout
    */
-  async imageTransparent(file) {
+  async cutout(file) {
     const formData = new FormData()
     formData.append('file', file)
 
-    const res = await apiClient.post('/image/transparent', formData, {
+    const res = await apiClient.post('/image/cutout', formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
     return res.data

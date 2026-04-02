@@ -49,7 +49,23 @@
               </div>
             </div>
             <div class="p-4 bg-zinc-100 flex items-center justify-center relative" :style="{ minHeight: previewHeight + 'px' }">
-              <div class="relative inline-block" ref="imageContainer">
+              <!-- 抠图双图预览 -->
+              <div v-if="activeTab === 'ai-remove-bg' && cutoutBgUrl" class="w-full grid grid-cols-2 gap-3">
+                <div class="flex flex-col items-center gap-2">
+                  <div class="bg-[url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAH0lEQVQ4T2NkYGD4z8BQDwAAAQ8AAXwkMp8AAAAASUVORK5CYII=')] rounded-lg overflow-hidden">
+                    <img :src="previewUrl" class="max-w-full max-h-[320px] object-contain block" />
+                  </div>
+                  <span class="text-xs text-zinc-400">前景图（透明）</span>
+                </div>
+                <div class="flex flex-col items-center gap-2">
+                  <div class="rounded-lg overflow-hidden">
+                    <img :src="cutoutBgUrl" class="max-w-full max-h-[320px] object-contain block" />
+                  </div>
+                  <span class="text-xs text-zinc-400">修复背景图</span>
+                </div>
+              </div>
+              <!-- 普通单图预览 -->
+              <div v-else class="relative inline-block" ref="imageContainer">
                 <img
                   ref="previewImage"
                   :src="previewUrl || imagePreviewUrl"
@@ -301,19 +317,29 @@
                     </svg>
                     <div>
                       <p class="text-sm text-zinc-600 font-medium">AI智能抠图</p>
-                      <p class="text-xs text-zinc-400 mt-1">使用AI技术自动识别并去除图片背景</p>
+                      <p class="text-xs text-zinc-400 mt-1">智能识别主体，同时生成透明前景图与修复背景图</p>
                     </div>
                   </div>
                 </div>
                 <button
-                  @click="handleAIRemoveBackground"
+                  @click="handleAICutout"
                   :disabled="aiProcessing"
                   class="w-full py-2 px-4 text-white rounded-xl transition-all hover:opacity-90 text-sm disabled:opacity-50"
                   style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)"
                 >
                   {{ aiProcessing ? '处理中...' : '开始处理' }}
                 </button>
-                <button @click="resetAIRemoveBackground" class="w-full py-2 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-sm transition-colors">
+                <div v-if="previewUrl && cutoutBgUrl" class="grid grid-cols-2 gap-2">
+                  <a :href="previewUrl" download="cutout_fg.png" class="flex items-center justify-center gap-1.5 py-2 px-3 bg-zinc-100 hover:bg-zinc-200 text-zinc-600 rounded-xl text-xs transition-colors">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    前景图
+                  </a>
+                  <a :href="cutoutBgUrl" download="cutout_bg.png" class="flex items-center justify-center gap-1.5 py-2 px-3 bg-zinc-100 hover:bg-zinc-200 text-zinc-600 rounded-xl text-xs transition-colors">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    背景图
+                  </a>
+                </div>
+                <button @click="resetAICutout" class="w-full py-2 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-sm transition-colors">
                   恢复默认
                 </button>
               </div>
@@ -327,19 +353,19 @@
                     </svg>
                     <div>
                       <p class="text-sm text-zinc-600 font-medium">AI智能背景透明</p>
-                      <p class="text-xs text-zinc-400 mt-1">将图片背景设置为透明，支持PNG格式</p>
+                      <p class="text-xs text-zinc-400 mt-1">移除图片背景，输出透明 PNG 格式</p>
                     </div>
                   </div>
                 </div>
                 <button
-                  @click="handleAITransparent"
+                  @click="handleAIRemoveBackground"
                   :disabled="aiProcessing"
                   class="w-full py-2 px-4 text-white rounded-xl transition-all hover:opacity-90 text-sm disabled:opacity-50"
                   style="background: linear-gradient(135deg, #52525b 0%, #3f3f46 50%, #52525b 100%)"
                 >
                   {{ aiProcessing ? '处理中...' : '开始处理' }}
                 </button>
-                <button @click="resetAITransparent" class="w-full py-2 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-sm transition-colors">
+                <button @click="resetAIRemoveBackground" class="w-full py-2 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-sm transition-colors">
                   恢复默认
                 </button>
               </div>
@@ -524,8 +550,8 @@ const featureList = [
   { icon: '🎨', name: '图片滤镜', desc: '灰度、复古、提亮、对比、模糊' },
   { icon: '🎯', name: '马赛克', desc: '调整马赛克强度，保护隐私' },
   { icon: '🔃', name: '格式转换', desc: '支持 JPG、PNG、WebP 格式互转' },
-  { icon: '✨', name: 'AI 抠图', desc: 'AI 智能去除图片背景' },
-  { icon: '🔮', name: 'AI 背景透明', desc: 'AI 将图片背景设为透明' },
+  { icon: '✨', name: 'AI 抠图', desc: 'AI 智能抠图，生成透明前景图与修复背景图' },
+  { icon: '🔮', name: 'AI 背景透明', desc: 'AI 移除图片背景，输出透明前景图' },
   { icon: '✂️', name: 'AI 裁剪', desc: 'AI 智能识别主体裁剪' },
   { icon: '📇', name: 'AI 证件照', desc: 'AI 生成标准证件照' },
 ]
@@ -538,6 +564,7 @@ const secondImageFile = ref(null)
 const imagePreviewUrl = ref('')
 const secondImageUrl = ref('')
 const previewUrl = ref('')
+const cutoutBgUrl = ref('')
 const displayFileSize = ref(0)
 const displayWidth = ref(0)
 const displayHeight = ref(0)
@@ -1267,11 +1294,15 @@ const resetMosaic = () => {
   applyAllEffects()
 }
 
-const resetAIRemoveBackground = async () => {
+const resetAICutout = async () => {
   isCropped.value = false
   clearModified('ai-remove-bg')
   if (previewUrl.value && previewUrl.value !== imagePreviewUrl.value) {
     URL.revokeObjectURL(previewUrl.value)
+  }
+  if (cutoutBgUrl.value) {
+    URL.revokeObjectURL(cutoutBgUrl.value)
+    cutoutBgUrl.value = ''
   }
   previewUrl.value = imagePreviewUrl.value
   displayFileSize.value = originalFileSize.value
@@ -1279,7 +1310,7 @@ const resetAIRemoveBackground = async () => {
   displayHeight.value = originalHeight.value
 }
 
-const resetAITransparent = async () => {
+const resetAIRemoveBackground = async () => {
   isCropped.value = false
   clearModified('ai-transparent')
   if (previewUrl.value && previewUrl.value !== imagePreviewUrl.value) {
@@ -1382,11 +1413,11 @@ const confirmDownload = async () => {
   showDownloadModal.value = false
 }
 
-const handleAIRemoveBackground = async () => {
+const handleAICutout = async () => {
   if (!selectedImage.value) return
   aiProcessing.value = true
   try {
-    const result = await api.removeBackground(selectedImage.value)
+    const result = await api.cutout(selectedImage.value)
     if (result.base64) {
       const blob = base64ToBlob(result.base64, 'image/png')
       const url = URL.createObjectURL(blob)
@@ -1397,6 +1428,11 @@ const handleAIRemoveBackground = async () => {
       displayFileSize.value = blob.size
       markModified('ai-remove-bg')
     }
+    if (result.base64Bg) {
+      if (cutoutBgUrl.value) URL.revokeObjectURL(cutoutBgUrl.value)
+      const bgBlob = base64ToBlob(result.base64Bg, 'image/png')
+      cutoutBgUrl.value = URL.createObjectURL(bgBlob)
+    }
   } catch (error) {
     console.error('AI抠图失败:', error)
   } finally {
@@ -1404,11 +1440,11 @@ const handleAIRemoveBackground = async () => {
   }
 }
 
-const handleAITransparent = async () => {
+const handleAIRemoveBackground = async () => {
   if (!selectedImage.value) return
   aiProcessing.value = true
   try {
-    const result = await api.imageTransparent(selectedImage.value)
+    const result = await api.removeBackground(selectedImage.value)
     if (result.base64) {
       const blob = base64ToBlob(result.base64, 'image/png')
       const url = URL.createObjectURL(blob)

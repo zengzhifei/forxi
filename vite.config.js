@@ -39,7 +39,13 @@ export default defineConfig(({ mode }) => {
       vue(),
       vitePrerender({
         staticDir: join(__dirname, 'dist'),
-        routes: ['/', '/file-preview', '/image-processing', '/ocr', '/it-tools', '/ai', '/jetbra', '/articles', '/privacy', '/terms'],
+        routes: [
+          '/',  '/privacy', '/terms',
+          '/hub/', '/hub/file-preview', '/hub/image-processing', '/hub/ocr', '/hub/it-tools', 
+          '/ai/', '/ai/chat', '/ai/text2image', '/ai/image2image',
+          '/idea/','/idea/articles', 
+          '/explore/', '/explore/jetbra', 
+         ],
         renderer: new Renderer({
           maxConcurrentRoutes: 2,
           renderAfterDocumentEvent: 'app-rendered',

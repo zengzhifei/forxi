@@ -66,7 +66,7 @@ Forxi 是一个免费在线工具平台，提供文件预览、图片处理、AI
 
 **加密**：文本加密 / 解密
 
-### 🧲 JetBrains 激活
+### 🧲 JetBrains 
 
 支持 IntelliJ IDEA、PyCharm、WebStorm、GoLand、Rider、CLion 等 JetBrains 系列 IDE。
 

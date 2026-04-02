@@ -3,6 +3,7 @@ import sso from '../utils/sso'
 
 const user = ref(null)
 const loading = ref(false)
+const profileFetched = ref(false)
 
 export function useAuth() {
   const isAuthenticated = computed(() => !!user.value)
@@ -40,6 +41,7 @@ export function useAuth() {
   }
 
   const fetchProfile = async () => {
+    if (profileFetched.value) return
     loading.value = true
     try {
       const data = await sso.getProfile()
@@ -48,6 +50,7 @@ export function useAuth() {
       console.error('获取用户信息失败:', error)
       user.value = null
     } finally {
+      profileFetched.value = true
       loading.value = false
     }
   }
@@ -58,6 +61,7 @@ export function useAuth() {
       await sso.logout()
     } finally {
       user.value = null
+      profileFetched.value = false
       loading.value = false
     }
   }

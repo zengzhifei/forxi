@@ -10,6 +10,9 @@ const HomeView = () => import('../views/HomeView.vue')
 const FilePreviewView = () => import('../views/FilePreviewView.vue')
 const ImageProcessingView = () => import('../views/ImageProcessingView.vue')
 const AIView = () => import('../views/AIView.vue')
+const ChatView = () => import('../views/ChatView.vue')
+const Text2ImageView = () => import('../views/Text2ImageView.vue')
+const Image2ImageView = () => import('../views/Image2ImageView.vue')
 const OcrView = () => import('../views/OcrView.vue')
 const ItToolsView = () => import('../views/ItToolsView.vue')
 const JetbrainsView = () => import('../views/JetbrainsView.vue')
@@ -21,6 +24,9 @@ const GithubCallbackView = () => import('../views/OauthCallbackView.vue')
 const ArticlesView = () => import('../views/ArticlesView.vue')
 const TermsView = () => import('../views/TermsView.vue')
 const PrivacyView = () => import('../views/PrivacyView.vue')
+const HubView = () => import('../views/HubView.vue')
+const IdeaView = () => import('../views/IdeaView.vue')
+const ExploreView = () => import('../views/ExploreView.vue')
 
 // 路由配置
 const routes = [
@@ -76,86 +82,6 @@ const routes = [
     }
   },
   {
-    path: '/file-preview',
-    name: 'file-preview',
-    component: FilePreviewView,
-    meta: {
-      title: 'Forxi - 文件预览',
-      description: '免费在线预览 PDF、Word、Excel、PPT、图片、视频等多种文件格式，无需下载，打开即览。',
-      keywords: '在线文件预览,PDF预览,Word预览,Excel预览,PPT预览,图片预览,免费文件预览'
-    }
-  },
-  {
-    path: '/image-processing',
-    name: 'image-processing',
-    component: ImageProcessingView,
-    meta: {
-      title: 'Forxi - 图片处理',
-      description: '免费在线图片处理，支持压缩、裁剪、旋转、加水印、调滤镜、格式转换，纯本地处理保护隐私。',
-      keywords: '在线图片处理,图片压缩,图片裁剪,图片旋转,图片水印,图片格式转换,免费图片编辑'
-    }
-  },
-  {
-    path: '/ocr',
-    name: 'ocr',
-    component: OcrView,
-    meta: {
-      title: 'Forxi - 图片OCR',
-      description: '免费在线图片文字识别工具，支持中文、英文等多种语言识别，纯前端处理，保护隐私。',
-      keywords: '图片OCR,文字识别,图片转文字,在线OCR,中文识别'
-    }
-  },
-  {
-    path: '/ai',
-    name: 'ai',
-    component: AIView,
-    meta: {
-      title: 'Forxi - AI 趣玩',
-      description: '免费在线 AI 工具，支持文生图、图生图、AI 智能对话，让创意轻松落地。',
-      keywords: 'AI趣玩,文生图,图生图,AI绘画,AI对话,AI创作,免费AI工具'
-    }
-  },
-  {
-    path: '/it-tools',
-    name: 'it-tools',
-    component: ItToolsView,
-    meta: {
-      title: 'Forxi - IT 工具箱',
-      description: '开发者常用工具集合，包含 Base64 编解码、JSON 格式化、UUID 生成、颜色转换、正则测试、时间戳转换等实用工具。',
-      keywords: 'IT工具箱,开发工具,Base64编码,JSON格式化,UUID生成,颜色转换,正则表达式,时间戳转换,URL编码,MD5'
-    }
-  },
-  {
-    path: '/jetbra',
-    name: 'jetbrains',
-    component: JetbrainsView,
-    meta: {
-      title: 'Forxi - JetBrains 激活',
-      description: 'JetBrains 系列 IDE 激活服务，支持 IntelliJ IDEA、PyCharm、WebStorm、GoLand 等。',
-      keywords: 'JetBrains激活,IntelliJ IDEA,PyCharm,WebStorm,GoLand,Rider,CLion,IDE激活'
-    }
-  },
-  {
-    path: '/articles',
-    name: 'articles',
-    component: ArticlesView,
-    meta: {
-      title: 'Forxi - 文章',
-      description: '技术文章、随笔杂谈、经验总结，涵盖前端开发、后端技术、DevOps 等领域。',
-      keywords: '技术文章,随笔,经验总结,前端,后端,DevOps'
-    }
-  },
-  {
-    path: '/articles/:category/:id',
-    name: 'article-detail',
-    component: ArticlesView,
-    meta: {
-      title: 'Forxi - 文章',
-      description: '技术文章、随笔杂谈、经验总结，涵盖前端开发、后端技术、DevOps 等领域。',
-      keywords: '技术文章,随笔,经验总结,前端,后端,DevOps'
-    }
-  },
-  {
     path: '/privacy',
     name: 'privacy',
     component: PrivacyView,
@@ -173,6 +99,156 @@ const routes = [
       title: 'Forxi - 服务条款',
       description: 'Forxi 服务条款，规定了用户使用本服务的权利和义务。',
       keywords: 'Forxi,服务条款,用户协议'
+    }
+  },
+  {
+    path: '/hub/',
+    name: 'hub',
+    component: HubView,
+    meta: {
+      title: 'Forxi - 百宝箱',
+      description: '百宝箱精选工具集合，包含文件预览、图片处理、图片OCR、IT工具箱等实用工具。',
+      keywords: '百宝箱,工具箱,文件预览,图片处理,OCR'
+    }
+  },
+  {
+    path: '/hub/file-preview',
+    name: 'file-preview',
+    component: FilePreviewView,
+    meta: {
+      title: 'Forxi - 百宝箱 - 文件预览',
+      description: '免费在线预览 PDF、Word、Excel、PPT、图片、视频等多种文件格式，无需下载，打开即览。',
+      keywords: '在线文件预览,PDF预览,Word预览,Excel预览,PPT预览,图片预览,免费文件预览'
+    }
+  },
+  {
+    path: '/hub/image-processing',
+    name: 'image-processing',
+    component: ImageProcessingView,
+    meta: {
+      title: 'Forxi - 百宝箱 - 图片处理',
+      description: '免费在线图片处理，支持压缩、裁剪、旋转、加水印、调滤镜、格式转换，纯本地处理保护隐私。',
+      keywords: '在线图片处理,图片压缩,图片裁剪,图片旋转,图片水印,图片格式转换,免费图片编辑'
+    }
+  },
+  {
+    path: '/hub/ocr',
+    name: 'ocr',
+    component: OcrView,
+    meta: {
+      title: 'Forxi - 百宝箱 - 图片OCR',
+      description: '免费在线图片文字识别工具，支持中文、英文等多种语言识别，纯前端处理，保护隐私。',
+      keywords: '图片OCR,文字识别,图片转文字,在线OCR,中文识别'
+    }
+  },
+  {
+    path: '/hub/it-tools',
+    name: 'it-tools',
+    component: ItToolsView,
+    meta: {
+      title: 'Forxi - 百宝箱 - IT 工具箱',
+      description: '开发者常用工具集合，包含 Base64 编解码、JSON 格式化、UUID 生成、颜色转换、正则测试、时间戳转换等实用工具。',
+      keywords: 'IT工具箱,开发工具,Base64编码,JSON格式化,UUID生成,颜色转换,正则表达式,时间戳转换,URL编码,MD5'
+    }
+  },
+  {
+    path: '/ai/',
+    name: 'ai',
+    component: AIView,
+    meta: {
+      title: 'Forxi - AI 趣玩',
+      description: '免费在线 AI 工具，支持文生图、图生图、AI 智能对话，让创意轻松落地。',
+      keywords: 'AI趣玩,文生图,图生图,AI绘画,AI对话,AI创作,免费AI工具'
+    }
+  },
+  {
+    path: '/ai/chat',
+    name: 'chat',
+    component: ChatView,
+    meta: {
+      title: 'Forxi - AI 趣玩 - 聊一聊',
+      description: '与 AI 智能对话，解答问题、编写代码、创作文案。',
+      keywords: 'AI对话,AI聊天,智能助手'
+    }
+  },
+  {
+    path: '/ai/text2image',
+    name: 'text2image',
+    component: Text2ImageView,
+    meta: {
+      title: 'Forxi - AI 趣玩 - 文生图',
+      description: '输入文字描述，AI 为你生成精美图片。',
+      keywords: '文生图,AI绘画,AI生成图片'
+    }
+  },
+  {
+    path: '/ai/image2image',
+    name: 'image2image',
+    component: Image2ImageView,
+    meta: {
+      title: 'Forxi - AI 趣玩 - 图生图',
+      description: '上传图片并描述变化，AI 帮你改造图片。',
+      keywords: '图生图,AI改图,AI图片处理'
+    }
+  },
+  {
+    path: '/idea/',
+    name: 'idea',
+    component: IdeaView,
+    meta: {
+      title: 'Forxi - 内容集',
+      description: '探索内容集，发现更多精彩内容。',
+      keywords: '内容集,文章,探索'
+    }
+  },
+  {
+    path: '/idea/articles/',
+    name: 'articles',
+    component: ArticlesView,
+    meta: {
+      title: 'Forxi - 内容集 - 文章',
+      description: '技术文章、随笔杂谈、经验总结，涵盖前端开发、后端技术、DevOps 等领域。',
+      keywords: '技术文章,随笔,经验总结,前端,后端,DevOps'
+    }
+  },
+  {
+    path: '/idea/articles/:category/',
+    name: 'articles-category',
+    component: ArticlesView,
+    meta: {
+      title: 'Forxi - 内容集 - 文章',
+      description: '技术文章、随笔杂谈、经验总结，涵盖前端开发、后端技术、DevOps 等领域。',
+      keywords: '技术文章,随笔,经验总结,前端,后端,DevOps'
+    }
+  },
+  {
+    path: '/idea/articles/:category/:id',
+    name: 'article-detail',
+    component: ArticlesView,
+    meta: {
+      title: 'Forxi - 内容集 - 文章',
+      description: '技术文章、随笔杂谈、经验总结，涵盖前端开发、后端技术、DevOps 等领域。',
+      keywords: '技术文章,随笔,经验总结,前端,后端,DevOps'
+    }
+  },
+  {
+    path: '/explore/',
+    name: 'explore',
+    component: ExploreView,
+    meta: {
+      title: 'Forxi - 探索',
+      description: '探索开发者资源，JetBrains IDE 激活等精选工具。',
+      keywords: '探索,JetBrains,开发者资源'
+    }
+  },
+  {
+    path: '/explore/jetbra',
+    name: 'jetbrains',
+    component: JetbrainsView,
+    meta: {
+      title: 'Forxi - 探索 - JetBrains 激活',
+      description: 'JetBrains 系列 IDE 激活服务，支持 IntelliJ IDEA、PyCharm、WebStorm、GoLand 等。',
+      keywords: 'JetBrains激活,IntelliJ IDEA,PyCharm,WebStorm,GoLand,Rider,CLion,IDE激活'
     }
   },
   {

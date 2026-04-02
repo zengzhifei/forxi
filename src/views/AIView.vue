@@ -3,626 +3,222 @@
     <AppHeader />
 
     <main class="flex-1">
-      <div class="max-w-7xl mx-auto py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col lg:flex-row gap-6">
-          <div class="w-full lg:w-64 flex-shrink-0">
-            <div class="bg-white rounded-2xl shadow-sm border border-zinc-100 p-2 lg:p-4 sticky top-16 lg:top-20 z-10">
-              <h3 class="hidden lg:block text-lg font-bold text-zinc-700 mb-4 px-3">AI趣玩</h3>
-              <div class="flex lg:flex-col gap-1 lg:space-y-1 overflow-x-auto lg:overflow-visible">
-                <span class="lg:hidden flex-shrink-0 text-sm font-bold text-zinc-400 px-3 py-2 self-center">AI</span>
-                <button
-                  v-for="item in menuItems"
-                  :key="item.id"
-                  @click="activeMenu = item.id"
-                  class="flex-shrink-0 text-left px-4 py-2 lg:py-3 rounded-xl text-sm font-medium transition-all duration-200 flex items-center gap-2 whitespace-nowrap"
-                  :class="activeMenu === item.id ? 'bg-zinc-100 text-zinc-700 shadow-sm' : 'text-zinc-500 hover:bg-zinc-50'"
-                >
-                  <span v-html="item.icon" class="w-4 h-4 lg:w-5 lg:h-5 flex-shrink-0"></span>
-                  <span>{{ item.name }}</span>
-                </button>
+      <!-- Hero Section -->
+      <section class="relative overflow-hidden bg-white border-b border-zinc-100">
+        <div class="absolute inset-0" style="background: linear-gradient(135deg, #f5f3ff 0%, #ffffff 40%, #ede9fe 100%);"></div>
+        <div class="relative max-w-5xl mx-auto px-5 sm:px-6 lg:px-8 py-10 sm:py-24 text-center">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-violet-50 text-violet-600 text-xs font-medium rounded-full mb-4 sm:mb-6">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+            免费使用，无需注册
+          </div>
+          <h1 class="text-3xl sm:text-5xl font-bold text-zinc-800 mb-3 sm:mb-5 tracking-tight">AI 趣玩</h1>
+          <p class="text-zinc-400 text-sm sm:text-lg max-w-2xl mx-auto leading-relaxed">释放创意，与 AI 一起探索无限可能。从智能对话到图片生成，让你的想法瞬间变为现实。</p>
+        </div>
+      </section>
+
+      <!-- Feature Sections -->
+      <section class="max-w-5xl mx-auto px-5 sm:px-6 lg:px-8 py-8 sm:py-16 space-y-8 sm:space-y-20">
+
+        <!-- 聊一聊 -->
+        <div class="flex flex-col md:flex-row items-start gap-4 md:gap-10">
+          <div class="w-full md:w-1/3 flex-shrink-0">
+            <!-- Mobile: compact -->
+            <div class="flex md:hidden items-center gap-3 p-3.5 bg-blue-50 rounded-xl">
+              <div class="w-9 h-9 rounded-lg bg-blue-100 text-blue-500 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
               </div>
+              <span class="font-semibold text-zinc-700 text-sm flex-1">聊一聊</span>
+              <router-link to="/ai/chat" class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-500 text-white text-xs font-medium rounded-lg whitespace-nowrap">
+                开始对话
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </router-link>
+            </div>
+            <!-- Desktop: full card -->
+            <div class="hidden md:flex bg-blue-50 rounded-2xl p-8 flex-col items-center text-center">
+              <div class="w-14 h-14 rounded-xl bg-blue-100 text-blue-500 flex items-center justify-center mb-4">
+                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+              </div>
+              <h3 class="text-lg font-semibold text-zinc-700 mb-2">聊一聊</h3>
+              <router-link to="/ai/chat" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors">
+                开始对话
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </router-link>
             </div>
           </div>
-
-          <div class="flex-1 min-w-0">
-            <Text2Image 
-              v-if="activeMenu === 'text2image'"
-              v-model:prompt="prompt"
-              v-model:negativePrompt="negativePrompt"
-              v-model:selectedModel="selectedModel"
-              v-model:size="size"
-              :models="models"
-              :generating="generating"
-              :generatedImage="generatedImage"
-              :error="error"
-              :progress="progress"
-              @generate="generateImage"
-              @download="downloadImage"
-              @regenerate="generateNewSamePrompt"
-            />
-
-            <Image2Image 
-              v-if="activeMenu === 'image2image'"
-              v-model:prompt="prompt"
-              v-model:negativePrompt="negativePrompt"
-              v-model:selectedModel="selectedModel"
-              v-model:size="size"
-              v-model:inputImageFile="inputImageFile"
-              v-model:previewInputImage="previewInputImage"
-              v-model:isDragging="isDragging"
-              :models="models"
-              :generating="generating"
-              :generatedImage="generatedImage"
-              :error="error"
-              :progress="progress"
-              @generate="generateImage"
-              @download="downloadImage"
-              @regenerate="generateNewSamePrompt"
-              @fileChange="handleFileChange"
-              @fileInputRef="(el) => fileInput = el"
-              @drop="handleDrop"
-              @clickUpload="fileInput?.click()"
-              @clearImage="clearInputImage"
-            />
-
-            <div v-if="activeMenu === 'chat'" class="space-y-6">
-              <Chat 
-                v-model:model="chatModel"
-                v-model:input="chatInput"
-                :models="models"
-                :messages="chatMessages"
-                :loading="chatLoading"
-                @send="sendChatMessage"
-                @clearChat="clearChat"
-                @resend="resendMessage"
-                ref="chatComponentRef"
-              />
+          <div class="flex-1">
+            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">与 AI 智能对话</h3>
+            <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">与 AI 进行自然语言对话，获取各类问题的解答和创意灵感。无论是知识问答、文案创作、代码编写还是头脑风暴，AI 都能为你提供高质量的回复。</p>
+            <div class="space-y-2 text-sm text-zinc-500">
+              <h4 class="font-medium text-zinc-600 mb-2">使用说明</h4>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">1</span>
+                <span>在对话框中输入你的问题或需求描述</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">2</span>
+                <span>AI 将实时生成回复，支持 Markdown 格式的富文本内容</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">3</span>
+                <span>可以持续追问，AI 会根据上下文给出连贯的回复</span>
+              </div>
+            </div>
+            <div class="mt-3 sm:mt-4 flex flex-wrap gap-2">
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">知识问答</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">文案创作</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">代码辅助</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">Markdown 渲染</span>
             </div>
           </div>
         </div>
-      </div>
-    </main>
 
-    <button
-      v-if="activeMenu !== 'chat'"
-      @click="scrollToTop"
-      class="fixed bottom-8 right-8 w-12 h-12 bg-zinc-500 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 hover:bg-zinc-600 z-50"
-      :class="{ 'opacity-100': showBackToTop, 'opacity-0 pointer-events-none': !showBackToTop }"
-    >
-      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
-      </svg>
-    </button>
+        <div class="h-px bg-zinc-200"></div>
+
+        <!-- 文生图 -->
+        <div class="flex flex-col md:flex-row-reverse items-start gap-4 md:gap-10">
+          <div class="w-full md:w-1/3 flex-shrink-0">
+            <!-- Mobile: compact -->
+            <div class="flex md:hidden items-center gap-3 p-3.5 bg-violet-50 rounded-xl">
+              <div class="w-9 h-9 rounded-lg bg-violet-100 text-violet-500 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+              </div>
+              <span class="font-semibold text-zinc-700 text-sm flex-1">文生图</span>
+              <router-link to="/ai/text2image" class="inline-flex items-center gap-1 px-3 py-1.5 bg-violet-500 text-white text-xs font-medium rounded-lg whitespace-nowrap">
+                开始创作
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </router-link>
+            </div>
+            <!-- Desktop: full card -->
+            <div class="hidden md:flex bg-violet-50 rounded-2xl p-8 flex-col items-center text-center">
+              <div class="w-14 h-14 rounded-xl bg-violet-100 text-violet-500 flex items-center justify-center mb-4">
+                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+              </div>
+              <h3 class="text-lg font-semibold text-zinc-700 mb-2">文生图</h3>
+              <router-link to="/ai/text2image" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-violet-500 text-white text-sm font-medium rounded-lg hover:bg-violet-600 transition-colors">
+                开始创作
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </router-link>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">用文字描绘画面</h3>
+            <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">输入一段文字描述，AI 将根据你的描述生成精美的图片。支持各种风格，从写实摄影到动漫插画，从水彩画到油画，满足你的多样化创作需求。</p>
+            <div class="space-y-2 text-sm text-zinc-500">
+              <h4 class="font-medium text-zinc-600 mb-2">使用说明</h4>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">1</span>
+                <span>在输入框中描述你想要的图片内容，越详细效果越好</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">2</span>
+                <span>可以选择图片尺寸和风格偏好</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">3</span>
+                <span>点击生成后等待片刻，即可获得 AI 创作的图片并下载保存</span>
+              </div>
+            </div>
+            <div class="mt-3 sm:mt-4 flex flex-wrap gap-2">
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">写实摄影</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">动漫插画</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">多种尺寸</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">高清下载</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="h-px bg-zinc-200"></div>
+
+        <!-- 图生图 -->
+        <div class="flex flex-col md:flex-row items-start gap-4 md:gap-10">
+          <div class="w-full md:w-1/3 flex-shrink-0">
+            <!-- Mobile: compact -->
+            <div class="flex md:hidden items-center gap-3 p-3.5 bg-emerald-50 rounded-xl">
+              <div class="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-500 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+              </div>
+              <span class="font-semibold text-zinc-700 text-sm flex-1">图生图</span>
+              <router-link to="/ai/image2image" class="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-500 text-white text-xs font-medium rounded-lg whitespace-nowrap">
+                开始改造
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </router-link>
+            </div>
+            <!-- Desktop: full card -->
+            <div class="hidden md:flex bg-emerald-50 rounded-2xl p-8 flex-col items-center text-center">
+              <div class="w-14 h-14 rounded-xl bg-emerald-100 text-emerald-500 flex items-center justify-center mb-4">
+                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+              </div>
+              <h3 class="text-lg font-semibold text-zinc-700 mb-2">图生图</h3>
+              <router-link to="/ai/image2image" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-emerald-500 text-white text-sm font-medium rounded-lg hover:bg-emerald-600 transition-colors">
+                开始改造
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </router-link>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">以图改图，创造新视觉</h3>
+            <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">上传一张图片并描述你希望的变化，AI 会在保留原图结构的基础上进行创意改造。可用于风格转换、场景重绘、元素替换等多种图片编辑场景。</p>
+            <div class="space-y-2 text-sm text-zinc-500">
+              <h4 class="font-medium text-zinc-600 mb-2">使用说明</h4>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">1</span>
+                <span>上传你想要改造的原始图片</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">2</span>
+                <span>输入文字描述，告诉 AI 你想要的改变方向</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">3</span>
+                <span>生成后可对比原图与新图，满意即可下载</span>
+              </div>
+            </div>
+            <div class="mt-3 sm:mt-4 flex flex-wrap gap-2">
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">风格转换</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">场景重绘</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">元素替换</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">原图参考</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Bottom CTA -->
+      <section class="bg-white border-t border-zinc-100">
+        <div class="max-w-5xl mx-auto px-5 sm:px-6 lg:px-8 py-8 sm:py-16">
+          <div class="grid grid-cols-3 gap-4 sm:gap-8">
+            <div class="text-center">
+              <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+              </div>
+              <h3 class="text-xs sm:text-sm font-medium text-zinc-700 mb-1">即开即用</h3>
+              <p class="text-xs text-zinc-400 leading-relaxed hidden sm:block">无需安装或配置，打开浏览器就能使用</p>
+            </div>
+            <div class="text-center">
+              <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-emerald-50 text-emerald-500 flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" /></svg>
+              </div>
+              <h3 class="text-xs sm:text-sm font-medium text-zinc-700 mb-1">完全免费</h3>
+              <p class="text-xs text-zinc-400 leading-relaxed hidden sm:block">所有 AI 功能免费使用</p>
+            </div>
+            <div class="text-center">
+              <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-violet-50 text-violet-500 flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+              </div>
+              <h3 class="text-xs sm:text-sm font-medium text-zinc-700 mb-1">多端兼容</h3>
+              <p class="text-xs text-zinc-400 leading-relaxed hidden sm:block">手机、平板、电脑均可流畅使用</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
 
     <AppFooter />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, inject, watch } from 'vue'
-import { api } from '@/utils/api'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
-import { Text2Image, Image2Image, Chat } from '../modules/ai'
-
-const toast = inject('toast')
-
-const menuItems = [
-  { 
-    id: 'chat', 
-    name: '聊一聊', 
-    icon: '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>'
-  },
-  { 
-    id: 'text2image', 
-    name: '文生图', 
-    icon: '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>'
-  },
-  { 
-    id: 'image2image', 
-    name: '图生图', 
-    icon: '<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>'
-  }
-]
-
-const activeMenu = ref('chat')
-const prompt = ref('')
-const negativePrompt = ref('')
-const selectedModel = ref('')
-const size = ref('1024x1024')
-const inputImageFile = ref(null)
-const previewInputImage = ref('')
-const isDragging = ref(false)
-const fileInput = ref(null)
-const generating = ref(false)
-const generatedImage = ref(null)
-const error = ref(null)
-const taskId = ref(null)
-const taskStatus = ref('')
-const progress = ref(0)
-const showBackToTop = ref(false)
-
-const chatMessages = ref([])
-const chatInput = ref('')
-const chatLoading = ref(false)
-const chatModel = ref('')
-const chatSummary = ref('')
-const chatRoundCount = ref(0)
-const chatComponentRef = ref(null)
-
-let pollTimer = null
-const models = ref([])
-
-const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
-
-const handleScroll = () => {
-  showBackToTop.value = window.scrollY > 300
-}
-
-const resendMessage = async (content) => {
-  chatInput.value = content
-  if (chatComponentRef.value?.inputRef) {
-    chatComponentRef.value.inputRef.focus()
-  }
-}
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-  const hash = window.location.hash.slice(1)
-  const initialMenu = hash && menuItems.some(item => item.id === hash) ? hash : 'chat'
-  activeMenu.value = initialMenu
-  loadModelsForMenu(initialMenu)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
-
-const loadModelsForMenu = (menu) => {
-  const taskMap = {
-    'chat': 'text-generation',
-    'text2image': 'text-to-image-synthesis',
-    'image2image': 'image-to-image'
-  }
-  const task = taskMap[menu]
-  if (!task) return
-  
-  api.getAiModels(task).then(data => {
-    models.value = data.models || []
-    if (models.value.length > 0) {
-      if (menu === 'chat') {
-        chatModel.value = models.value[0].id
-      } else {
-        selectedModel.value = models.value[0].id
-      }
-    }
-  }).catch(err => {
-    console.error('获取模型列表失败:', err)
-  })
-}
-
-watch(activeMenu, (newVal, oldVal) => {
-  if (!oldVal) return
-  
-  window.location.hash = newVal
-  generatedImage.value = null
-  error.value = null
-  prompt.value = ''
-  negativePrompt.value = ''
-  selectedModel.value = ''
-  size.value = '1024x1024'
-  previewInputImage.value = ''
-  inputImageFile.value = null
-  cancelGeneration(false)
-  
-  if (newVal === 'chat') {
-    clearChat()
-  }
-  
-  loadModelsForMenu(newVal)
-})
-
-const sendChatMessage = async () => {
-  if (!chatModel.value) {
-    toast.error('请先选择模型')
-    return
-  }
-  if (!chatInput.value.trim() || chatLoading.value) return
-  
-  const userMessage = chatInput.value.trim()
-  chatInput.value = ''
-  
-  chatMessages.value.push({ role: 'user', content: userMessage })
-  chatMessages.value.push({ role: 'assistant', content: '' })
-  
-  chatLoading.value = true
-  chatRoundCount.value++
-  
-  const systemPrompt = `
-你是一个 AI 技术助理。
-- 回答问题时使用简明、专业的中文
-- 输出示例代码时使用 Markdown 代码块，并指定语言
-- 如果回答涉及列表，保证每一项单独占一行
-- 不要在 JSON 或代码块里加入解释文字
-- 如果无法准确回答，说明原因，不要编造内容
-`
-  
-  let messages = []
-  if (chatSummary.value) {
-    const recentMessages = chatMessages.value.slice(-chatRoundCount.value * 2).slice(0, -1)
-    messages = [
-      { role: 'system', content: systemPrompt },
-      { role: 'system', content: `历史对话摘要：${chatSummary.value}` },
-      ...recentMessages.map(m => ({ role: m.role, content: m.content }))
-    ]
-  } else {
-    const prevMessages = chatMessages.value.slice(0, -1)
-    messages = [
-      { role: 'system', content: systemPrompt },
-      ...prevMessages.map(m => ({ role: m.role, content: m.content }))
-    ]
-  }
-  
-  try {
-    const response = await api.chat({
-      model: chatModel.value,
-      messages
-    })
-
-    if (!response.ok) {
-      const data = await response.json();
-      chatMessages.value[chatMessages.value.length - 1].content = data.message || '请求失败'
-      chatLoading.value = false
-      return
-    }
-    
-    const reader = response.body.getReader()
-    const decoder = new TextDecoder()
-    let buffer = ''
-    let currentEvent = ''
-    let dataLines = []
-    let isDone = false
-
-    while (!isDone) {
-      const { done, value } = await reader.read()
-      if (done) break
-
-      buffer += decoder.decode(value, { stream: true })
-      const lines = buffer.split('\n')
-      buffer = lines.pop() || ''
-
-      for (const line of lines) {
-        // 空行 = SSE 事件分派点
-        if (line.trim() === '') {
-          if (currentEvent === 'done') {
-            isDone = true
-            break
-          }
-          if (dataLines.length > 0 && currentEvent === 'message') {
-            // 同一事件内的多条 data: 行用 \n 拼接（SSE 规范）
-            const text = dataLines.join('\n')
-            chatMessages.value[chatMessages.value.length - 1].content += text
-          }
-          currentEvent = ''
-          dataLines = []
-          continue
-        }
-
-        if (line.startsWith('event:')) {
-          currentEvent = line.slice(6).trim()
-        } else if (line.startsWith('data:')) {
-          dataLines.push(line.slice(5))
-        }
-      }
-    }
-  } catch (err) {
-    chatMessages.value[chatMessages.value.length - 1].content = '抱歉，发生错误，请重试。'
-    console.error('聊天错误:', err)
-  } finally {
-    chatLoading.value = false
-    
-    if (chatRoundCount.value >= 15) {
-      let tempCurrentChatRound = chatRoundCount.value
-      chatRoundCount.value = 0
-      await summarizeChat(tempCurrentChatRound)
-    }
-  }
-}
-
-const summarizeChat = async (currentChatRound) => {
-  if (!chatModel.value) return
-  
-  const historyText = chatMessages.value
-    .slice(-currentChatRound * 2)
-    .filter(m => m.role !== 'system')
-    .map(m => `${m.role === 'user' ? '用户' : '助手'}: ${m.content}`)
-    .join('\n')
-  
-  const prompt = `你是一个对话摘要助手。
-任务：
-请总结用户和助手之间的历史对话。
-总结要求：
-1. 必须包含用户的目标和需求
-2. 必须包含助手(AI)已经给出的关键方案、结论
-3. 删除无关寒暄、重复解释和无价值内容
-4. 禁止编造对话中不存在的信息
-5. 保持客观、简洁
-6.后续对话遗忘本次总结对话摘要的请求记忆
-
-输出格式(必须严格按照以下结构):
-用户目标:
-关键需求:
-AI已提供方案:
-当前进展:
-未解决问题:
-
-以下是对话内容：\n${chatSummary.value ? '【上一次摘要】\n' + chatSummary.value + '\n【新对话】\n' : ''}${historyText}
-`
-
-  try {
-    const response = await api.chat({
-      model: chatModel.value,
-      messages: [
-        { role: 'system', content: '你是一个对话摘要助手。' },
-        { role: 'user', content: prompt }
-      ]
-    })
-    
-    if (response.status === 429) {
-      throw new Error('请求过于频繁，请稍后再试。')
-    }
-    if (!response.ok) {
-      throw new Error('请求失败')
-    }
-    
-    const reader = response.body.getReader()
-    const decoder = new TextDecoder()
-    let summary = ''
-    
-    while (true) {
-      const { done, value } = await reader.read()
-      if (done) break
-      
-      const text = decoder.decode(value)
-      const lines = text.split('\n')
-      
-      for (const line of lines) {
-        if (line.startsWith('event:')) continue
-        if (line.startsWith('data:')) {
-          const data = line.slice(5).trim()
-          if (data === '[DONE]' || !data) continue
-          try {
-            const parsed = JSON.parse(data)
-            summary += parsed.message || parsed.content || ''
-          } catch (e) {
-            summary += data
-          }
-        }
-      }
-    }
-    
-    chatSummary.value = summary.trim()
-  } catch (err) {
-    console.error('摘要生成失败:', err)
-  }
-}
-
-const clearChat = () => {
-  chatMessages.value = []
-  chatSummary.value = ''
-  chatRoundCount.value = 0
-}
-
-const generateImage = async () => {
-  if (!prompt.value.trim()) {
-    toast.error('请输入提示词')
-    return
-  }
-
-  if (!selectedModel.value) {
-    toast.error('请选择模型')
-    return
-  }
-
-  if (activeMenu.value === 'image2image' && !inputImageFile.value) {
-    toast.error('请上传图片')
-    return
-  }
-
-  generating.value = true
-  error.value = null
-  generatedImage.value = null
-  progress.value = 0
-  taskStatus.value = 'PROCESSING'
-
-  try {
-    let result
-    if (activeMenu.value === 'text2image') {
-      result = await api.text2image({
-        prompt: prompt.value,
-        model: selectedModel.value,
-        size: size.value,
-        negative_prompt: negativePrompt.value
-      })
-    } else {
-      result = await api.image2image({
-        prompt: prompt.value,
-        model: selectedModel.value,
-        file: inputImageFile.value,
-        negative_prompt: negativePrompt.value,
-        size: size.value
-      })
-    }
-
-    if (result.taskId) {
-      taskId.value = result.taskId
-      toast.info('任务已提交，开始生成...')
-      startPolling()
-      setTimeout(() => {
-        const resultSection = document.getElementById('result-section')
-        if (resultSection) {
-          resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        }
-      }, 100)
-    } else {
-      error.value = '任务提交失败'
-      toast.error('任务提交失败')
-      generating.value = false
-    }
-  } catch (err) {
-    error.value = err.message || '生成失败，请重试'
-    generating.value = false
-  }
-}
-
-const startPolling = () => {
-  if (pollTimer) clearInterval(pollTimer)
-  
-  progress.value = 1
-  
-  pollTimer = setInterval(async () => {
-    if (!taskId.value) {
-      clearInterval(pollTimer)
-      return
-    }
-
-    try {
-      const result = await api.queryTask(taskId.value)
-      if (result.task_status === 'SUCCEED') {
-        progress.value = 100
-        clearInterval(pollTimer)
-        if (result.output_images && result.output_images.length > 0) {
-          generatedImage.value = result.output_images[0]
-          toast.success('图片生成成功！')
-        } else {
-          error.value = '未生成图片'
-        }
-        generating.value = false
-      } else if (result.task_status === 'FAILED') {
-        clearInterval(pollTimer)
-        error.value = result.message || '生成失败'
-        toast.error(error.value)
-        generating.value = false
-      } else {
-        if (progress.value < 90) {
-          const randomIncrement = Math.floor(Math.random() * 4) + 3
-          progress.value = Math.min(progress.value + randomIncrement, 90)
-        } else if (progress.value < 99) {
-          const slowIncrement = Math.floor(Math.random() * 2) + 1
-          progress.value = Math.min(progress.value + slowIncrement, 99)
-        }
-      }
-    } catch (err) {
-      clearInterval(pollTimer)
-      error.value = err.message || '查询任务状态失败'
-      generating.value = false
-    }
-  }, 5000)
-}
-
-const cancelGeneration = (showToast = true) => {
-  if (pollTimer) {
-    clearInterval(pollTimer)
-    pollTimer = null
-  }
-  taskId.value = null
-  taskStatus.value = ''
-  progress.value = 0
-  generating.value = false
-  if (showToast) {
-    toast.info('已取消生成')
-  }
-}
-
-const generateNewSamePrompt = async () => {
-  await generateImage()
-}
-
-const handleFileChange = (event) => {
-  const file = event.target.files[0]
-  if (file) {
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('图片大小不能超过 5MB')
-      return
-    }
-    inputImageFile.value = file
-    previewInputImage.value = URL.createObjectURL(file)
-  }
-}
-
-const handleDrop = (event) => {
-  isDragging.value = false
-  const file = event.dataTransfer.files[0]
-  if (file && file.type.startsWith('image/')) {
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('图片大小不能超过 5MB')
-      return
-    }
-    inputImageFile.value = file
-    previewInputImage.value = URL.createObjectURL(file)
-  } else {
-    toast.error('请上传图片文件')
-  }
-}
-
-const clearInputImage = () => {
-  if (previewInputImage.value && previewInputImage.value.startsWith('blob:')) {
-    URL.revokeObjectURL(previewInputImage.value)
-  }
-  inputImageFile.value = null
-  previewInputImage.value = ''
-  if (fileInput.value) {
-    fileInput.value.value = ''
-  }
-}
-
-const downloadImage = async () => {
-  if (!generatedImage.value) return
-  
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-  const fileName = `ai-image-${Date.now()}.png`
-  
-  if (isMobile) {
-    try {
-      const response = await fetch(generatedImage.value)
-      const blob = await response.blob()
-      const blobUrl = window.URL.createObjectURL(blob)
-      
-      const link = document.createElement('a')
-      link.href = blobUrl
-      link.download = fileName
-      link.click()
-      
-      setTimeout(() => {
-        window.URL.revokeObjectURL(blobUrl)
-      }, 1000)
-    } catch (err) {
-      window.open(generatedImage.value, '_blank')
-    }
-  } else {
-    try {
-      const response = await fetch(generatedImage.value)
-      const blob = await response.blob()
-      const blobUrl = window.URL.createObjectURL(blob)
-      
-      const link = document.createElement('a')
-      link.href = blobUrl
-      link.download = fileName
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      window.URL.revokeObjectURL(blobUrl)
-    } catch (err) {
-      const link = document.createElement('a')
-      link.href = generatedImage.value
-      link.download = fileName
-      link.target = '_blank'
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-    }
-  }
-}
 </script>
