@@ -37,7 +37,14 @@
                 <div class="shape-svg-wrap">
                   <svg :viewBox="`0 0 ${shape.vw} ${shape.vh}`" width="40" :height="shape.vh / shape.vw * 40"
                     fill="none" stroke="#94a3b8" stroke-width="1.5">
-                    <path v-if="shape.svgPath" :d="shape.svgPath" fill="none" />
+                    <template v-if="shape.key === 'person'">
+                      <circle cx="20" cy="12" r="9" fill="none" />
+                      <line x1="20" y1="21" x2="20" y2="38" />
+                      <line x1="5" y1="25" x2="35" y2="25" />
+                      <line x1="20" y1="38" x2="8" y2="54" />
+                      <line x1="20" y1="38" x2="32" y2="54" />
+                    </template>
+                    <path v-else-if="shape.svgPath" :d="shape.svgPath" fill="none" />
                     <component v-else :is="shape.svgTag || 'rect'" v-bind="shape.svgAttrs" fill="none" />
                   </svg>
                 </div>
@@ -430,7 +437,7 @@ const allShapes = [
   { key:'cylinder',      type:'cylinder',     name:'圆柱',     width:80,  height:100, vw:40, vh:50, svgPath:'M2 10 Q20 2 38 10 L38 40 Q20 48 2 40 Z M2 10 Q20 18 38 10' },
   { key:'cross',         type:'cross',        name:'十字',     width:80,  height:80,  vw:50, vh:50, svgPath:'M20 2 L30 2 L30 20 L48 20 L48 30 L30 30 L30 48 L20 48 L20 30 L2 30 L2 20 L20 20 Z' },
   { key:'star',          type:'star',         name:'星形',     width:90,  height:90,  vw:50, vh:48, svgPath:'M25 2 L30 18 L48 18 L34 28 L39 46 L25 36 L11 46 L16 28 L2 18 L20 18 Z' },
-  { key:'person',        type:'person',       name:'人形',     width:70,  height:110, vw:40, vh:60, svgPath:'M20 8 A8 8 0 1 0 20.01 8 Z M8 28 Q10 18 20 18 Q30 18 32 28 L32 44 L26 44 L26 58 L14 58 L14 44 L8 44 Z' },
+  { key:'person',        type:'person',       name:'人形',     width:70,  height:110, vw:40, vh:60, svgPath:'M20 10 A8 8 0 1 0 20.01 10 Z M20 24 L20 44 M10 18 L30 18 M20 44 L12 60 M20 44 L28 60' },
 ]
 
 // 属性面板形状切换
@@ -620,27 +627,21 @@ const registerCustomNodes = (lfInstance) => {
             const d5 = pts5.map((p, i) => `${i===0?'M':'L'}${p[0]},${p[1]}`).join(' ') + ' Z'
             return hh('path', { d: d5, fill, stroke, strokeWidth })
           }
-          // 人形
+          // 人形（简化版）
           if (def.custom === 'person') {
             const headR = w * 0.22
-            const hx = x, hy = y - ht/2 + headR + 2
-            const shoulderY = hy + headR + 2
-            const bodyH = ht * 0.35
-            const legY = shoulderY + bodyH
+            const headCy = y - ht/2 + headR + 6
+            const neckY = headCy + headR
+            const bodyBottom = y + ht/2 - 12
+            const shoulderY = neckY + (bodyBottom - neckY) * 0.35
+            const armY = shoulderY - 12
+            const hipY = shoulderY + 12
             return hh('g', {}, [
-              hh('circle', { cx: hx, cy: hy, r: headR, fill, stroke, strokeWidth }),
-              hh('path', {
-                d: `M${x-w*0.38},${legY+ht*0.3} L${x-w*0.18},${legY} L${hx},${shoulderY+bodyH*0.3} L${x+w*0.18},${legY} L${x+w*0.38},${legY+ht*0.3}`,
-                fill: 'none', stroke, strokeWidth,
-              }),
-              hh('path', {
-                d: `M${x-w*0.42},${shoulderY+bodyH*0.4} Q${hx},${shoulderY} ${x+w*0.42},${shoulderY+bodyH*0.4}`,
-                fill: 'none', stroke, strokeWidth,
-              }),
-              hh('path', {
-                d: `M${x-w*0.18},${shoulderY} L${x-w*0.18},${legY} L${x+w*0.18},${legY} L${x+w*0.18},${shoulderY}`,
-                fill, stroke, strokeWidth,
-              }),
+              hh('circle', { cx: x, cy: headCy, r: headR, fill, stroke, strokeWidth }),
+              hh('line', { x1: x, y1: neckY, x2: x, y2: hipY, stroke, 'stroke-width': strokeWidth }),
+              hh('line', { x1: x - w*0.38, y1: armY, x2: x + w*0.38, y2: armY, stroke, 'stroke-width': strokeWidth }),
+              hh('line', { x1: x, y1: hipY, x2: x - w*0.3, y2: bodyBottom, stroke, 'stroke-width': strokeWidth }),
+              hh('line', { x1: x, y1: hipY, x2: x + w*0.3, y2: bodyBottom, stroke, 'stroke-width': strokeWidth }),
             ])
           }
           // 圆角矩形
@@ -1294,8 +1295,8 @@ onUnmounted(() => {
 }
 .shape-card:hover { background: #f0f9ff; border-color: #93c5fd; transform: translateY(-1px); box-shadow: 0 3px 10px rgba(59,130,246,.1); }
 .shape-card:active { cursor: grabbing; transform: scale(.97); box-shadow: none; }
-.shape-svg-wrap { width: 40px; height: 32px; display: flex; align-items: center; justify-content: center; }
-.shape-card-name { font-size: 10.5px; color: #64748b; font-weight: 500; }
+.shape-svg-wrap { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
+.shape-card-name { font-size: 10.5px; color: #64748b; font-weight: 500; margin-top: 2px; }
 
 /* 线型选项 */
 .edge-type-list { display: flex; flex-direction: column; gap: 5px; }
