@@ -297,6 +297,61 @@
           </div>
         </div>
 
+        <div class="h-px bg-zinc-200"></div>
+
+        <!-- 文件转换 -->
+        <div class="flex flex-col md:flex-row-reverse items-start gap-4 md:gap-10">
+          <div class="w-full md:w-1/3 flex-shrink-0">
+            <!-- Mobile: compact -->
+            <div class="flex md:hidden items-center gap-3 p-3.5 bg-pink-50 rounded-xl">
+              <div class="w-9 h-9 rounded-lg bg-pink-100 text-pink-500 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+              </div>
+              <span class="font-semibold text-zinc-700 text-sm flex-1">文件转换</span>
+              <router-link to="/hub/file-converter#image2pdf" class="inline-flex items-center gap-1 px-3 py-1.5 bg-pink-500 text-white text-xs font-medium rounded-lg whitespace-nowrap">
+                立即使用
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </router-link>
+            </div>
+            <!-- Desktop: full card -->
+            <div class="hidden md:flex bg-pink-50 rounded-2xl p-8 flex-col items-center text-center">
+              <div class="w-14 h-14 rounded-xl bg-pink-100 text-pink-500 flex items-center justify-center mb-4">
+                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+              </div>
+              <h3 class="text-lg font-semibold text-zinc-700 mb-2">文件转换</h3>
+              <router-link to="/hub/file-converter#image2pdf" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-pink-500 text-white text-sm font-medium rounded-lg hover:bg-pink-600 transition-colors">
+                立即使用
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </router-link>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">多格式文件转换</h3>
+            <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">支持将图片、文本、Word、表格数据等多种格式转换为 PDF 文档。适合制作报告、归档资料等场景，无需安装软件，纯浏览器端处理。</p>
+            <div class="space-y-2 text-sm text-zinc-500">
+              <h4 class="font-medium text-zinc-600 mb-2">使用说明</h4>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">1</span>
+                <span>选择要转换的类型（图片、文本、Word 或表格）</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">2</span>
+                <span>上传文件或输入内容</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">3</span>
+                <span>点击预览下载按钮，预览并保存文件</span>
+              </div>
+            </div>
+            <div class="mt-3 sm:mt-4 flex flex-wrap gap-2">
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">图片转PDF</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">文本转PDF</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">Word转PDF</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">表格转PDF</span>
+            </div>
+          </div>
+        </div>
+
       </section>
 
       <!-- Highlights -->

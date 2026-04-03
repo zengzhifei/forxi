@@ -26,6 +26,7 @@ const ArticlesView = () => import('../views/ArticlesView.vue')
 const TermsView = () => import('../views/TermsView.vue')
 const PrivacyView = () => import('../views/PrivacyView.vue')
 const HubView = () => import('../views/HubView.vue')
+const FileConverterView = () => import('../views/FileConverterView.vue')
 const IdeaView = () => import('../views/IdeaView.vue')
 const ExploreView = () => import('../views/ExploreView.vue')
 
@@ -160,6 +161,16 @@ const routes = [
       title: 'Forxi - 百宝箱 - 流程工厂',
       description: '免费在线流程图制作工具，支持节点添加、连接、拖拽、删除、属性编辑，可导出 PNG、JPEG 图片格式。',
       keywords: '流程图,流程工厂,在线流程图,flowchart,流程制作'
+    }
+  },
+  {
+    path: '/hub/file-converter',
+    name: 'file-converter',
+    component: FileConverterView,
+    meta: {
+      title: 'Forxi - 百宝箱 - 文件转换',
+      description: '免费在线文件转换工具，支持图片、文本、Word、表格等多种格式转换为 PDF。',
+      keywords: '文件转换,PDF转换,图片转PDF,文本转PDF,Word转PDF,表格转PDF'
     }
   },
   {
