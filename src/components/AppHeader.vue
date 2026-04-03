@@ -44,8 +44,8 @@
             首页
           </router-link>
 
-          <!-- 百宝箱下拉 -->
-          <div class="relative" @mouseleave="toolboxOpen = false">
+          <!-- 百宝箱下拉 - 二级菜单 -->
+          <div class="relative" @mouseleave="closeAllToolbox">
             <router-link
               to="/hub/"
               class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
@@ -60,19 +60,49 @@
             <Transition name="dropdown">
               <div
                 v-if="toolboxOpen"
-                class="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-52 bg-white rounded-xl shadow-lg shadow-zinc-200/50 border border-zinc-100 py-2 z-50 overflow-hidden"
-                @mouseenter="toolboxOpen = true"
+                class="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-52 bg-white rounded-xl shadow-lg shadow-zinc-200/50 border border-zinc-100 py-2 z-50"
+                style="overflow: visible"
               >
-                <router-link
-                  v-for="item in toolboxItems"
-                  :key="item.path"
-                  :to="item.path"
-                  class="flex items-center gap-3 px-4 py-2.5 text-sm transition-all duration-150"
-                  :class="$route.path === item.path ? 'text-zinc-800 bg-zinc-50' : 'text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50'"
-                >
-                  <span class="flex-shrink-0 w-6 h-6 rounded-md bg-zinc-50 flex items-center justify-center" v-html="item.icon"></span>
-                  {{ item.name }}
-                </router-link>
+                <template v-for="item in toolboxFirstLevel" :key="item.name">
+                  <div
+                    v-if="item.children"
+                    class="group relative"
+                    @mouseenter="activeSubmenu = item.name"
+                    @mouseleave="activeSubmenu = null"
+                  >
+                    <div class="flex items-center justify-between px-4 py-2.5 text-sm text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50 cursor-pointer">
+                      <span class="flex items-center gap-3">
+                        <span class="flex-shrink-0 w-6 h-6 rounded-md bg-zinc-50 flex items-center justify-center" v-html="item.icon"></span>
+                        {{ item.name }}
+                      </span>
+                      <svg class="w-4 h-4 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </div>
+                    <div
+                      v-if="activeSubmenu === item.name"
+                      class="absolute left-full top-0 ml-0.5 w-48 bg-white rounded-xl shadow-lg shadow-zinc-200/50 border border-zinc-100 py-2 z-50"
+                      style="animation: submenuIn 0.15s ease"
+                    >
+                      <router-link
+                        v-for="child in item.children"
+                        :key="child.path"
+                        :to="child.path"
+                        class="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50"
+                      >
+                        <span class="flex-shrink-0 w-6 h-6 rounded-md bg-zinc-50 flex items-center justify-center" v-html="child.icon"></span>
+                        {{ child.name }}
+                      </router-link>
+                    </div>
+                  </div>
+                  <router-link
+                    v-else
+                    :to="item.path"
+                    class="flex items-center gap-3 px-4 py-2.5 text-sm transition-all duration-150"
+                    :class="$route.path === item.path ? 'text-zinc-800 bg-zinc-50' : 'text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50'"
+                  >
+                    <span class="flex-shrink-0 w-6 h-6 rounded-md bg-zinc-50 flex items-center justify-center" v-html="item.icon"></span>
+                    {{ item.name }}
+                  </router-link>
+                </template>
               </div>
             </Transition>
           </div>
@@ -239,19 +269,32 @@
                 <svg class="w-3 h-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
               </router-link>
             </div>
-            <div class="px-3 pb-2">
+
+            <template v-for="item in toolboxFirstLevel" :key="item.name">
+              <template v-if="item.children">
+                <router-link
+                  v-for="child in item.children"
+                  :key="child.path"
+                  :to="child.path"
+                  @click="menuOpen = false"
+                  class="flex items-center gap-2.5 pl-6 pr-3 py-2 rounded-lg text-sm transition-colors"
+                  :class="$route.path === child.path ? 'bg-zinc-100 text-zinc-700 font-medium' : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-600'"
+                >
+                  <span class="flex-shrink-0 w-4 h-4 flex items-center justify-center opacity-70" v-html="child.icon"></span>
+                  {{ child.name }}
+                </router-link>
+              </template>
               <router-link
-                v-for="item in toolboxItems"
-                :key="item.path"
+                v-else
                 :to="item.path"
                 @click="menuOpen = false"
-                class="flex items-center gap-2.5 pl-8 pr-3 py-2 rounded-lg text-sm transition-colors"
+                class="flex items-center gap-2.5 pl-6 pr-3 py-2 rounded-lg text-sm transition-colors"
                 :class="$route.path === item.path ? 'bg-zinc-100 text-zinc-700 font-medium' : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-600'"
               >
                 <span class="flex-shrink-0 w-4 h-4 flex items-center justify-center opacity-70" v-html="item.icon"></span>
                 {{ item.name }}
               </router-link>
-            </div>
+            </template>
           </div>
 
           <!-- AI 趣玩分组 -->
@@ -355,21 +398,38 @@ import UserMenu from './UserMenu.vue'
 const { isMobile } = useBreakpoint()
 const route = useRoute()
 
-const toolboxItems = [
+const toolboxFirstLevel = [
   {
-    name: '文件预览',
-    path: '/hub/file-preview',
-    icon: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>`
+    name: '文件工具',
+    icon: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>`,
+    children: [
+      {
+        name: '文件预览',
+        path: '/hub/file-preview',
+        icon: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>`
+      },
+      {
+        name: '文件转换',
+        path: '/hub/file-converter#image2pdf',
+        icon: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>`
+      }
+    ]
   },
   {
-    name: '图片处理',
-    path: '/hub/image-processing',
-    icon: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`
-  },
-  {
-    name: '图片OCR',
-    path: '/hub/ocr',
-    icon: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2zM9 4h6v6H9V4z"/></svg>`
+    name: '图片工具',
+    icon: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`,
+    children: [
+      {
+        name: '图片处理',
+        path: '/hub/image-processing',
+        icon: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`
+      },
+      {
+        name: '图片OCR',
+        path: '/hub/ocr',
+        icon: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2zM9 4h6v6H9V4z"/></svg>`
+      }
+    ]
   },
   {
     name: 'IT 工具箱',
@@ -380,13 +440,14 @@ const toolboxItems = [
     name: '流程工厂',
     path: '/hub/flow-factory',
     icon: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>`
-  },
-  {
-    name: '文件转换',
-    path: '/hub/file-converter#image2pdf',
-    icon: `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>`
-  },
+  }
 ]
+
+const activeSubmenu = ref(null)
+const closeAllToolbox = () => {
+  toolboxOpen.value = false
+  activeSubmenu.value = null
+}
 
 const isToolboxActive = computed(() =>
   route.path.startsWith('/hub')
@@ -478,5 +539,28 @@ function toggleMenu() {
 .dropdown-leave-to {
   opacity: 0;
   transform: translateX(-50%) translateY(-6px);
+}
+
+.submenu-enter-active {
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.submenu-leave-active {
+  transition: opacity 0.1s ease, transform 0.1s ease;
+}
+.submenu-enter-from,
+.submenu-leave-to {
+  opacity: 0;
+  transform: translateX(-8px);
+}
+
+@keyframes submenuIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 </style>
