@@ -1,10 +1,21 @@
 <template>
   <div class="ffc">
     <AppHeader />
-    <div class="ffc-body">
+    <div class="ffc-body" :class="{ 'is-mobile': isMobile }">
+
+      <!-- 移动端全屏提示 -->
+      <div v-if="isMobile" class="mobile-overlay">
+        <div class="mobile-content">
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+          <h2>请在电脑端使用</h2>
+          <p>流程工厂需要在较大屏幕上使用</p>
+        </div>
+      </div>
 
       <!-- ===== 左侧图形库 ===== -->
-      <aside class="ffc-sidebar">
+      <aside v-if="!isMobile" class="ffc-sidebar">
         <div class="panel-hd">
           <span class="panel-hd-title">图形库</span>
           <div class="panel-hd-tabs">
@@ -61,7 +72,7 @@
       </aside>
 
       <!-- ===== 中间画布 ===== -->
-      <div class="ffc-canvas-area">
+      <div v-if="!isMobile" class="ffc-canvas-area">
         <div class="toolbar">
           <!-- 缩放 -->
           <div class="toolbar-group">
@@ -129,7 +140,7 @@
       </div>
 
       <!-- ===== 右侧属性面板 ===== -->
-      <aside class="ffc-props">
+      <aside v-if="!isMobile" class="ffc-props">
 
         <!-- 多选批量属性 -->
         <template v-if="multiSelected">
@@ -139,14 +150,19 @@
           </div>
           <div class="props-body">
             <div class="ps">
-              <div class="ps-title">填充 & 边框</div>
-              <div class="pr"><label class="pl">填充色</label><color-row :value="batchFill" :list="fillColors" @change="onBatchFillChange"/></div>
-              <div class="pr"><label class="pl">边框色</label><color-row :value="batchStroke" :list="fillColors" @change="onBatchStrokeChange"/></div>
+              <div class="ps-title">填充</div>
+              <div class="pr"><label class="pl">颜色</label><color-row :value="batchFill" :list="fillColors" @change="onBatchFillChange"/></div>
+            </div>
+
+            <div class="ps">
+              <div class="ps-title">边框</div>
+              <div class="pr"><label class="pl">颜色</label><color-row :value="batchStroke" :list="fillColors" @change="onBatchStrokeChange"/></div>
               <div class="pr">
-                <label class="pl">边框宽</label>
+                <label class="pl">宽度</label>
                 <div class="pi-row"><input v-model.number="batchStrokeWidth" type="number" min="0" max="12" class="pi pi-sm" @change="applyBatch({ strokeWidth: batchStrokeWidth })"/><span class="pu">px</span></div>
               </div>
             </div>
+
             <div class="ps">
               <div class="action-group">
                 <button @click="alignSelectedH" class="abtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M8 12h8M4 18h16"/></svg>水平对齐</button>
@@ -166,11 +182,13 @@
           <div class="props-body">
 
             <div class="ps">
-              <div class="ps-title">内容</div>
-              <div class="pr">
-                <label class="pl">文本</label>
-                <input v-model="nodeText" type="text" class="pi" placeholder="节点文字" @change="updateNodeText" />
-              </div>
+              <div class="ps-title">填充</div>
+              <div class="pr"><label class="pl">颜色</label><color-row :value="nodeColor" :list="fillColors" @change="onNodeFillChange"/></div>
+            </div>
+
+            <div class="ps">
+              <div class="ps-title">文字</div>
+              <div class="pr"><label class="pl">颜色</label><color-row :value="nodeTextColor" :list="textColorList" @change="onNodeTextColorChange"/></div>
               <div class="pr">
                 <label class="pl">字号</label>
                 <div class="pi-row"><input v-model.number="nodeFontSize" type="number" min="8" max="72" class="pi pi-sm" @change="updateNodeStyle"/><span class="pu">px</span></div>
@@ -178,17 +196,23 @@
             </div>
 
             <div class="ps">
-              <div class="ps-title">填充 & 边框</div>
-              <div class="pr"><label class="pl">填充色</label><color-row :value="nodeColor" :list="fillColors" @change="onNodeFillChange"/></div>
-              <div class="pr"><label class="pl">文字色</label><color-row :value="nodeTextColor" :list="textColorList" @change="onNodeTextColorChange"/></div>
-              <div class="pr"><label class="pl">边框色</label><color-row :value="nodeBorderColor" :list="fillColors" @change="onNodeBorderColorChange"/></div>
+              <div class="ps-title">边框</div>
+              <div class="pr"><label class="pl">颜色</label><color-row :value="nodeBorderColor" :list="fillColors" @change="onNodeBorderColorChange"/></div>
               <div class="pr">
-                <label class="pl">边框宽</label>
+                <label class="pl">宽度</label>
                 <div class="pi-row"><input v-model.number="nodeBorderWidth" type="number" min="0" max="12" class="pi pi-sm" @change="updateNodeStyle"/><span class="pu">px</span></div>
               </div>
               <div class="pr">
                 <label class="pl">圆角</label>
                 <div class="pi-row"><input v-model.number="nodeRadius" type="number" min="0" max="60" class="pi pi-sm" @change="updateNodeStyle"/><span class="pu">px</span></div>
+              </div>
+            </div>
+
+            <div class="ps">
+              <div class="ps-title">内容</div>
+              <div class="pr">
+                <label class="pl">文本</label>
+                <input v-model="nodeText" type="text" class="pi" placeholder="节点文字" @change="updateNodeText" />
               </div>
             </div>
 
@@ -313,6 +337,8 @@
     </div>
 
     <input ref="fileInputRef" type="file" class="hidden-input" accept=".json" @change="onFileImport"/>
+
+    <AppFooter />
   </div>
 </template>
 
@@ -320,8 +346,10 @@
 import { ref, defineComponent, h, onMounted, onUnmounted } from 'vue'
 import LogicFlow from '@logicflow/core'
 import '@logicflow/core/es/style/index.css'
+import '@logicflow/extension/lib/style/index.css'
 import { SelectionSelect, Snapshot } from '@logicflow/extension'
 import AppHeader from '../components/AppHeader.vue'
+import AppFooter from '../components/AppFooter.vue'
 
 // 全局安装插件（只需执行一次）
 LogicFlow.use(SelectionSelect)
@@ -472,6 +500,7 @@ const hasNodes         = ref(false)
 const activeSidebarTab = ref('shapes')
 const activeBg         = ref('dot')
 const defaultEdgeType  = ref('polyline')
+const isMobile         = ref(false)
 
 let dragShape = null
 
@@ -682,7 +711,11 @@ const initLogicFlow = () => {
   bindEvents()
 
   // 开启框选（SelectionSelect 插件）
-  lf.value.extension?.selectionSelect?.openSelectionSelect()
+  // 先设置框选灵敏度，再开启框选
+  if (lf.value.extension?.selectionSelect) {
+    lf.value.extension.selectionSelect.setSelectionSense(false, true)
+    lf.value.extension.selectionSelect.openSelectionSelect()
+  }
 }
 
 const bindEvents = () => {
@@ -1187,16 +1220,33 @@ let ro = null
 let destroyed = false
 
 onMounted(() => {
+  // 检测移动端（屏幕宽度小于 768px）
+  isMobile.value = window.innerWidth < 768
+
+  // 监听窗口大小变化
+  window.addEventListener('resize', handleResize)
+
   ro = new ResizeObserver(() => {
     if (destroyed) return
+    // 移动端不初始化 LogicFlow
+    if (isMobile.value) return
     if (!lf.value && containerRef.value?.clientWidth > 0) initLogicFlow()
     else if (lf.value && containerRef.value) lf.value.resize(containerRef.value.clientWidth, containerRef.value.clientHeight)
   })
   containerRef.value && ro.observe(containerRef.value)
 })
 
+const handleResize = () => {
+  isMobile.value = window.innerWidth < 768
+  if (isMobile.value && lf.value) {
+    lf.value.destroy()
+    lf.value = null
+  }
+}
+
 onUnmounted(() => {
   destroyed = true
+  window.removeEventListener('resize', handleResize)
   ro?.disconnect()
   ro = null
   try { lf.value?.destroy() } catch {}
@@ -1213,18 +1263,20 @@ onUnmounted(() => {
   font-size: 13px; color: #1e293b;
 }
 .ffc-body { display: flex; flex: 1; overflow: hidden; min-height: 0; }
+.ffc-body.is-mobile { overflow: visible; position: relative; }
 
 /* ═══ 面板 Header ════════════════════════════════ */
 .panel-hd {
-  height: 44px; display: flex; align-items: center; gap: 8px;
-  padding: 0 14px; border-bottom: 1px solid #e2e8f0;
-  flex-shrink: 0; background: #fff;
+  height: 48px; display: flex; align-items: center; gap: 8px;
+  padding: 0 14px; border-bottom: 2px solid #e2e8f0;
+  flex-shrink: 0; background: linear-gradient(to bottom, #fff, #fafafa);
+  box-shadow: 0 1px 0 0 #f1f5f9;
 }
-.panel-hd-title { font-size: 12.5px; font-weight: 700; color: #374151; }
+.panel-hd-title { font-size: 13px; font-weight: 700; color: #1e293b; letter-spacing: .02em; }
 .panel-hd-tabs { display: flex; gap: 2px; margin-left: auto; background: #f1f5f9; border-radius: 6px; padding: 2px; }
 .hd-tab { padding: 3px 10px; font-size: 11.5px; font-weight: 500; color: #64748b; background: transparent; border: none; border-radius: 4px; cursor: pointer; transition: all .12s; }
 .hd-tab.active { background: #fff; color: #1e293b; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
-.badge { margin-left: auto; font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 20px; }
+.badge { margin-left: auto; font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 20px; }
 .badge-node  { background: #eff6ff; color: #3b82f6; }
 .badge-edge  { background: #fefce8; color: #b45309; }
 .badge-multi { background: #f0fdf4; color: #16a34a; }
@@ -1306,18 +1358,19 @@ onUnmounted(() => {
 .fade-enter-from,.fade-leave-to { opacity: 0; }
 
 /* ═══ 属性面板 ════════════════════════════════════ */
-.ffc-props { width: 252px; background: #fff; border-left: 1px solid #e2e8f0; display: flex; flex-direction: column; flex-shrink: 0; overflow: hidden; }
+.ffc-props { width: 272px; background: #fff; border-left: 1px solid #e2e8f0; display: flex; flex-direction: column; flex-shrink: 0; overflow: hidden; padding-right: 4px; box-sizing: border-box; }
 .props-body { flex: 1; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #e2e8f0 transparent; }
 
 /* 属性区块 */
-.ps { padding: 11px 14px; border-bottom: 1px solid #f1f5f9; }
-.ps-title { font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 9px; }
-.pr { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+.ps { padding: 12px 12px 14px; border-bottom: 1px solid #f1f5f9; margin-bottom: 4px; }
+.ps:last-child { border-bottom: none; margin-bottom: 0; }
+.ps-title { font-size: 11px; font-weight: 800; color: #1e293b; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid #e2e8f0; }
+.pr { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
 .pr:last-child { margin-bottom: 0; }
-.pl { width: 36px; flex-shrink: 0; font-size: 11.5px; color: #64748b; line-height: 28px; }
-.pi { flex: 1; padding: 5px 8px; font-size: 12.5px; border: 1px solid #e2e8f0; border-radius: 6px; outline: none; background: #fafafa; color: #1e293b; box-sizing: border-box; transition: border-color .12s, box-shadow .12s; min-width: 0; }
+.pl { width: 42px; flex-shrink: 0; font-size: 12px; color: #94a3b8; line-height: 30px; font-weight: 500; }
+.pi { flex: 1; padding: 6px 10px; font-size: 13px; border: 1px solid #e2e8f0; border-radius: 6px; outline: none; background: #fafafa; color: #1e293b; box-sizing: border-box; transition: border-color .12s, box-shadow .12s; min-width: 0; }
 .pi:focus { border-color: #93c5fd; background: #fff; box-shadow: 0 0 0 3px rgba(147,197,253,.15); }
-.pi-sm { width: 56px; flex: none; }
+.pi-sm { width: 64px; flex: none; padding: 6px 8px; }
 .pi-row { display: flex; align-items: center; gap: 5px; }
 .pu { font-size: 11px; color: #94a3b8; }
 .p2col { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -1373,4 +1426,41 @@ onUnmounted(() => {
 .canvas-box .lf-grid { display: none !important; }
 /* 对齐线 */
 .canvas-box .lf-snapline { stroke: #3b82f6 !important; stroke-width: 1px !important; opacity: .7; }
+
+/* 移动端全屏提示 */
+.mobile-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mobile-content {
+  text-align: center;
+  color: #374151;
+  max-width: 300px;
+  padding: 24px;
+}
+.mobile-content svg {
+  display: block;
+  margin: 0 auto 20px;
+  color: #64748b;
+}
+.mobile-content h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: #1f2937;
+}
+.mobile-content p {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
 </style>
