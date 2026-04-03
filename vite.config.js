@@ -41,7 +41,7 @@ export default defineConfig(({ mode }) => {
         staticDir: join(__dirname, 'dist'),
         routes: [
           '/',  '/privacy', '/terms',
-          '/hub/', '/hub/file-preview', '/hub/image-processing', '/hub/ocr', '/hub/it-tools', '/hub/file-converter',
+          '/hub/', '/hub/file-preview', '/hub/image-processing', '/hub/ocr', '/hub/it-tools', '/hub/file-converter', '/hub/flow-factory',
           '/ai/', '/ai/chat', '/ai/text2image', '/ai/image2image',
           '/idea/','/idea/articles',
           '/explore/', '/explore/jetbra',
