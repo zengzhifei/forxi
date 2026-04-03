@@ -194,6 +194,14 @@ const ToolsIcon = {
   }
 }
 
+const FlowIcon = {
+  render() {
+    return h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
+      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-width': '1.8', d: 'M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z' })
+    ])
+  }
+}
+
 const JetbrainsIcon = {
   render() {
     return h('svg', { xmlns: 'http://www.w3.org/2000/svg', width: '32', height: '32', fill: 'none', viewBox: '0 0 32 32' }, [
@@ -272,6 +280,32 @@ const tools = [
     iconActive: 'text-orange-600',
     buttonText: '执简驭繁',
     onClick: () => navigateTo('/hub/it-tools')
+  },
+  {
+    title: '文件转换',
+    description: '支持多种文件格式互转，简单好用高效',
+    icon: FileIcon,
+    bgDefault: 'bg-zinc-50',
+    bgHover: 'group-hover:bg-cyan-100',
+    bgActive: 'bg-cyan-100',
+    iconDefault: 'text-zinc-300',
+    iconHover: 'group-hover:text-cyan-600',
+    iconActive: 'text-cyan-600',
+    buttonText: '格式无忧',
+    onClick: () => navigateTo('/hub/file-converter')
+  },
+  {
+    title: '流程工厂',
+    description: '可视化流程图编辑器，支持拖拽、连线和批量编辑',
+    icon: FlowIcon,
+    bgDefault: 'bg-zinc-50',
+    bgHover: 'group-hover:bg-rose-100',
+    bgActive: 'bg-rose-100',
+    iconDefault: 'text-zinc-300',
+    iconHover: 'group-hover:text-rose-600',
+    iconActive: 'text-rose-600',
+    buttonText: '流程自如',
+    onClick: () => navigateTo('/hub/flow-factory')
   },
 ]
 
