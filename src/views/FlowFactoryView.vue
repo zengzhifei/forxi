@@ -95,11 +95,6 @@
             <button @click="redo" class="tbtn" title="重做 Ctrl+Y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 10h-10a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6"/></svg></button>
           </div>
           <div class="tbtn-sep"></div>
-          <!-- 布局 -->
-          <div class="toolbar-group">
-            <button @click="autoLayout" class="tbtn" title="自动布局 (Dagre)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5h16M4 12h10M4 19h7"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 15l-3 3 3 3"/></svg></button>
-          </div>
-          <div class="tbtn-sep"></div>
           <!-- 编辑 -->
           <div class="toolbar-group">
             <button @click="deleteSelected" :disabled="!selectedId && !multiSelected" class="tbtn tbtn-danger" title="删除 Delete">
@@ -153,24 +148,59 @@
         <template v-if="multiSelected">
           <div class="panel-hd">
             <span class="panel-hd-title">批量属性</span>
-            <span class="badge badge-multi">{{ selectedNodes.length }}节点</span>
+            <span class="badge badge-multi" v-if="selectedNodes.length && !selectedEdges.length">{{ selectedNodes.length }}节点</span>
+            <span class="badge badge-multi" v-else-if="selectedEdges.length && !selectedNodes.length">{{ selectedEdges.length }}连接线</span>
+            <span class="badge badge-multi" v-else>{{ selectedNodes.length }}节点{{ selectedEdges.length }}连接线</span>
           </div>
           <div class="props-body">
-            <div class="ps">
+            <div class="ps" v-if="selectedNodes.length">
               <div class="ps-title">填充</div>
               <div class="pr"><label class="pl">颜色</label><color-row :value="batchFill" :list="fillColors" @change="onBatchFillChange"/></div>
             </div>
 
-            <div class="ps">
+            <div class="ps" v-if="selectedNodes.length">
               <div class="ps-title">边框</div>
               <div class="pr"><label class="pl">颜色</label><color-row :value="batchStroke" :list="fillColors" @change="onBatchStrokeChange"/></div>
               <div class="pr">
                 <label class="pl">宽度</label>
-                <div class="pi-row"><input v-model.number="batchStrokeWidth" type="number" min="0" max="12" class="pi pi-sm" @change="applyBatch({ strokeWidth: batchStrokeWidth })"/><span class="pu">px</span></div>
+                <div class="pi-row"><input v-model.number="batchStrokeWidth" type="number" min="0" max="12" class="pi pi-sm" @change="onBatchStrokeWidthChange(batchStrokeWidth)"/><span class="pu">px</span></div>
               </div>
             </div>
 
-            <div class="ps">
+            <div class="ps" v-if="selectedNodes.length">
+              <div class="ps-title">内容</div>
+              <div class="pr">
+                <label class="pl">文本</label>
+                <input v-model="batchNodeText" type="text" class="pi" placeholder="节点文字" @change="onBatchNodeTextChange(batchNodeText)" />
+              </div>
+              <div class="pr"><label class="pl">文字颜色</label><color-row :value="batchNodeTextColor" :list="textColorList" @change="onBatchNodeTextColorChange"/></div>
+              <div class="pr">
+                <label class="pl">字号</label>
+                <div class="pi-row"><input v-model.number="batchNodeFontSize" type="number" min="8" max="72" class="pi pi-sm" @change="onBatchNodeFontSizeChange(batchNodeFontSize)"/><span class="pu">px</span></div>
+              </div>
+            </div>
+
+            <div class="ps" v-if="selectedEdges.length">
+              <div class="ps-title">线条</div>
+              <div class="pr"><label class="pl">颜色</label><color-row :value="batchEdgeColor" :list="fillColors" @change="onBatchEdgeColorChange"/></div>
+              <div class="pr">
+                <label class="pl">宽度</label>
+                <div class="pi-row"><input v-model.number="batchEdgeWidth" type="number" min="1" max="10" class="pi pi-sm" @change="onBatchEdgeWidthChange(batchEdgeWidth)"/><span class="pu">px</span></div>
+              </div>
+              <div class="pr">
+                <label class="pl">线型</label>
+                <div class="seg-ctrl">
+                  <button v-for="ls in lineStyles" :key="ls.value" class="seg-btn" :class="{ active: batchEdgeLineStyle === ls.value }"
+                    @click="batchEdgeLineStyle = ls.value; onBatchEdgeLineStyleChange(ls.value)" :title="ls.label">
+                    <svg width="32" height="10" viewBox="0 0 32 10">
+                      <line x1="2" y1="5" x2="30" y2="5" stroke="#6b7280" stroke-width="1.5" :stroke-dasharray="ls.dasharray"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="ps" v-if="selectedNodes.length">
               <div class="action-group">
                 <button @click="alignSelectedH" class="abtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M8 12h8M4 18h16"/></svg>水平对齐</button>
                 <button @click="alignSelectedV" class="abtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 4v16M12 8v8M18 4v16"/></svg>垂直对齐</button>
@@ -517,17 +547,26 @@ const selectedType = ref(null)
 // 多选状态
 const multiSelected  = ref(false)
 const selectedNodes  = ref([])  // 多选时节点 id 数组
+const selectedEdges  = ref([])  // 多选时连接线 id 数组
 
-// 批量属性
+// 批量属性 - 节点
 const batchFill        = ref('transparent')
-const batchStroke      = ref('#94a3b8')
+const batchStroke      = ref('#000000')
 const batchStrokeWidth = ref(1.5)
+const batchNodeText    = ref('')
+const batchNodeTextColor = ref('#374151')
+const batchNodeFontSize  = ref(14)
+
+// 批量属性 - 连接线
+const batchEdgeColor     = ref('#000000')
+const batchEdgeWidth     = ref(2)
+const batchEdgeLineStyle = ref('solid')
 
 // 节点属性
 const nodeText        = ref('')
 const nodeColor       = ref('transparent')
 const nodeTextColor   = ref('#374151')
-const nodeBorderColor = ref('#94a3b8')
+const nodeBorderColor = ref('#000000')
 const nodeBorderWidth = ref(1.5)
 const nodeFontSize    = ref(14)
 const nodeRadius      = ref(4)
@@ -539,7 +578,7 @@ const nodeHeight      = ref(60)
 
 // 连接线属性
 const edgeText      = ref('')
-const edgeColor     = ref('#94a3b8')
+const edgeColor     = ref('#000000')
 const edgeWidth     = ref(2)
 const edgeLineStyle = ref('solid')
 const edgeType      = ref('polyline')
@@ -691,12 +730,12 @@ const initLogicFlow = () => {
     history: true,
     edgeType: 'polyline',
     style: {
-      rect:     { fill: 'transparent', stroke: '#94a3b8', strokeWidth: 1.5, radius: 4 },
-      circle:   { fill: 'transparent', stroke: '#94a3b8', strokeWidth: 1.5 },
-      diamond:  { fill: 'transparent', stroke: '#94a3b8', strokeWidth: 1.5 },
-      ellipse:  { fill: 'transparent', stroke: '#94a3b8', strokeWidth: 1.5 },
+      rect:     { fill: 'transparent', stroke: '#000000', strokeWidth: 1.5, radius: 4 },
+      circle:   { fill: 'transparent', stroke: '#000000', strokeWidth: 1.5 },
+      diamond:  { fill: 'transparent', stroke: '#000000', strokeWidth: 1.5 },
+      ellipse:  { fill: 'transparent', stroke: '#000000', strokeWidth: 1.5 },
       text:     { color: '#374151', fontSize: 14 },
-      baseEdge: { stroke: '#94a3b8', strokeWidth: 2 },
+      baseEdge: { stroke: '#000000', strokeWidth: 2 },
       edgeText: {
         color: '#64748b', fontSize: 12,
         background: { fill: '#fff', stroke: '#e2e8f0', height: 20, radius: 4 },
@@ -754,22 +793,60 @@ const bindEvents = () => {
   lf.value.on('selection:selected', () => {
     if (destroyed) return
     const selectedNodeModels = lf.value.graphModel.nodes.filter(n => n.isSelected)
-    if (selectedNodeModels.length > 1) {
+    const selectedEdgeModels = lf.value.graphModel.edges.filter(e => e.isSelected)
+    
+    if (selectedNodeModels.length > 1 && selectedEdgeModels.length === 0) {
       multiSelected.value = true
       selectedNodes.value = selectedNodeModels.map(n => n.id)
+      selectedEdges.value = []
       selectedId.value = null
       selectedType.value = null
       const s = selectedNodeModels[0].getProperties()?.style || {}
       batchFill.value        = s.fill        || 'transparent'
-      batchStroke.value      = s.stroke      || '#94a3b8'
+      batchStroke.value      = s.stroke      || '#000000'
       batchStrokeWidth.value = s.strokeWidth ?? 1.5
-    } else if (selectedNodeModels.length === 1) {
+    } else if (selectedEdgeModels.length > 1 && selectedNodeModels.length === 0) {
+      multiSelected.value = true
+      selectedNodes.value = []
+      selectedEdges.value = selectedEdgeModels.map(e => e.id)
+      selectedId.value = null
+      selectedType.value = null
+      const s = selectedEdgeModels[0].style || {}
+      batchEdgeColor.value     = s.stroke      || '#000000'
+      batchEdgeWidth.value     = s.strokeWidth ?? 2
+      batchEdgeLineStyle.value = s.strokeDasharray ? (s.strokeDasharray === 'none' ? 'solid' : (s.strokeDasharray.includes('6') ? 'dashed' : 'dotted')) : 'solid'
+    } else if (selectedNodeModels.length === 1 && selectedEdgeModels.length === 0) {
       multiSelected.value = false
       selectedNodes.value = []
+      selectedEdges.value = []
       selectNode(selectedNodeModels[0].getData())
-    } else {
+    } else if (selectedEdgeModels.length === 1 && selectedNodeModels.length === 0) {
       multiSelected.value = false
       selectedNodes.value = []
+      selectedEdges.value = []
+      selectEdge(selectedEdgeModels[0].getData())
+    } else if ((selectedNodeModels.length > 0 || selectedEdgeModels.length > 0)) {
+      multiSelected.value = true
+      selectedNodes.value = selectedNodeModels.map(n => n.id)
+      selectedEdges.value = selectedEdgeModels.map(e => e.id)
+      selectedId.value = null
+      selectedType.value = null
+      if (selectedNodeModels.length > 0) {
+        const s = selectedNodeModels[0].getProperties()?.style || {}
+        batchFill.value        = s.fill        || 'transparent'
+        batchStroke.value      = s.stroke      || '#000000'
+        batchStrokeWidth.value = s.strokeWidth ?? 1.5
+        const text = selectedNodeModels[0].getText?.() || selectedNodeModels[0].data?.text || ''
+        batchNodeText.value    = typeof text === 'string' ? text : (text?.value || '')
+        batchNodeTextColor.value = selectedNodeModels[0].data?.properties?.textStyle?.color || '#374151'
+        batchNodeFontSize.value  = selectedNodeModels[0].data?.properties?.textStyle?.fontSize || 14
+      }
+      if (selectedEdgeModels.length > 0) {
+        const s = selectedEdgeModels[0].style || {}
+        batchEdgeColor.value     = s.stroke      || '#000000'
+        batchEdgeWidth.value     = s.strokeWidth ?? 2
+        batchEdgeLineStyle.value = s.strokeDasharray ? (s.strokeDasharray === 'none' ? 'solid' : (s.strokeDasharray.includes('6') ? 'dashed' : 'dotted')) : 'solid'
+      }
     }
   })
 }
@@ -812,7 +889,7 @@ const selectNode = (data) => {
   nodeHeight.value    = data.height || 60
   const s = data.properties?.style || {}
   nodeColor.value       = s.fill        || 'transparent'
-  nodeBorderColor.value = s.stroke      || '#94a3b8'
+  nodeBorderColor.value = s.stroke      || '#000000'
   nodeBorderWidth.value = s.strokeWidth ?? 1.5
   nodeRadius.value      = s.radius      ?? 4
   nodeTextColor.value   = data.properties?.textStyle?.color    || '#374151'
@@ -824,7 +901,7 @@ const selectEdge = (data) => {
   selectedType.value = 'edge'
   edgeText.value     = getTextFromData(data)
   const s = data.properties?.edgeStyle || {}
-  edgeColor.value     = s.stroke      || '#94a3b8'
+  edgeColor.value     = s.stroke      || '#000000'
   edgeWidth.value     = s.strokeWidth ?? 2
   edgeLineStyle.value = s.lineStyle   || 'solid'
   edgeType.value      = data.type     || 'polyline'
@@ -851,7 +928,7 @@ const doAddNode = (shape, x, y) => {
     x, y,
     text: shape.name,
     properties: {
-      style: { fill: 'transparent', stroke: '#94a3b8', strokeWidth: 1.5, radius: shape.type === 'rect' ? 4 : 0 },
+      style: { fill: 'transparent', stroke: '#000000', strokeWidth: 1.5, radius: shape.type === 'rect' ? 4 : 0 },
     },
   }
   const node = lf.value.addNode(nodeConfig)
@@ -957,6 +1034,43 @@ const applyBatch = (styleOverrides) => {
 const onBatchFillChange   = (c) => { batchFill.value   = c; applyBatch({ fill: c }) }
 const onBatchStrokeChange = (c) => { batchStroke.value = c; applyBatch({ stroke: c }) }
 
+const onBatchStrokeWidthChange = (w) => {
+  batchStrokeWidth.value = w
+  applyBatch({ strokeWidth: w })
+}
+
+const onBatchNodeTextChange = (text) => {
+  batchNodeText.value = text
+  if (!lf.value) return
+  selectedNodes.value.forEach(id => {
+    const m = lf.value.getNodeModelById(id)
+    if (!m) return
+    m.setText(text)
+  })
+}
+
+const onBatchNodeTextColorChange = (c) => {
+  batchNodeTextColor.value = c
+  if (!lf.value) return
+  selectedNodes.value.forEach(id => {
+    const m = lf.value.getNodeModelById(id)
+    if (!m) return
+    const curr = m.getProperties()
+    m.setProperties({ ...curr, textStyle: { ...(curr.textStyle || {}), color: c } })
+  })
+}
+
+const onBatchNodeFontSizeChange = (size) => {
+  batchNodeFontSize.value = size
+  if (!lf.value) return
+  selectedNodes.value.forEach(id => {
+    const m = lf.value.getNodeModelById(id)
+    if (!m) return
+    const curr = m.getProperties()
+    m.setProperties({ ...curr, textStyle: { ...(curr.textStyle || {}), fontSize: size } })
+  })
+}
+
 const alignSelectedH = () => {
   if (!lf.value || !selectedNodes.value.length) return
   const models = selectedNodes.value.map(id => lf.value.getNodeModelById(id)).filter(Boolean)
@@ -976,9 +1090,29 @@ const alignSelectedV = () => {
 const deleteSelectedMulti = () => {
   if (!lf.value) return
   selectedNodes.value.forEach(id => { try { lf.value.deleteNode(id) } catch {} })
+  selectedEdges.value.forEach(id => { try { lf.value.deleteEdge(id) } catch {} })
   multiSelected.value = false
   selectedNodes.value = []
+  selectedEdges.value = []
   syncHasNodes()
+}
+
+const applyBatchEdge = (styleOverrides) => {
+  if (!lf.value) return
+  selectedEdges.value.forEach(id => {
+    const m = lf.value.getEdgeModelById(id)
+    if (!m) return
+    const s = { ...m.style, ...styleOverrides }
+    m.setStyles(s)
+    m.setProperty('edgeStyle', { ...s, lineStyle: batchEdgeLineStyle.value })
+  })
+}
+
+const onBatchEdgeColorChange     = (c) => { batchEdgeColor.value     = c; applyBatchEdge({ stroke: c }) }
+const onBatchEdgeWidthChange     = (w) => { batchEdgeWidth.value     = w; applyBatchEdge({ strokeWidth: w }) }
+const onBatchEdgeLineStyleChange = (ls) => { 
+  batchEdgeLineStyle.value = ls
+  applyBatchEdge({ strokeDasharray: dashArr(ls) })
 }
 
 // ─── 连接线操作 ────────────────────────────────────
@@ -1089,96 +1223,6 @@ const deleteSelected = () => {
 // 背景切换：纯 CSS class 控制，LF 内置 grid SVG 已通过全局 CSS 隐藏
 const switchBg = (key) => {
   activeBg.value = key
-}
-
-// ─── 自动布局 (Dagre) ─────────────────────────────
-
-const autoLayout = async () => {
-  if (!lf.value) return
-  const data = lf.value.getGraphData()
-  if (!data.nodes?.length) return
-
-  // 动态引入 dagre-d3-es
-  // dagre-d3-es/src/index.js 导出 { graphlib, render, intersect }
-  // dagre-d3-es/src/dagre/index.js 导出 { layout }
-  try {
-    const { graphlib } = await import('dagre-d3-es/src/index.js')
-    const { layout }   = await import('dagre-d3-es/src/dagre/index.js')
-    const g = new graphlib.Graph()
-    g.setDefaultEdgeLabel(() => ({}))
-    g.setGraph({ rankdir: 'TB', nodesep: 60, ranksep: 80, marginx: 40, marginy: 40 })
-
-    data.nodes.forEach(n => {
-      const m = lf.value.getNodeModelById(n.id)
-      g.setNode(n.id, { width: m?.width || 120, height: m?.height || 60 })
-    })
-    data.edges?.forEach(e => {
-      if (e.sourceNodeId && e.targetNodeId) {
-        try { g.setEdge(e.sourceNodeId, e.targetNodeId) } catch {}
-      }
-    })
-
-    layout(g)
-
-    g.nodes().forEach(id => {
-      const pos = g.node(id)
-      if (pos) lf.value.getNodeModelById(id)?.moveTo(pos.x, pos.y)
-    })
-    setTimeout(() => fitView(), 80)
-    return
-  } catch (e) {
-    console.warn('Dagre layout failed, fallback to topo:', e)
-  }
-
-  // Fallback: 拓扑层次布局
-  const container = containerRef.value
-  const W = container?.clientWidth  || 800
-  const H = container?.clientHeight || 600
-  const padX = 80, padY = 80
-
-  const map = {}
-  data.nodes.forEach(n => { map[n.id] = { id: n.id, outs: [], ins: 0 } })
-  data.edges?.forEach(e => {
-    if (map[e.sourceNodeId] && map[e.targetNodeId]) {
-      map[e.sourceNodeId].outs.push(e.targetNodeId)
-      map[e.targetNodeId].ins++
-    }
-  })
-
-  const levels = []
-  let queue = Object.values(map).filter(n => n.ins === 0).map(n => n.id)
-  const placed = new Set()
-
-  while (queue.length) {
-    levels.push([...queue])
-    queue.forEach(id => placed.add(id))
-    const next = []
-    queue.forEach(id => {
-      map[id]?.outs.forEach(cid => {
-        if (!placed.has(cid)) {
-          map[cid].ins--
-          if (map[cid].ins === 0) next.push(cid)
-        }
-      })
-    })
-    queue = next
-  }
-
-  const unplaced = data.nodes.filter(n => !placed.has(n.id)).map(n => n.id)
-  if (unplaced.length) levels.push(unplaced)
-
-  if (levels.length > 0) {
-    const hGap = Math.min(200, (W - padX * 2) / Math.max(1, Math.max(...levels.map(l => l.length))))
-    const vGap = Math.min(150, (H - padY * 2) / Math.max(1, levels.length))
-    levels.forEach((ids, li) => {
-      const rowW = (ids.length - 1) * hGap
-      const startX = W / 2 - rowW / 2
-      ids.forEach((id, i) => {
-        lf.value.getNodeModelById(id)?.moveTo(startX + i * hGap, padY + li * vGap)
-      })
-    })
-  }
-  setTimeout(() => fitView(), 80)
 }
 
 // ─── 导入导出 ──────────────────────────────────────
