@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-white shadow-sm relative">
+  <header class="bg-white relative">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- 移动端：左侧菜单 + 中间Logo + 右侧用户菜单 -->
       <div v-if="isMobile" class="flex justify-between h-16 items-center">
@@ -24,7 +24,7 @@
       </div>
 
       <!-- PC端 -->
-      <div v-else class="flex justify-between h-16 items-center">
+      <div v-else class="flex justify-between h-14 items-center">
         <!-- Logo -->
         <div class="flex items-center">
           <router-link to="/" class="flex items-center">
@@ -34,25 +34,25 @@
         </div>
 
         <!-- PC端菜单 -->
-        <nav class="flex-1 flex justify-center space-x-2 items-center">
+        <nav class="flex-1 flex justify-center items-center gap-4">
           <!-- 首页 -->
           <router-link
             to="/"
-            class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+            class="inline-flex items-center px-5 py-2 rounded-lg text-xs font-medium transition-all duration-200"
             :class="$route.path === '/' ? 'bg-zinc-100 text-zinc-800' : 'text-gray-500 hover:bg-zinc-50 hover:text-gray-700'"
           >
             首页
           </router-link>
 
-          <!-- 百宝箱下拉 - 二级菜单 -->
+          <!-- 应用下拉 - 二级菜单 -->
           <div class="relative" @mouseleave="closeAllToolbox">
             <router-link
               to="/hub/"
-              class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+              class="inline-flex items-center px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200"
               :class="isToolboxActive ? 'bg-zinc-100 text-zinc-800' : 'text-gray-500 hover:bg-zinc-50 hover:text-gray-700'"
               @mouseenter="toolboxOpen = true"
             >
-              百宝箱
+              应用
             </router-link>
 
             <div v-show="toolboxOpen" class="absolute top-full left-1/2 -translate-x-1/2 w-48 h-2" @mouseenter="toolboxOpen = true"></div>
@@ -107,15 +107,14 @@
             </Transition>
           </div>
 
-          <!-- AI 趣玩下拉 -->
           <div class="relative" @mouseleave="aiOpen = false">
             <router-link
               to="/ai/"
-              class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+              class="inline-flex items-center px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200"
               :class="isAiActive ? 'bg-zinc-100 text-zinc-800' : 'text-gray-500 hover:bg-zinc-50 hover:text-gray-700'"
               @mouseenter="aiOpen = true"
             >
-              AI 趣玩
+              AI
             </router-link>
 
             <div v-show="aiOpen" class="absolute top-full left-1/2 -translate-x-1/2 w-48 h-2" @mouseenter="aiOpen = true"></div>
@@ -140,15 +139,15 @@
             </Transition>
           </div>
 
-          <!-- 内容集下拉 -->
+          <!-- 创意下拉 -->
           <div class="relative" @mouseleave="contentOpen = false">
             <router-link
               to="/idea/"
-              class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+              class="inline-flex items-center px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200"
               :class="isContentActive ? 'bg-zinc-100 text-zinc-800' : 'text-gray-500 hover:bg-zinc-50 hover:text-gray-700'"
               @mouseenter="contentOpen = true"
             >
-              内容集
+              创意
             </router-link>
 
             <div v-show="contentOpen" class="absolute top-full left-1/2 -translate-x-1/2 w-48 h-2" @mouseenter="contentOpen = true"></div>
@@ -177,7 +176,7 @@
           <div class="relative" @mouseleave="exploreOpen = false">
             <router-link
               to="/explore/"
-              class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+              class="inline-flex items-center px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200"
               :class="isExploreActive ? 'bg-zinc-100 text-zinc-800' : 'text-gray-500 hover:bg-zinc-50 hover:text-gray-700'"
               @mouseenter="exploreOpen = true"
             >
@@ -255,7 +254,7 @@
             </router-link>
           </div>
 
-          <!-- 百宝箱分组 -->
+          <!-- 应用分组 -->
           <div class="mt-2">
             <div class="mx-3 h-px bg-zinc-100"></div>
             <div class="px-3 pt-3 pb-1">
@@ -265,7 +264,7 @@
                 class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-colors"
                 :class="$route.path === '/hub/' ? 'text-zinc-800' : 'text-zinc-500 hover:text-zinc-800'"
               >
-                百宝箱
+                应用
                 <svg class="w-3 h-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
               </router-link>
             </div>
@@ -297,7 +296,7 @@
             </template>
           </div>
 
-          <!-- AI 趣玩分组 -->
+          <!-- AI分组 -->
           <div class="mt-1">
             <div class="mx-3 h-px bg-zinc-100"></div>
             <div class="px-3 pt-3 pb-1">
@@ -307,7 +306,7 @@
                 class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-colors"
                 :class="$route.path === '/ai/' ? 'text-zinc-800' : 'text-zinc-500 hover:text-zinc-800'"
               >
-                AI 趣玩
+                AI
                 <svg class="w-3 h-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
               </router-link>
             </div>
@@ -326,7 +325,7 @@
             </div>
           </div>
 
-          <!-- 内容集分组 -->
+          <!-- 创意分组 -->
           <div class="mt-1">
             <div class="mx-3 h-px bg-zinc-100"></div>
             <div class="px-3 pt-3 pb-1">
@@ -336,7 +335,7 @@
                 class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-colors"
                 :class="$route.path === '/idea/' ? 'text-zinc-800' : 'text-zinc-500 hover:text-zinc-800'"
               >
-                内容集
+                创意
                 <svg class="w-3 h-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
               </router-link>
             </div>

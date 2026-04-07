@@ -1,11 +1,9 @@
 <template>
-  <div class="min-h-screen bg-[#fafafa] text-zinc-600 font-sans flex flex-col">
+  <div class="min-h-screen bg-gray-100 text-zinc-600 font-sans flex flex-col">
     <AppHeader />
 
-    <section class="relative min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center overflow-hidden bg-white">
-      <div class="absolute inset-0" style="background: linear-gradient(135deg, #f5f5f7 0%, #ffffff 50%, #fafafa 100%);">
-        <div class="absolute inset-0" style="background-image: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.9) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(245,245,250,0.7) 0%, transparent 50%);"></div>
-      </div>
+    <section class="relative min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center overflow-hidden bg-zinc-100">
+      <div class="absolute inset-0 bg-zinc-100"></div>
 
       <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
 
@@ -385,17 +383,17 @@ const contentTools = [
 
 const categories = [
   {
-    label: '百宝箱', en: 'hub', path: '/hub/', tools,
+    label: '应用', en: 'hub', path: '/hub/', tools,
     accentStyle: 'background: linear-gradient(180deg, #93c5fd 0%, #3b82f6 100%)',
     subStyle: 'color: #93c5fd',
   },
   {
-    label: 'AI 趣玩', en: 'ai', path: '/ai/', tools: aiTools,
+    label: 'AI', en: 'ai', path: '/ai/', tools: aiTools,
     accentStyle: 'background: linear-gradient(180deg, #c4b5fd 0%, #8b5cf6 100%)',
     subStyle: 'color: #c4b5fd',
   },
   {
-    label: '内容集', en: 'Idea', path: '/idea/', tools: contentTools,
+    label: '创意', en: 'Idea', path: '/idea/', tools: contentTools,
     accentStyle: 'background: linear-gradient(180deg, #6ee7b7 0%, #10b981 100%)',
     subStyle: 'color: #6ee7b7',
   },

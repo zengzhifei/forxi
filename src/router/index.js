@@ -108,9 +108,9 @@ const routes = [
     name: 'hub',
     component: HubView,
     meta: {
-      title: 'Forxi - 百宝箱',
-      description: '百宝箱精选工具集合，包含文件预览、图片处理、图片OCR、IT工具箱等实用工具。',
-      keywords: '百宝箱,工具箱,文件预览,图片处理,OCR'
+      title: 'Forxi - 应用',
+      description: '应用精选工具集合，包含文件预览、图片处理、图片OCR、IT工具箱等实用工具。',
+      keywords: '应用,工具箱,文件预览,图片处理,OCR'
     }
   },
   {
@@ -118,7 +118,7 @@ const routes = [
     name: 'file-preview',
     component: FilePreviewView,
     meta: {
-      title: 'Forxi - 百宝箱 - 文件预览',
+      title: 'Forxi - 应用 - 文件预览',
       description: '免费在线预览 PDF、Word、Excel、PPT、图片、视频等多种文件格式，无需下载，打开即览。',
       keywords: '在线文件预览,PDF预览,Word预览,Excel预览,PPT预览,图片预览,免费文件预览'
     }
@@ -128,7 +128,7 @@ const routes = [
     name: 'image-processing',
     component: ImageProcessingView,
     meta: {
-      title: 'Forxi - 百宝箱 - 图片处理',
+      title: 'Forxi - 应用 - 图片处理',
       description: '免费在线图片处理，支持压缩、裁剪、旋转、加水印、调滤镜、格式转换，纯本地处理保护隐私。',
       keywords: '在线图片处理,图片压缩,图片裁剪,图片旋转,图片水印,图片格式转换,免费图片编辑'
     }
@@ -138,7 +138,7 @@ const routes = [
     name: 'ocr',
     component: OcrView,
     meta: {
-      title: 'Forxi - 百宝箱 - 图片OCR',
+      title: 'Forxi - 应用 - 图片OCR',
       description: '免费在线图片文字识别工具，支持中文、英文等多种语言识别，纯前端处理，保护隐私。',
       keywords: '图片OCR,文字识别,图片转文字,在线OCR,中文识别'
     }
@@ -148,7 +148,7 @@ const routes = [
     name: 'it-tools',
     component: ItToolsView,
     meta: {
-      title: 'Forxi - 百宝箱 - IT 工具箱',
+      title: 'Forxi - 应用 - IT 工具箱',
       description: '开发者常用工具集合，包含 Base64 编解码、JSON 格式化、UUID 生成、颜色转换、正则测试、时间戳转换等实用工具。',
       keywords: 'IT工具箱,开发工具,Base64编码,JSON格式化,UUID生成,颜色转换,正则表达式,时间戳转换,URL编码,MD5'
     }
@@ -158,7 +158,7 @@ const routes = [
     name: 'flow-factory',
     component: FlowFactoryView,
     meta: {
-      title: 'Forxi - 百宝箱 - 流程工厂',
+      title: 'Forxi - 应用 - 流程工厂',
       description: '免费在线流程图制作工具，支持节点添加、连接、拖拽、删除、属性编辑，可导出 PNG、JPEG 图片格式。',
       keywords: '流程图,流程工厂,在线流程图,flowchart,流程制作'
     }
@@ -168,7 +168,7 @@ const routes = [
     name: 'file-converter',
     component: FileConverterView,
     meta: {
-      title: 'Forxi - 百宝箱 - 文件转换',
+      title: 'Forxi - 应用 - 文件转换',
       description: '免费在线文件转换工具，支持图片、文本、Word、表格等多种格式转换为 PDF。',
       keywords: '文件转换,PDF转换,图片转PDF,文本转PDF,Word转PDF,表格转PDF'
     }
@@ -178,9 +178,9 @@ const routes = [
     name: 'ai',
     component: AIView,
     meta: {
-      title: 'Forxi - AI 趣玩',
+      title: 'Forxi - AI',
       description: '免费在线 AI 工具，支持文生图、图生图、AI 智能对话，让创意轻松落地。',
-      keywords: 'AI趣玩,文生图,图生图,AI绘画,AI对话,AI创作,免费AI工具'
+      keywords: 'AI,文生图,图生图,AI绘画,AI对话,AI创作,免费AI工具'
     }
   },
   {
@@ -188,7 +188,7 @@ const routes = [
     name: 'chat',
     component: ChatView,
     meta: {
-      title: 'Forxi - AI 趣玩 - 聊一聊',
+      title: 'Forxi - AI - 聊一聊',
       description: '与 AI 智能对话，解答问题、编写代码、创作文案。',
       keywords: 'AI对话,AI聊天,智能助手'
     }
@@ -198,7 +198,7 @@ const routes = [
     name: 'text2image',
     component: Text2ImageView,
     meta: {
-      title: 'Forxi - AI 趣玩 - 文生图',
+      title: 'Forxi - AI - 文生图',
       description: '输入文字描述，AI 为你生成精美图片。',
       keywords: '文生图,AI绘画,AI生成图片'
     }
@@ -208,7 +208,7 @@ const routes = [
     name: 'image2image',
     component: Image2ImageView,
     meta: {
-      title: 'Forxi - AI 趣玩 - 图生图',
+      title: 'Forxi - AI - 图生图',
       description: '上传图片并描述变化，AI 帮你改造图片。',
       keywords: '图生图,AI改图,AI图片处理'
     }
@@ -218,9 +218,9 @@ const routes = [
     name: 'idea',
     component: IdeaView,
     meta: {
-      title: 'Forxi - 内容集',
-      description: '探索内容集，发现更多精彩内容。',
-      keywords: '内容集,文章,探索'
+      title: 'Forxi - 创意',
+      description: '探索创意空间，发现更多精彩内容。',
+      keywords: '创意,文章,探索'
     }
   },
   {
@@ -228,7 +228,7 @@ const routes = [
     name: 'articles',
     component: ArticlesView,
     meta: {
-      title: 'Forxi - 内容集 - 文章',
+      title: 'Forxi - 创意 - 文章',
       description: '技术文章、随笔杂谈、经验总结，涵盖前端开发、后端技术、DevOps 等领域。',
       keywords: '技术文章,随笔,经验总结,前端,后端,DevOps'
     }
@@ -238,7 +238,7 @@ const routes = [
     name: 'articles-category',
     component: ArticlesView,
     meta: {
-      title: 'Forxi - 内容集 - 文章',
+      title: 'Forxi - 创意 - 文章',
       description: '技术文章、随笔杂谈、经验总结，涵盖前端开发、后端技术、DevOps 等领域。',
       keywords: '技术文章,随笔,经验总结,前端,后端,DevOps'
     }
@@ -248,7 +248,7 @@ const routes = [
     name: 'article-detail',
     component: ArticlesView,
     meta: {
-      title: 'Forxi - 内容集 - 文章',
+      title: 'Forxi - 创意 - 文章',
       description: '技术文章、随笔杂谈、经验总结，涵盖前端开发、后端技术、DevOps 等领域。',
       keywords: '技术文章,随笔,经验总结,前端,后端,DevOps'
     }

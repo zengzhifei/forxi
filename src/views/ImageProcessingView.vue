@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#fafafa] text-zinc-600 font-sans flex flex-col">
+  <div class="min-h-screen bg-gray-100 text-zinc-600 font-sans flex flex-col">
     <AppHeader />
 
     <main class="flex-1">

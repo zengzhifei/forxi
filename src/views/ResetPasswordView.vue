@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex bg-[#fafafa]">
+  <div class="min-h-screen flex bg-gray-100">
     <!-- 左侧装饰区 -->
     <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden" :style="{ height: '100vh', position: 'fixed', left: 0, top: 0, background: 'linear-gradient(135deg, #f5f5f7 0%, #ffffff 50%, #fafafa 100%)' }">
       <div class="absolute inset-0">

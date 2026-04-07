@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#fafafa]">
+  <div class="min-h-screen bg-gray-100">
     <AppHeader />
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -581,7 +581,7 @@ watch([selectedArticle, categories], () => {
   if (selectedArticle.value) {
     const article = selectedArticle.value
     const catName = getCategoryName(article.category)
-    const titleParts = ['Forxi', '内容集', '文章']
+    const titleParts = ['Forxi', '创意', '文章']
     if (catName) titleParts.push(catName)
     if (article.title) titleParts.push(article.title)
     const title = titleParts.join(' - ')
@@ -590,7 +590,7 @@ watch([selectedArticle, categories], () => {
     updateSeoMeta({ title, description, keywords })
   } else if (route.params.category) {
     const catName = getCategoryName(route.params.category)
-    const title = catName ? `Forxi - 内容集 - 文章 - ${catName}` : 'Forxi - 内容集 - 文章'
+    const title = catName ? `Forxi - 创意 - 文章 - ${catName}` : 'Forxi - 创意 - 文章'
     const description = catName
       ? `${catName}分类文章列表，技术文章、随笔杂谈、经验总结。`
       : '技术文章、随笔杂谈、经验总结，涵盖前端开发、后端技术、DevOps 等领域。'

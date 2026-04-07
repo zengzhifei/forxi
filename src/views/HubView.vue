@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#fafafa] text-zinc-600 font-sans flex flex-col">
+  <div class="min-h-screen bg-gray-100 text-zinc-600 font-sans flex flex-col">
     <AppHeader />
 
     <main class="flex-1">
@@ -11,7 +11,7 @@
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
             免费工具，打开即用
           </div>
-          <h1 class="text-3xl sm:text-5xl font-bold text-zinc-800 mb-3 sm:mb-5 tracking-tight">百宝箱</h1>
+          <h1 class="text-3xl sm:text-5xl font-bold text-zinc-800 mb-3 sm:mb-5 tracking-tight">应用</h1>
           <p class="text-zinc-400 text-sm sm:text-lg max-w-2xl mx-auto leading-relaxed">精选实用工具集合，文件预览、图片处理、文字识别、开发利器——让效率翻倍。</p>
         </div>
       </section>
