@@ -236,7 +236,7 @@ export const api = {
   async getArticleList(options = {}) {
     const params = {
       page: options.page || 1,
-      pageSize: options.pageSize || 10,
+      pageSize: options.pageSize || 20,
       query: options.query || '',
       category: options.category || ''
     }
@@ -244,7 +244,7 @@ export const api = {
       params.id = options.id
     }
     const res = await apiClient.get('/article/list', { params, _silent: true })
-    return res.data
+    return res
   },
 
   // ==================== 文件上传接口 ====================

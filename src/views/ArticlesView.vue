@@ -105,9 +105,11 @@
               </div>
             </div>
 
-            <div ref="loadMoreTrigger" class="h-10 flex items-center justify-center mt-4">
-              <span v-if="loading" class="text-gray-400 text-sm">加载中...</span>
-              <span v-else-if="noMore" class="text-gray-400 text-sm">没有更多文章了</span>
+            <div class="flex justify-center mt-6">
+              <Pagination
+                :meta="meta"
+                @page-change="handlePageChange"
+              />
             </div>
           </div>
 
@@ -200,9 +202,9 @@
 import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
+import Pagination from '../components/Pagination.vue'
 import MarkdownIt from 'markdown-it'
 import hljs from 'highlight.js/lib/common'
-import { useIntersectionObserver } from '@vueuse/core'
 import api from '../utils/api'
 
 const route = useRoute()
@@ -266,11 +268,9 @@ const selectedArticle = ref(null)
 const articles = ref([])
 const articleStats = ref({})
 const page = ref(1)
-const pageSize = 10
-const total = ref(0)
+const pageSize = ref(20)
+const meta = ref({ page: 1, page_size: 20, total: 0, total_pages: 1 })
 const loading = ref(false)
-const noMore = ref(false)
-const loadMoreTrigger = ref(null)
 const searchQuery = ref('')
 const showMobileCategory = ref(false)
 
@@ -344,46 +344,29 @@ async function loadCategories() {
   }
 }
 
-async function loadArticles(reset = false) {
-  if (loading.value || (noMore.value && !reset)) return
+async function loadArticles() {
+  if (loading.value) return
 
   loading.value = true
-
-  if (reset) {
-    page.value = 1
-    articles.value = []
-    articleStats.value = {}
-    noMore.value = false
-  }
 
   try {
     const res = await api.getArticleList({
       page: page.value,
-      pageSize: pageSize,
+      pageSize: pageSize.value,
       category: selectedCategory.value,
       query: searchQuery.value
     })
 
-    const newArticles = Array.isArray(res) ? res : (res.data || [])
-    const meta = Array.isArray(res) ? {} : (res.meta || {})
+    const newArticles = res.data || []
+    const resMeta = res.meta || {}
 
-    if (reset) {
-      articles.value = newArticles
-      total.value = meta.total || 0
-    } else {
-      articles.value.push(...newArticles)
-    }
-
-    if (newArticles.length < pageSize || articles.value.length >= total.value) {
-      noMore.value = true
-    } else {
-      page.value++
-    }
+    articles.value = newArticles
+    pageSize.value = resMeta.page_size || pageSize.value
+    meta.value = { ...resMeta }
 
     await loadArticlesStats()
   } catch (e) {
     console.error('Failed to load articles:', e.message || e)
-    noMore.value = true
   } finally {
     loading.value = false
   }
@@ -479,7 +462,6 @@ async function toggleLike() {
 
 function selectCategory(category) {
   selectedArticle.value = null
-  noMore.value = false
   searchQuery.value = ''
   if (category === '') {
     router.push('/idea/articles/')
@@ -488,9 +470,14 @@ function selectCategory(category) {
   }
 }
 
+function handlePageChange(newPage) {
+  page.value = newPage
+  loadArticles()
+}
+
 function handleSearch() {
-  noMore.value = false
-  loadArticles(true)
+  page.value = 1
+  loadArticles()
 }
 
 function viewArticle(article) {
@@ -571,9 +558,9 @@ watch(() => route.params, async (newParams) => {
     await loadArticleDetail(newParams.id)
   } else {
     selectedArticle.value = null
-    noMore.value = false
     selectedCategory.value = newParams.category || ''
-    loadArticles(true)
+    page.value = 1
+    loadArticles()
   }
 }, { immediate: true })
 
@@ -598,12 +585,6 @@ watch([selectedArticle, categories], () => {
     updateSeoMeta({ title, description, keywords })
   }
 })
-
-useIntersectionObserver(loadMoreTrigger, ([{ isIntersecting }]) => {
-  if (isIntersecting && !isDetailView.value && !loading.value && !noMore.value) {
-    loadArticles()
-  }
-}, { threshold: 0.1 })
 
 onMounted(async () => {
   await loadCategories()
