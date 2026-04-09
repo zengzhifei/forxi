@@ -25,8 +25,6 @@
 
 <script setup>
 import { ref, inject } from 'vue'
-import { jsPDF } from 'jspdf'
-import html2canvas from 'html2canvas'
 
 const emit = defineEmits(['preview'])
 const toast = inject('toast')
@@ -41,6 +39,10 @@ const generatePdf = async () => {
 
   isGenerating.value = true
   try {
+    const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
+      import('html2canvas'),
+      import('jspdf')
+    ])
     const textEl = document.createElement('div')
     textEl.style.cssText = 'background:white;padding:40px;font-family:Arial,sans-serif;line-height:1.6;font-size:' + fontSize.value + 'px;max-width:800px;margin:0 auto'
     if (title.value) {

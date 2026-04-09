@@ -78,9 +78,7 @@ export default defineConfig(({ mode }) => {
           manualChunks: {
             'vendor-vue': ['vue', 'vue-router'],
             'vendor-md': ['markdown-it'],
-            'vendor-hljs': ['highlight.js/lib/common'],
-            'vendor-logicflow': ['@logicflow/core', '@logicflow/extension'],
-            'vendor-fileconverter': ['jspdf', 'html2canvas', 'docx-preview']
+            'vendor-hljs': ['highlight.js/lib/common']
           }
         }
       }

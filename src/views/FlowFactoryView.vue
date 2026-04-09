@@ -381,16 +381,10 @@
 
 <script setup>
 import { ref, defineComponent, h, onMounted, onUnmounted } from 'vue'
-import LogicFlow from '@logicflow/core'
-import '@logicflow/core/es/style/index.css'
-import '@logicflow/extension/lib/style/index.css'
-import { SelectionSelect, Snapshot } from '@logicflow/extension'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
 
-// 全局安装插件（只需执行一次）
-LogicFlow.use(SelectionSelect)
-LogicFlow.use(Snapshot)
+let LogicFlow = null
 
 // ─── 内联子组件 ─────────────────────────────────────
 
@@ -713,8 +707,21 @@ const registerCustomNodes = (lfInstance) => {
   })
 }
 
-const initLogicFlow = () => {
+const initLogicFlow = async () => {
   if (!containerRef.value) return
+
+  const [{ default: LF }, { SelectionSelect, Snapshot }] = await Promise.all([
+    import('@logicflow/core'),
+    import('@logicflow/extension')
+  ])
+
+  await import('@logicflow/core/es/style/index.css')
+  await import('@logicflow/extension/lib/style/index.css')
+
+  LF.use(SelectionSelect)
+  LF.use(Snapshot)
+
+  LogicFlow = LF
 
   lf.value = new LogicFlow({
     container: containerRef.value,
@@ -744,14 +751,11 @@ const initLogicFlow = () => {
     },
   })
 
-  // 注册自定义节点（必须在 render 之前）
   registerCustomNodes(lf.value)
 
   lf.value.render()
   bindEvents()
 
-  // 开启框选（SelectionSelect 插件）
-  // 先设置框选灵敏度，再开启框选
   if (lf.value.extension?.selectionSelect) {
     lf.value.extension.selectionSelect.setSelectionSense(false, true)
     lf.value.extension.selectionSelect.openSelectionSelect()

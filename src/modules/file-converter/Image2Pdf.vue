@@ -52,7 +52,6 @@
 
 <script setup>
 import { ref, inject } from 'vue'
-import { jsPDF } from 'jspdf'
 
 const emit = defineEmits(['preview'])
 const toast = inject('toast')
@@ -118,6 +117,7 @@ const generatePdf = async () => {
 
   isGenerating.value = true
   try {
+    const { jsPDF } = await import('jspdf')
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'px' })
 
     for (let i = 0; i < images.value.length; i++) {

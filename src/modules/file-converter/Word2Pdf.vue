@@ -37,9 +37,6 @@
 
 <script setup>
 import { ref, inject } from 'vue'
-import { jsPDF } from 'jspdf'
-import html2canvas from 'html2canvas'
-import { renderAsync } from 'docx-preview'
 
 const emit = defineEmits(['preview'])
 const toast = inject('toast')
@@ -68,6 +65,7 @@ const handleDrop = (e) => {
 const loadFile = async (file) => {
   fileName.value = file.name
   const buffer = await file.arrayBuffer()
+  const { renderAsync } = await import('docx-preview')
   if (docPreview.value) {
     docPreview.value.innerHTML = ''
     await renderAsync(buffer, docPreview.value, undefined, { className: 'docx-wrapper', inlinedStyles: true })
@@ -84,6 +82,10 @@ const generatePdf = async () => {
 
   isGenerating.value = true
   try {
+    const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
+      import('html2canvas'),
+      import('jspdf')
+    ])
     const canvas = await html2canvas(docPreview.value, { scale: 2, useCORS: true, backgroundColor: '#ffffff' })
     const pdf = new jsPDF({ orientation: canvas.width > canvas.height ? 'landscape' : 'portrait', unit: 'px' })
     const ratio = Math.min(pdf.internal.pageSize.getWidth() / canvas.width, pdf.internal.pageSize.getHeight() / canvas.height)

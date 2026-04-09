@@ -115,7 +115,7 @@
                 <img
                   :src="getThumbnailUrl(selectedPage)"
                   :alt="selectedPage.title || '图片'"
-                  class="w-full h-full object-cover"
+                  class="w-full h-full object-contain"
                 />
               </div>
 
