@@ -217,6 +217,16 @@ const JetbrainsIcon = {
   }
 }
 
+const TimeMachineIcon = {
+  render() {
+    return h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
+      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-width': '2', d: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' }),
+      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-width': '2', d: 'M12 2v2' }),
+      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-width': '2', d: 'M12 20v2' })
+    ])
+  }
+}
+
 const BookIcon = {
   render() {
     return h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
@@ -362,6 +372,19 @@ const otherTools = [
     iconActive: 'text-yellow-600',
     buttonText: '巧用魔法',
     onClick: () => navigateTo('/explore/jetbra')
+  },
+  {
+    title: '历史上的今天',
+    description: '穿越历史长河，探索任意一天的人类足迹',
+    icon: TimeMachineIcon,
+    bgDefault: 'bg-zinc-50',
+    bgHover: 'group-hover:bg-violet-100',
+    bgActive: 'bg-violet-100',
+    iconDefault: 'text-zinc-300',
+    iconHover: 'group-hover:text-violet-600',
+    iconActive: 'text-violet-600',
+    buttonText: '穿越历史',
+    onClick: () => navigateTo('/explore/onthisday')
   },
 ]
 

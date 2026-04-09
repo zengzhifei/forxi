@@ -73,6 +73,57 @@
           </div>
         </div>
 
+        <!-- 历史上的今天 -->
+        <div class="flex flex-col md:flex-row items-start gap-4 md:gap-10">
+          <div class="w-full md:w-1/3 flex-shrink-0">
+            <div class="flex md:hidden items-center gap-3 p-3.5 bg-violet-50 rounded-xl">
+              <div class="w-9 h-9 rounded-lg bg-violet-100 text-violet-500 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+              </div>
+              <span class="font-semibold text-zinc-700 text-sm flex-1">历史上的今天</span>
+              <router-link to="/explore/onthisday" class="inline-flex items-center gap-1 px-3 py-1.5 bg-violet-500 text-white text-xs font-medium rounded-lg whitespace-nowrap">
+                立即使用
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </router-link>
+            </div>
+            <div class="hidden md:flex bg-violet-50 rounded-2xl p-8 flex-col items-center text-center">
+              <div class="w-14 h-14 rounded-xl bg-violet-100 text-violet-500 flex items-center justify-center mb-4">
+                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+              </div>
+              <h3 class="text-lg font-semibold text-zinc-700 mb-2">历史上的今天</h3>
+              <router-link to="/explore/onthisday" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-violet-500 text-white text-sm font-medium rounded-lg hover:bg-violet-600 transition-colors">
+                立即使用
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </router-link>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">穿越历史，洞见未来</h3>
+            <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">探索任意一天的人类历史足迹，从政治变迁到科学发现，从文化盛事到体育突破，让历史不再枯燥，让记忆更加鲜活。</p>
+            <div class="space-y-2 text-sm text-zinc-500">
+              <h4 class="font-medium text-zinc-600 mb-2">功能亮点</h4>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">1</span>
+                <span>随机穿越 — 点击按钮，穿越到任意一天的历史</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">2</span>
+                <span>图文并茂 — 每条事件配有维基百科相关条目</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">3</span>
+                <span>回到今天 — 随时查看今天在历史上发生的事</span>
+              </div>
+            </div>
+            <div class="mt-3 sm:mt-4 flex flex-wrap gap-2">
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">随机穿越</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">历史回顾</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">维基百科</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">时光隧道</span>
+            </div>
+          </div>
+        </div>
+
       </section>
 
       <!-- Coming Soon -->

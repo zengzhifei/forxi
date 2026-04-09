@@ -29,6 +29,7 @@ const HubView = () => import('../views/HubView.vue')
 const FileConverterView = () => import('../views/FileConverterView.vue')
 const IdeaView = () => import('../views/IdeaView.vue')
 const ExploreView = () => import('../views/ExploreView.vue')
+const OnThisDayView = () => import('../views/OnThisDayView.vue')
 
 // 路由配置
 const routes = [
@@ -271,6 +272,16 @@ const routes = [
       title: 'Forxi - 探索 - JetBrains 激活',
       description: 'JetBrains 系列 IDE 激活服务，支持 IntelliJ IDEA、PyCharm、WebStorm、GoLand 等。',
       keywords: 'JetBrains激活,IntelliJ IDEA,PyCharm,WebStorm,GoLand,Rider,CLion,IDE激活'
+    }
+  },
+  {
+    path: '/explore/onthisday',
+    name: 'onthisday',
+    component: OnThisDayView,
+    meta: {
+      title: 'Forxi - 探索 - 历史上的今天',
+      description: '穿越时光隧道，看看历史上今天发生了什么重大事件。收集政治变迁、科学发现、文化盛事、体育突破等历史瞬间。',
+      keywords: '历史上的今天,历史回顾,时光隧道,历史事件'
     }
   },
   {

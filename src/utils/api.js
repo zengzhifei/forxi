@@ -247,6 +247,22 @@ export const api = {
     return res
   },
 
+  // ==================== 历史上的今天接口 ====================
+
+  /**
+   * 获取历史上的今天
+   * 路由：GET /api/onthisday/today
+   * @param {number} options.month - 月份，1-12
+   * @param {number} options.day - 日期，1-31
+   */
+  async getOnThisDay(options = {}) {
+    const params = {}
+    if (options.month) params.month = options.month
+    if (options.day) params.day = options.day
+    const res = await apiClient.get('/onthisday/today', { params, _silent: true })
+    return res.data
+  },
+
   // ==================== 文件上传接口 ====================
 
   /**
