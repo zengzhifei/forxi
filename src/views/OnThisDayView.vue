@@ -81,7 +81,7 @@
                         v-if="getThumbnailUrl(page)"
                         :src="getThumbnailUrl(page)"
                         :alt="page.title || '图片'"
-                        class="w-full h-full object-cover"
+                        class="w-full h-full object-contain"
                         loading="lazy"
                       />
                       <template v-else>
@@ -111,11 +111,12 @@
                 </button>
               </div>
 
-              <div v-if="getThumbnailUrl(selectedPage)" class="w-full h-40 rounded-lg overflow-hidden bg-zinc-100 mb-4">
+              <div v-if="getThumbnailUrl(selectedPage)" class="w-full h-40 rounded-lg overflow-hidden bg-zinc-100 mb-4 cursor-zoom-in">
                 <img
                   :src="getThumbnailUrl(selectedPage)"
                   :alt="selectedPage.title || '图片'"
                   class="w-full h-full object-contain"
+                  @click="openViewer(getThumbnailUrl(selectedPage))"
                 />
               </div>
 
@@ -200,11 +201,12 @@
             </button>
           </div>
 
-          <div v-if="getThumbnailUrl(selectedPage)" class="w-full h-48 rounded-lg overflow-hidden bg-zinc-100 mb-4">
+          <div v-if="getThumbnailUrl(selectedPage)" class="w-full h-48 rounded-lg overflow-hidden bg-zinc-100 mb-4 cursor-zoom-in">
             <img
               :src="getThumbnailUrl(selectedPage)"
               :alt="selectedPage.title || '图片'"
-              class="w-full h-full object-cover"
+              class="w-full h-full object-contain"
+              @click="openViewer(getThumbnailUrl(selectedPage))"
             />
           </div>
 
@@ -214,6 +216,12 @@
         </div>
       </div>
     </Transition>
+
+    <ImageViewer
+      :src="viewerSrc"
+      :visible="viewerVisible"
+      @update:visible="viewerVisible = $event"
+    />
   </div>
 </template>
 
@@ -221,6 +229,7 @@
 import { ref, computed, onMounted } from 'vue'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
+import ImageViewer from '../components/ImageViewer.vue'
 import api from '../utils/api'
 
 const loading = ref(true)
@@ -229,6 +238,14 @@ const events = ref([])
 const selectedPage = ref(null)
 const month = ref(new Date().getMonth() + 1)
 const day = ref(new Date().getDate())
+
+const viewerVisible = ref(false)
+const viewerSrc = ref('')
+
+const openViewer = (src) => {
+  viewerSrc.value = src
+  viewerVisible.value = true
+}
 
 const currentMonth = computed(() => month.value)
 const currentDay = computed(() => day.value)
