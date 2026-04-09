@@ -168,6 +168,14 @@ const AIIcon = {
   }
 }
 
+const ChatIcon = {
+  render() {
+    return h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
+      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-width': '2', d: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z' })
+    ])
+  }
+}
+
 const Text2ImageIcon = {
   render() {
     return h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
@@ -321,7 +329,7 @@ const aiTools = [
   {
     title: '聊一聊',
     description: '与 AI 智能对话，解答问题、编写代码、创作文案',
-    icon: AIIcon,
+    icon: ChatIcon,
     bgDefault: 'bg-zinc-50',
     bgHover: 'group-hover:bg-violet-100',
     bgActive: 'bg-violet-100',
@@ -385,6 +393,19 @@ const otherTools = [
     iconActive: 'text-violet-600',
     buttonText: '穿越历史',
     onClick: () => navigateTo('/explore/onthisday')
+  },
+  {
+    title: 'MBTI 性格测试',
+    description: '精选题目，探索你的性格密码，发现真实的自己',
+    icon: AIIcon,
+    bgDefault: 'bg-zinc-50',
+    bgHover: 'group-hover:bg-violet-100',
+    bgActive: 'bg-violet-100',
+    iconDefault: 'text-zinc-300',
+    iconHover: 'group-hover:text-violet-600',
+    iconActive: 'text-violet-600',
+    buttonText: '探索自我',
+    onClick: () => navigateTo('/explore/mbti')
   },
 ]
 

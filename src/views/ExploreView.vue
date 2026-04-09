@@ -74,7 +74,7 @@
         </div>
 
         <!-- 历史上的今天 -->
-        <div class="flex flex-col md:flex-row items-start gap-4 md:gap-10">
+        <div class="flex flex-col md:flex-row-reverse items-start gap-4 md:gap-10">
           <div class="w-full md:w-1/3 flex-shrink-0">
             <div class="flex md:hidden items-center gap-3 p-3.5 bg-violet-50 rounded-xl">
               <div class="w-9 h-9 rounded-lg bg-violet-100 text-violet-500 flex items-center justify-center flex-shrink-0">
@@ -120,6 +120,59 @@
               <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">历史回顾</span>
               <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">维基百科</span>
               <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">时光隧道</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- MBTI 测试 -->
+        <div class="flex flex-col md:flex-row items-start gap-4 md:gap-10">
+          <div class="w-full md:w-1/3 flex-shrink-0">
+            <!-- Mobile: compact -->
+            <div class="flex md:hidden items-center gap-3 p-3.5 bg-violet-50 rounded-xl">
+              <div class="w-9 h-9 rounded-lg bg-violet-100 text-violet-500 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+              </div>
+              <span class="font-semibold text-zinc-700 text-sm flex-1">MBTI 性格测试</span>
+              <router-link to="/explore/mbti" class="inline-flex items-center gap-1 px-3 py-1.5 bg-violet-500 text-white text-xs font-medium rounded-lg whitespace-nowrap">
+                立即测试
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </router-link>
+            </div>
+            <!-- Desktop: full card -->
+            <div class="hidden md:flex bg-violet-50 rounded-2xl p-8 flex-col items-center text-center">
+              <div class="w-14 h-14 rounded-xl bg-violet-100 text-violet-500 flex items-center justify-center mb-4">
+                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+              </div>
+              <h3 class="text-lg font-semibold text-zinc-700 mb-2">MBTI 性格测试</h3>
+              <router-link to="/explore/mbti" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-violet-500 text-white text-sm font-medium rounded-lg hover:bg-violet-600 transition-colors">
+                立即测试
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </router-link>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">探索你的性格密码</h3>
+            <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">专业的 MBTI 人格类型测试，精选题目带你发现真实的自己。了解你的性格特点、优势弱势，找到适合的职业方向。</p>
+            <div class="space-y-2 text-sm text-zinc-500">
+              <h4 class="font-medium text-zinc-600 mb-2">测试亮点</h4>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">1</span>
+                <span>经典题目，涵盖四大性格维度</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">2</span>
+                <span>详细的人格类型解析和职业建议</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">3</span>
+                <span>自动保存进度，刷新页面不丢失</span>
+              </div>
+            </div>
+            <div class="mt-3 sm:mt-4 flex flex-wrap gap-2">
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">性格测试</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">MBTI</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">16 型人格</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">职业规划</span>
             </div>
           </div>
         </div>

@@ -44,7 +44,7 @@ export default defineConfig(({ mode }) => {
           '/hub/', '/hub/file-preview', '/hub/image-processing', '/hub/ocr', '/hub/it-tools', '/hub/file-converter', '/hub/flow-factory',
           '/ai/', '/ai/chat', '/ai/text2image', '/ai/image2image',
           '/idea/','/idea/articles',
-          '/explore/', '/explore/jetbra', '/explore/onthisday',
+          '/explore/', '/explore/jetbra', '/explore/onthisday', '/explore/mbti',
          ],
         renderer: new Renderer({
           maxConcurrentRoutes: 2,

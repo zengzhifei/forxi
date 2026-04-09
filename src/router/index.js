@@ -30,6 +30,7 @@ const FileConverterView = () => import('../views/FileConverterView.vue')
 const IdeaView = () => import('../views/IdeaView.vue')
 const ExploreView = () => import('../views/ExploreView.vue')
 const OnThisDayView = () => import('../views/OnThisDayView.vue')
+const MbtiView = () => import('../views/MbtiView.vue')
 
 // 路由配置
 const routes = [
@@ -281,7 +282,17 @@ const routes = [
     meta: {
       title: 'Forxi - 探索 - 历史上的今天',
       description: '穿越时光隧道，看看历史上今天发生了什么重大事件。收集政治变迁、科学发现、文化盛事、体育突破等历史瞬间。',
-      keywords: '历史上的今天,历史回顾,时光隧道,历史事件'
+      keywords: '历史上的今天，历史回顾，时光隧道，历史事件'
+    }
+  },
+  {
+    path: '/explore/mbti',
+    name: 'mbti',
+    component: MbtiView,
+    meta: {
+      title: 'Forxi - 探索 - MBTI 人格测试',
+      description: '免费在线 MBTI 人格类型测试，精选题目带你发现真实的自己，探索你的性格密码。',
+      keywords: 'MBTI，人格测试，性格测试，16 型人格，职业测试'
     }
   },
   {

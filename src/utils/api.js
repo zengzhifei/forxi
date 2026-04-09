@@ -326,6 +326,26 @@ export const api = {
       _silent: true
     })
     return res.data
+  },
+
+  // ==================== MBTI 测试接口 ====================
+
+  /**
+   * 获取 MBTI 测试题目
+   * 路由：GET /api/mbti/questions
+   */
+  async getMbtiQuestions() {
+    const res = await apiClient.get('/mbti/questions')
+    return res.data
+  },
+
+  /**
+   * 提交 MBTI 测试答案
+   * 路由：POST /api/mbti/submit
+   */
+  async submitMbtiAnswers(answers) {
+    const res = await apiClient.post('/mbti/submit', { answers })
+    return res.data
   }
 }
 
