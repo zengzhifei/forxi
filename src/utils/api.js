@@ -335,7 +335,7 @@ export const api = {
    * 路由：GET /api/mbti/questions
    */
   async getMbtiQuestions() {
-    const res = await apiClient.get('/mbti/questions')
+    const res = await apiClient.get('/mbti/questions', { _silent: true })
     return res.data
   },
 
@@ -344,7 +344,7 @@ export const api = {
    * 路由：POST /api/mbti/submit
    */
   async submitMbtiAnswers(answers) {
-    const res = await apiClient.post('/mbti/submit', { answers })
+    const res = await apiClient.post('/mbti/submit', { answers }, { _silent: true })
     return res.data
   }
 }

@@ -375,7 +375,10 @@ watch(currentIndex, () => {
   startCountdown()
 })
 
+let initPending = false
 async function initTest() {
+  if (initPending) return
+  initPending = true
   loading.value = true
   error.value = null
   try {
@@ -395,6 +398,7 @@ async function initTest() {
     console.error(err)
   } finally {
     loading.value = false
+    initPending = false
   }
 }
 

@@ -92,8 +92,10 @@ const progressTrackClass = computed(() => (config[type.value] ?? config.info).pr
 const progressBarClass   = computed(() => (config[type.value] ?? config.info).progressBar)
 
 let timer = null
+let suppressUntil = 0
 
 function show(msg, msgType = 'info', duration = 3000) {
+  if (Date.now() < suppressUntil) return
   if (timer) clearTimeout(timer)
   message.value = msg
   type.value = msgType
@@ -108,6 +110,8 @@ function show(msg, msgType = 'info', duration = 3000) {
 function close() {
   visible.value = false
   if (timer) clearTimeout(timer)
+  timer = null
+  suppressUntil = Date.now() + 500
 }
 
 defineExpose({ show, close })
