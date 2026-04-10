@@ -24,26 +24,35 @@
             <h2 class="text-2xl font-bold text-zinc-800 mb-3">MBTI 人格类型测试</h2>
             <p class="text-zinc-500 text-sm leading-relaxed">
               MBTI（Myers-Briggs Type Indicator）是一种广泛使用的人格类型测试工具，
-              将人格分为 16 种类型。本测试预计需要 5-10 分钟完成。
+              将人格分为 16 种类型。
             </p>
           </div>
-          <div class="space-y-3 mb-8">
-            <div class="flex items-start gap-3 p-3 bg-zinc-50 rounded-lg">
-              <span class="w-6 h-6 rounded-full bg-violet-100 text-violet-500 flex items-center justify-center text-xs flex-shrink-0">1</span>
-              <span class="text-sm text-zinc-600">共 {{ questions.length }} 题，每次显示 1 题</span>
+
+          <div class="space-y-4 mb-8">
+            <div @click="selectMode('quick')" class="p-4 border-2 rounded-xl cursor-pointer transition-all duration-200" :class="testMode === 'quick' ? 'border-violet-500 bg-violet-50' : 'border-zinc-200 hover:border-violet-300'">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="px-2.5 py-1 text-xs rounded-md bg-amber-100 text-amber-600 font-medium">快速</span>
+                <h3 class="font-semibold text-zinc-800">快速测试</h3>
+              </div>
+              <p class="text-sm text-zinc-500">约 5 分钟，共 {{ quickQuestionCount }} 题，快速了解你的性格类型</p>
             </div>
-            <div class="flex items-start gap-3 p-3 bg-zinc-50 rounded-lg">
-              <span class="w-6 h-6 rounded-full bg-violet-100 text-violet-500 flex items-center justify-center text-xs flex-shrink-0">2</span>
-              <span class="text-sm text-zinc-600">请根据第一反应作答，无需过多思考</span>
-            </div>
-            <div class="flex items-start gap-3 p-3 bg-zinc-50 rounded-lg">
-              <span class="w-6 h-6 rounded-full bg-violet-100 text-violet-500 flex items-center justify-center text-xs flex-shrink-0">3</span>
-              <span class="text-sm text-zinc-600">答案无对错之分，真实作答即可</span>
+            <div @click="selectMode('deep')" class="p-4 border-2 rounded-xl cursor-pointer transition-all duration-200" :class="testMode === 'deep' ? 'border-violet-500 bg-violet-50' : 'border-zinc-200 hover:border-violet-300'">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="px-2.5 py-1 text-xs rounded-md bg-emerald-100 text-emerald-600 font-medium">深度</span>
+                <h3 class="font-semibold text-zinc-800">深度测试</h3>
+              </div>
+              <p class="text-sm text-zinc-500">约 10 分钟，共 {{ deepQuestionCount }} 题，获得更精确的性格分析</p>
             </div>
           </div>
-          <button @click="startTest" class="w-full py-3 bg-violet-500 text-white font-medium rounded-lg hover:bg-violet-600 transition-colors">
-            开始测试
-          </button>
+
+          <div class="flex gap-3">
+            <button @click="retakeTest" class="flex-1 py-3 border-2 border-zinc-200 text-zinc-600 font-medium rounded-lg hover:border-zinc-300 hover:bg-zinc-50 transition-colors">
+              重新测试
+            </button>
+            <button @click="startTest" :disabled="!testMode" class="flex-1 py-3 bg-violet-500 text-white font-medium rounded-lg hover:bg-violet-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              开始测试
+            </button>
+          </div>
         </div>
 
         <div v-if="started && !finished && questions.length > 0" class="bg-white rounded-2xl shadow-lg p-6 sm:p-10">
@@ -204,7 +213,7 @@
               重新测试
             </button>
             <button @click="backToHome" class="flex-1 py-3 bg-violet-500 text-white font-medium rounded-lg hover:bg-violet-600 transition-colors">
-              返回首页
+              返回探索
             </button>
           </div>
         </div>
@@ -241,7 +250,8 @@ const router = useRouter()
 
 const started = ref(false)
 const finished = ref(false)
-const questions = ref([])
+const allQuestions = ref([])
+const testMode = ref(null)
 const answers = ref([])
 const currentIndex = ref(0)
 const selectedAnswer = ref(null)
@@ -255,6 +265,21 @@ let timerInterval = null
 let countdownInterval = null
 
 const STORAGE_KEY = 'mbti_test_data'
+
+const questions = computed(() => {
+  if (testMode.value === 'quick') {
+    return allQuestions.value.filter(q => q.is_quick === 1)
+  }
+  return allQuestions.value
+})
+
+const quickQuestionCount = computed(() => {
+  return allQuestions.value.filter(q => q.is_quick === 1).length
+})
+
+const deepQuestionCount = computed(() => {
+  return allQuestions.value.length
+})
 
 const currentQuestion = computed(() => {
   return questions.value[currentIndex.value] || {}
@@ -275,13 +300,20 @@ function getDimensionName(dimension) {
   return map[dimension] || dimension
 }
 
+function selectMode(mode) {
+  testMode.value = mode
+  answers.value = new Array(questions.value.length).fill(null)
+  saveToStorage()
+}
+
 function loadFromStorage() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY)
     if (saved) {
       const data = JSON.parse(saved)
-      if (data.questions && data.answers && data.currentIndex) {
-        questions.value = data.questions
+      if (data.allQuestions && data.answers && data.currentIndex !== undefined && data.testMode) {
+        allQuestions.value = data.allQuestions
+        testMode.value = data.testMode
         answers.value = data.answers
         currentIndex.value = data.currentIndex
         started.value = true
@@ -299,7 +331,8 @@ function loadFromStorage() {
 function saveToStorage() {
   try {
     const data = {
-      questions: questions.value,
+      allQuestions: allQuestions.value,
+      testMode: testMode.value,
       answers: answers.value,
       currentIndex: currentIndex.value,
       selectedAnswer: selectedAnswer.value,
@@ -355,7 +388,7 @@ async function initTest() {
   error.value = null
   try {
     const res = await api.getMbtiQuestions()
-    questions.value = res || []
+    allQuestions.value = res || []
     answers.value = new Array(questions.value.length).fill(null)
     started.value = false
     finished.value = false
@@ -363,6 +396,7 @@ async function initTest() {
     selectedAnswer.value = null
     result.value = null
     totalTime.value = 0
+    testMode.value = null
     clearStorage()
   } catch (err) {
     error.value = '加载题目失败，请稍后重试'
@@ -373,7 +407,11 @@ async function initTest() {
 }
 
 function startTest() {
+  if (!testMode.value) return
   started.value = true
+  answers.value = new Array(questions.value.length).fill(null)
+  currentIndex.value = 0
+  selectedAnswer.value = null
   startTimer()
   startCountdown()
 }
@@ -394,7 +432,7 @@ function goToPrevious() {
 
 function goToNext() {
   if (!selectedAnswer.value) return
-  
+
   if (currentIndex.value < questions.value.length - 1) {
     currentIndex.value++
     selectedAnswer.value = answers.value[currentIndex.value]
@@ -408,13 +446,13 @@ async function submitAnswers() {
   loading.value = true
   error.value = null
   stopTimer()
-  
+
   try {
     const payload = questions.value.map((q, index) => ({
       question_id: q.id,
       answer: answers.value[index]
     }))
-    
+
     const res = await api.submitMbtiAnswers(payload)
     result.value = res
     finished.value = true
@@ -430,7 +468,14 @@ async function submitAnswers() {
 function retakeTest() {
   stopTimer()
   clearStorage()
-  initTest()
+  testMode.value = null
+  started.value = false
+  finished.value = false
+  currentIndex.value = 0
+  selectedAnswer.value = null
+  result.value = null
+  totalTime.value = 0
+  answers.value = []
 }
 
 function backToHome() {
