@@ -45,14 +45,9 @@
             </div>
           </div>
 
-          <div class="flex gap-3">
-            <button @click="retakeTest" class="flex-1 py-3 border-2 border-zinc-200 text-zinc-600 font-medium rounded-lg hover:border-zinc-300 hover:bg-zinc-50 transition-colors">
-              重新测试
-            </button>
-            <button @click="startTest" :disabled="!testMode" class="flex-1 py-3 bg-violet-500 text-white font-medium rounded-lg hover:bg-violet-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-              开始测试
-            </button>
-          </div>
+          <button @click="startTest" :disabled="!testMode" class="w-full py-3 bg-violet-500 text-white font-medium rounded-lg hover:bg-violet-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+            开始测试
+          </button>
         </div>
 
         <div v-if="started && !finished && questions.length > 0" class="bg-white rounded-2xl shadow-lg p-6 sm:p-10">
@@ -97,7 +92,7 @@
           <div class="flex items-center justify-between">
             <button
               @click="retakeTest"
-              class="px-4 py-2 border-2 border-zinc-200 text-zinc-600 font-medium rounded-lg hover:border-zinc-300 hover:bg-zinc-50 transition-colors"
+              class="px-4 py-2 bg-zinc-500 text-white font-medium rounded-lg hover:bg-zinc-600 transition-colors"
             >
               重新测试
             </button>
@@ -211,9 +206,6 @@
           <div class="flex gap-3">
             <button @click="retakeTest" class="flex-1 py-3 border-2 border-zinc-200 text-zinc-600 font-medium rounded-lg hover:border-zinc-300 hover:bg-zinc-50 transition-colors">
               重新测试
-            </button>
-            <button @click="backToHome" class="flex-1 py-3 bg-violet-500 text-white font-medium rounded-lg hover:bg-violet-600 transition-colors">
-              返回探索
             </button>
           </div>
         </div>
