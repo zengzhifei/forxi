@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import './style.css'
 import './plugins/baidu-tongji.js'
+import './plugins/google-analytics.js'
 
 const app = createApp(App)
 

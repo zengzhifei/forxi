@@ -60,6 +60,11 @@ export default defineConfig(({ mode }) => {
             /<script[^>]*hm\.baidu\.com[^>]*><\/script>/gi,
             ''
           )
+          // 移除预渲染时注入的 Google Analytics 脚本，避免运行时重复
+          renderedRoute.html = renderedRoute.html.replace(
+            /<script[^>]*googletagmanager\.com[^>]*><\/script>/gi,
+            ''
+          )
           return renderedRoute
         }
       })
@@ -70,7 +75,8 @@ export default defineConfig(({ mode }) => {
       }
     },
     define: {
-      __BAIDU_TONGJI__: JSON.stringify(mode === 'production')
+      __BAIDU_TONGJI__: JSON.stringify(mode === 'production'),
+      __GOOGLE_ANALYTICS__: JSON.stringify(mode === 'production')
     },
     build: {
       rollupOptions: {
