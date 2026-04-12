@@ -15,22 +15,35 @@
             <p class="text-xs sm:text-sm text-zinc-400">让知识变得有趣，让学习变得轻松</p>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
-            <div class="bg-zinc-800 rounded-lg p-2 sm:p-3 text-center">
-              <div class="text-lg sm:text-xl font-bold text-cyan-400">{{ meta.total || 0 }}</div>
-              <div class="text-[10px] sm:text-xs text-zinc-500">冷知识</div>
+          <div class="space-y-3">
+            <div class="grid grid-cols-3 gap-2 sm:gap-3">
+              <div class="bg-zinc-800 rounded-lg p-2 sm:p-3 text-center">
+                <div class="text-lg sm:text-xl font-bold text-cyan-400">{{ meta.total || 0 }}</div>
+                <div class="text-[10px] sm:text-xs text-zinc-500">冷知识</div>
+              </div>
+              <div class="bg-zinc-800 rounded-lg p-2 sm:p-3 text-center">
+                <div class="text-lg sm:text-xl font-bold text-cyan-400">∞</div>
+                <div class="text-[10px] sm:text-xs text-zinc-500">无边界</div>
+              </div>
+              <div class="bg-zinc-800 rounded-lg p-2 sm:p-3 text-center">
+                <div class="text-lg sm:text-xl font-bold text-cyan-400">24/7</div>
+                <div class="text-[10px] sm:text-xs text-zinc-500">更新中</div>
+              </div>
             </div>
-            <div class="bg-zinc-800 rounded-lg p-2 sm:p-3 text-center">
-              <div class="text-lg sm:text-xl font-bold text-cyan-400">∞</div>
-              <div class="text-[10px] sm:text-xs text-zinc-500">无边界</div>
-            </div>
-            <div class="bg-zinc-800 rounded-lg p-2 sm:p-3 text-center">
-              <div class="text-lg sm:text-xl font-bold text-cyan-400">24/7</div>
-              <div class="text-[10px] sm:text-xs text-zinc-500">更新中</div>
-            </div>
-            <div class="bg-zinc-800 rounded-lg p-2 sm:p-3 text-center">
-              <div class="text-lg sm:text-xl font-bold text-cyan-400">🧠</div>
-              <div class="text-[10px] sm:text-xs text-zinc-500">持续学习</div>
+
+            <div class="bg-white rounded-xl p-3">
+              <div class="relative">
+                <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  v-model="searchKeyword"
+                  type="text"
+                  placeholder="搜索冷知识..."
+                  class="w-full h-11 pl-12 pr-4 bg-zinc-100 text-zinc-800 text-sm rounded-lg placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all"
+                  @keyup.enter="handleSearch"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -195,6 +208,7 @@ const itemStats = ref({})
 const page = ref(1)
 const pageSize = ref(10)
 const meta = ref({ page: 1, page_size: 10, total: 0, totalPages: 1 })
+const searchKeyword = ref('')
 
 const selectedItem = ref(null)
 const currentViewCount = ref(0)
@@ -223,7 +237,8 @@ async function loadData() {
   try {
     const res = await api.getColdKnowledgeList({
       page: page.value,
-      pageSize: pageSize.value
+      pageSize: pageSize.value,
+      query: searchKeyword.value
     })
 
     coldKnowledgeList.value = res.data || []
@@ -236,6 +251,11 @@ async function loadData() {
   } finally {
     loading.value = false
   }
+}
+
+function handleSearch() {
+  page.value = 1
+  loadData()
 }
 
 async function loadStats() {
