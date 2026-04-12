@@ -31,6 +31,7 @@ const IdeaView = () => import('../views/IdeaView.vue')
 const ExploreView = () => import('../views/ExploreView.vue')
 const OnThisDayView = () => import('../views/OnThisDayView.vue')
 const MbtiView = () => import('../views/MbtiView.vue')
+const ColdKnowledgeView = () => import('../views/ColdKnowledgeView.vue')
 
 // 路由配置
 const routes = [
@@ -233,6 +234,16 @@ const routes = [
       title: 'Forxi - 创意 - 文章',
       description: '技术文章、随笔杂谈、经验总结，涵盖前端开发、后端技术、DevOps 等领域。',
       keywords: '技术文章,随笔,经验总结,前端,后端,DevOps'
+    }
+  },
+  {
+    path: '/idea/coldknowledge',
+    name: 'coldknowledge',
+    component: ColdKnowledgeView,
+    meta: {
+      title: 'Forxi - 创意 - 冷知识',
+      description: '探索有趣的小知识，发现世界的奇妙之处。',
+      keywords: '冷知识,趣味知识,有趣事实'
     }
   },
   {

@@ -43,7 +43,7 @@ export default defineConfig(({ mode }) => {
           '/',  '/privacy', '/terms',
           '/hub/', '/hub/file-preview', '/hub/image-processing', '/hub/ocr', '/hub/it-tools', '/hub/file-converter', '/hub/flow-factory',
           '/ai/', '/ai/chat', '/ai/text2image', '/ai/image2image',
-          '/idea/','/idea/articles',
+          '/idea/','/idea/articles','/idea/coldknowledge',
           '/explore/', '/explore/jetbra', '/explore/onthisday', '/explore/mbti',
          ],
         renderer: new Renderer({

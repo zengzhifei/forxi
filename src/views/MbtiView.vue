@@ -89,25 +89,25 @@
             </div>
           </div>
 
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-between gap-3 overflow-x-auto">
             <button
               @click="retakeTest"
-              class="px-4 py-2 bg-zinc-500 text-white font-medium rounded-lg hover:bg-zinc-600 transition-colors"
+              class="px-4 py-2 bg-zinc-500 text-white font-medium rounded-lg hover:bg-zinc-600 transition-colors whitespace-nowrap flex-shrink-0"
             >
               重新测试
             </button>
-            <div class="flex gap-3">
+            <div class="flex gap-3 flex-shrink-0">
               <button
                 @click="goToPrevious"
                 :disabled="currentIndex === 0"
-                class="px-6 py-2.5 border-2 border-zinc-200 text-zinc-600 font-medium rounded-lg hover:border-zinc-300 hover:bg-zinc-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                class="px-4 py-2 border-2 border-zinc-200 text-zinc-600 font-medium rounded-lg hover:border-zinc-300 hover:bg-zinc-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
               >
                 上一题
               </button>
               <button
                 @click="goToNext"
                 :disabled="!selectedAnswer"
-                class="px-6 py-2.5 bg-violet-500 text-white font-medium rounded-lg hover:bg-violet-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                class="px-4 py-2 bg-violet-500 text-white font-medium rounded-lg hover:bg-violet-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
               >
                 {{ currentIndex === questions.length - 1 ? '提交答案' : '下一题' }}
               </button>

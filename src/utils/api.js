@@ -328,6 +328,26 @@ export const api = {
     return res.data
   },
 
+  // ==================== 冷知识接口 ====================
+
+  /**
+   * 获取冷知识列表
+   * 路由：GET /api/coldknowledge/list
+   * @param {Object} options - 查询参数
+   * @param {number} options.page - 页码
+   * @param {number} options.pageSize - 每页数量
+   * @param {string} options.query - 搜索关键词
+   */
+  async getColdKnowledgeList(options = {}) {
+    const params = {
+      page: options.page || 1,
+      pageSize: options.pageSize || 20,
+      query: options.query || ''
+    }
+    const res = await apiClient.get('/coldknowledge/list', { params, _silent: true })
+    return res
+  },
+
   // ==================== MBTI 测试接口 ====================
 
   /**

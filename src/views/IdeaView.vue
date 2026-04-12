@@ -76,6 +76,63 @@
           </div>
         </div>
 
+        <!-- 冷知识 -->
+        <div class="flex flex-col md:flex-row-reverse items-start gap-4 md:gap-10">
+          <div class="w-full md:w-1/3 flex-shrink-0">
+            <!-- Mobile: compact -->
+            <div class="flex md:hidden items-center gap-3 p-3.5 bg-cyan-50 rounded-xl">
+              <div class="w-9 h-9 rounded-lg bg-cyan-100 text-cyan-500 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+              </div>
+              <span class="font-semibold text-zinc-700 text-sm flex-1">冷知识</span>
+              <router-link to="/idea/coldknowledge" class="inline-flex items-center gap-1 px-3 py-1.5 bg-cyan-500 text-white text-xs font-medium rounded-lg whitespace-nowrap">
+                探索发现
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </router-link>
+            </div>
+            <!-- Desktop: full card -->
+            <div class="hidden md:flex bg-cyan-50 rounded-2xl p-8 flex-col items-center text-center">
+              <div class="w-14 h-14 rounded-xl bg-cyan-100 text-cyan-500 flex items-center justify-center mb-4">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+              </div>
+              <h3 class="text-lg font-semibold text-zinc-700 mb-2">冷知识</h3>
+              <router-link to="/idea/coldknowledge" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-cyan-500 text-white text-sm font-medium rounded-lg hover:bg-cyan-600 transition-colors">
+                探索发现
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </router-link>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">有趣的小知识</h3>
+            <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">探索生活中那些你可能不知道的有趣事实，从动物习性到科学原理，从历史趣闻到自然奥秘。每一条冷知识都能让你对这个世界多一份好奇，发现平凡生活中隐藏的惊喜与乐趣。</p>
+            <div class="space-y-2 text-sm text-zinc-500">
+              <h4 class="font-medium text-zinc-600 mb-2">内容涵盖</h4>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">1</span>
+                <span>动物世界：昆虫、哺乳动物、海洋生物的神奇习性</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">2</span>
+                <span>人体奥秘：大脑、感官、睡眠等有趣的生理现象</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">3</span>
+                <span>科学原理：物理、化学、数学中的神奇现象</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">4</span>
+                <span>历史趣闻：那些你可能不知道的历史小故事</span>
+              </div>
+            </div>
+            <div class="mt-3 sm:mt-4 flex flex-wrap gap-2">
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">趣味知识</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">科普</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">探索</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">发现</span>
+            </div>
+          </div>
+        </div>
+
       </section>
 
       <!-- Coming Soon Hint -->
