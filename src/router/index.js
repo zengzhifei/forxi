@@ -32,6 +32,7 @@ const ExploreView = () => import('../views/ExploreView.vue')
 const OnThisDayView = () => import('../views/OnThisDayView.vue')
 const MbtiView = () => import('../views/MbtiView.vue')
 const ColdKnowledgeView = () => import('../views/ColdKnowledgeView.vue')
+const CalculatorView = () => import('../views/CalculatorView.vue')
 
 // 路由配置
 const routes = [
@@ -304,6 +305,16 @@ const routes = [
       title: 'Forxi - 探索 - MBTI 人格测试',
       description: '免费在线 MBTI 人格类型测试，精选题目带你发现真实的自己，探索你的性格密码。',
       keywords: 'MBTI，人格测试，性格测试，16 型人格，职业测试'
+    }
+  },
+  {
+    path: '/hub/calculator',
+    name: 'calculator',
+    component: CalculatorView,
+    meta: {
+      title: 'Forxi - 应用 - 超级计算器',
+      description: '免费在线超级计算器，支持数学计算、科学计算、金融计算、进制转换、字节换算、单位换算等多种计算功能。',
+      keywords: '计算器，在线计算器，科学计算器，复利计算器，进制转换，单位换算'
     }
   },
   {

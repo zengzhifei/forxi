@@ -208,6 +208,14 @@ const FlowIcon = {
   }
 }
 
+const CalculatorIcon = {
+  render() {
+    return h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
+      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-width': '2', d: 'M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z' })
+    ])
+  }
+}
+
 const JetbrainsIcon = {
   render() {
     return h('svg', { xmlns: 'http://www.w3.org/2000/svg', width: '32', height: '32', fill: 'none', viewBox: '0 0 32 32' }, [
@@ -330,6 +338,19 @@ const tools = [
     iconActive: 'text-rose-600',
     buttonText: '流程自如',
     onClick: () => navigateTo('/hub/flow-factory')
+  },
+  {
+    title: '超级计算器',
+    description: '数学计算、科学计算、金融计算、进制转换、单位换算、亲戚称呼',
+    icon: CalculatorIcon,
+    bgDefault: 'bg-zinc-50',
+    bgHover: 'group-hover:bg-amber-100',
+    bgActive: 'bg-amber-100',
+    iconDefault: 'text-zinc-300',
+    iconHover: 'group-hover:text-amber-600',
+    iconActive: 'text-amber-600',
+    buttonText: '全能计算',
+    onClick: () => navigateTo('/hub/calculator')
   },
 ]
 
