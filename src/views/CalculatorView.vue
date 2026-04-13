@@ -1333,7 +1333,7 @@ function scientificCalc(fn) {
     return
   }
 
-  display.value = result.toString()
+  display.value = parseFloat(result.toPrecision(12)).toString()
   expression.value = display.value
 }
 
