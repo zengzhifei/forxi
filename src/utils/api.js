@@ -366,6 +366,66 @@ export const api = {
   async submitMbtiAnswers(answers) {
     const res = await apiClient.post('/mbti/submit', { answers }, { _silent: true })
     return res.data
+  },
+
+  // ==================== 评论接口 ====================
+
+  /**
+   * 获取评论类型列表
+   * 路由：GET /api/comment/type
+   */
+  async getCommentTypes() {
+    const res = await apiClient.get('/comment/type', { _silent: true })
+    return res.data
+  },
+
+  /**
+   * 获取我的反馈列表
+   * 路由：GET /api/comment/my-feedback
+   * @param {number} page - 页码
+   * @param {number} pageSize - 每页数量
+   */
+  async getMyFeedback(page = 1, pageSize = 10) {
+    const res = await apiClient.get('/comment/my-feedback', {
+      params: { page, page_size: pageSize }
+    })
+    return res
+  },
+
+  /**
+   * 获取评论回复列表
+   * 路由：GET /api/comment/replies
+   * @param {number} commentId - 父评论ID
+   * @param {number} page - 页码
+   * @param {number} pageSize - 每页数量
+   */
+  async getCommentReplies(commentId, page = 1, pageSize = 10) {
+    const res = await apiClient.get('/comment/replies', {
+      params: { comment_id: commentId, page, page_size: pageSize }
+    })
+    return res
+  },
+
+  /**
+   * 提交评论/反馈
+   * 路由：POST /api/comment/create
+   * @param {Object} options - 评论参数
+   * @param {number} options.targetId - 目标ID
+   * @param {string} options.majorType - 评论大类 (normal/feedback)
+   * @param {string} options.minorType - 评论小类
+   * @param {string} options.content - 评论内容 (1-2000字符)
+   * @param {string[]} options.images - 图片URL数组 (最多9张)
+   */
+  async submitComment(options = {}) {
+    const res = await apiClient.post('/comment/create', {
+      target_id: options.targetId ?? 0,
+      parent_id: options.parentId || 0,
+      major_type: options.majorType || 'feedback',
+      minor_type: options.minorType,
+      content: options.content,
+      images: options.images || []
+    })
+    return res.data
   }
 }
 

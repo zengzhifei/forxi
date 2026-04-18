@@ -3,6 +3,7 @@
   <Toast ref="toastRef" />
   <ConfirmDialog ref="confirmRef" />
   <BackTop />
+  <FeedbackModal ref="feedbackRef" />
 </template>
 
 <script setup>
@@ -10,14 +11,22 @@ import { ref, onMounted, provide } from 'vue'
 import Toast from './components/Toast.vue'
 import ConfirmDialog from './components/ConfirmDialog.vue'
 import BackTop from './components/BackTop.vue'
+import FeedbackModal from './components/FeedbackModal.vue'
 import { setToastFunction } from './utils/api'
 
 const toastRef = ref(null)
 const confirmRef = ref(null)
+const feedbackRef = ref(null)
 
 function showToast(message, type = 'info', duration = 3000) {
   if (toastRef.value) {
     toastRef.value.show(message, type, duration)
+  }
+}
+
+function openFeedbackModal() {
+  if (feedbackRef.value) {
+    feedbackRef.value.openModal()
   }
 }
 
@@ -40,6 +49,10 @@ provide('confirm', {
     }
     return Promise.resolve(false)
   }
+})
+
+provide('feedback', {
+  open: openFeedbackModal
 })
 </script>
 

@@ -7,11 +7,23 @@
         <router-link to="/terms" class="hover:text-gray-500">服务条款</router-link>
         <span class="cursor-default">·</span>
         <router-link to="/privacy" class="hover:text-gray-500">隐私协议</router-link>
+        <span class="cursor-default">·</span>
+        <button @click="openFeedback" class="hover:text-gray-500 cursor-pointer">反馈</button>
       </div>
     </div>
   </footer>
 </template>
 
 <script setup>
+import { inject } from 'vue'
+
 const icpNumber = '陕ICP备2026004216号'
+
+const feedback = inject('feedback', null)
+
+function openFeedback() {
+  if (feedback?.open) {
+    feedback.open()
+  }
+}
 </script>

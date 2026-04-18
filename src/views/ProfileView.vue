@@ -321,6 +321,100 @@
             </button>
           </div>
         </div>
+
+        <!-- 我的反馈 -->
+        <div v-if="activeTab === 'feedback'" class="p-6">
+          <div v-if="feedbackLoading" class="text-center py-8 text-zinc-400">
+            加载中...
+          </div>
+          <div v-else-if="myFeedback.length === 0" class="text-center py-8 text-zinc-400">
+            暂无反馈记录
+          </div>
+          <div v-else class="space-y-4">
+            <div
+              v-for="item in myFeedback"
+              :key="item.id"
+              class="p-4 bg-zinc-50 rounded-xl border border-zinc-100"
+            >
+              <div class="flex items-start justify-between mb-2">
+                <p class="text-sm text-zinc-700 flex-1 pr-4">{{ item.content }}</p>
+                <span class="text-xs text-zinc-400 whitespace-nowrap">
+                  {{ formatDate(item.created_at) }}
+                </span>
+              </div>
+              <div v-if="item.images && item.images.length > 0" class="flex gap-2 mb-2 flex-wrap">
+                <img
+                  v-for="(img, idx) in item.images"
+                  :key="idx"
+                  :src="img"
+                  class="w-16 h-16 object-cover rounded-lg"
+                />
+              </div>
+              <div class="flex items-center gap-4 text-xs text-zinc-400">
+                <button
+                  v-if="item.reply_count > 0"
+                  @click="toggleReplies(item)"
+                  class="hover:text-zinc-600 transition-colors"
+                >
+                  {{ expandedReplies[item.id] ? '收起回复' : `查看 ${item.reply_count} 条回复` }}
+                </button>
+              </div>
+
+              <!-- 回复列表 -->
+              <div v-if="expandedReplies[item.id]" class="mt-3 space-y-2 pl-4 border-l-2 border-zinc-200">
+                <div v-if="repliesLoading[item.id]" class="text-center py-2 text-xs text-zinc-400">
+                  加载中...
+                </div>
+                <div v-else-if="!itemReplies[item.id] || itemReplies[item.id].length === 0" class="text-center py-2 text-xs text-zinc-400">
+                  暂无回复
+                </div>
+                <div
+                  v-else
+                  v-for="reply in itemReplies[item.id]"
+                  :key="reply.id"
+                  class="p-3 bg-white rounded-lg border border-zinc-100"
+                >
+                  <div class="flex items-start gap-2">
+                    <img
+                      v-if="reply.user?.avatar"
+                      :src="reply.user.avatar.trim().replace(/`/g, '')"
+                      class="w-8 h-8 rounded-full object-cover flex-shrink-0"
+                      @error="(e) => e.target.style.display = 'none'"
+                    />
+                    <div v-else class="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center flex-shrink-0">
+                      {{ (reply.user?.nickname || '用户').charAt(0).toUpperCase() }}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div class="flex items-center gap-2 flex-wrap">
+                        <span class="text-sm font-medium text-zinc-700">{{ reply.user?.nickname || '用户' }}</span>
+                        <span class="text-xs text-zinc-400">▶</span>
+                        <span class="text-sm font-medium text-zinc-700">{{ getReplyToWhom(reply, item) }}</span>
+                      </div>
+                      <p class="text-sm text-zinc-600 mt-1">{{ reply.content }}</p>
+                      <p class="text-xs text-zinc-400 mt-1">{{ formatDate(reply.created_at) }}</p>
+                    </div>
+                  </div>
+                </div>
+                <!-- 回复分页 -->
+                <Pagination
+                  v-if="replyMeta[item.id] && replyMeta[item.id].total_pages > 1"
+                  :meta="replyMeta[item.id]"
+                  @page-change="(page) => fetchReplies(item, page)"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- 分页 -->
+          <div class="flex justify-center mt-6">
+            <Pagination
+              v-if="feedbackMeta.total > 0"
+              :key="feedbackMeta.page"
+              :meta="{page: feedbackMeta.page, page_size: feedbackMeta.pageSize, total: feedbackMeta.total, total_pages: feedbackMeta.totalPages}"
+              @page-change="(page) => fetchMyFeedback(page)"
+            />
+          </div>
+        </div>
       </div>
     </div>
 
@@ -337,6 +431,7 @@ import sso from '../utils/sso'
 import { validatePassword, PASSWORD_RULES, getPasswordStrength } from '../utils/validate'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
+import Pagination from '../components/Pagination.vue'
 
 const toast = inject('toast')
 const confirm = inject('confirm')
@@ -373,6 +468,9 @@ onUnmounted(() => {
 })
 
 watch(activeTab, (val) => {
+  if (val === 'feedback' && myFeedback.value.length === 0) {
+    fetchMyFeedback(1)
+  }
   if (val !== 'profile') {
     location.hash = val
   } else {
@@ -388,6 +486,7 @@ const tabs = [
   { id: 'profile', name: '基本资料' },
   { id: 'password', name: '修改密码' },
   { id: 'oauth', name: '账号绑定' },
+  { id: 'feedback', name: '我的反馈' },
   { id: 'logs', name: '登录日志' }
 ]
 
@@ -419,6 +518,109 @@ const showNewPassword = ref(false)
 const showConfirmPassword = ref(false)
 const showPasswordRules = ref(false)
 
+const expandedReplies = ref({})
+const repliesLoading = ref({})
+const itemReplies = ref({})
+const replyMeta = ref({})
+
+const toggleReplies = async (item) => {
+  const isExpanded = !!expandedReplies.value[item.id]
+  expandedReplies.value[item.id] = !isExpanded
+
+  if (!isExpanded && !itemReplies.value[item.id]) {
+    repliesLoading.value[item.id] = true
+    try {
+      const res = await api.getCommentReplies(item.id)
+      let data = []
+      let meta = null
+
+      if (Array.isArray(res)) {
+        data = res
+        meta = null
+      } else if (res?.data && Array.isArray(res.data)) {
+        data = res.data
+        meta = res.meta || null
+      } else if (res?.data?.comments) {
+        data = res.data.comments
+        meta = res.data.meta || null
+      }
+
+      const replies = data
+      itemReplies.value[item.id] = replies
+      const userMap = {}
+      replies.forEach(r => {
+        if (r.user) {
+          userMap[r.id] = r.user.nickname || '用户'
+        }
+      })
+      replyUserMap[item.id] = userMap
+
+      if (meta) {
+        replyMeta.value[item.id] = meta
+      } else {
+        replyMeta.value[item.id] = { page: 1, page_size: 10, total: replies.length, total_pages: 1 }
+      }
+    } catch (err) {
+      console.error('获取回复失败:', err)
+      itemReplies.value[item.id] = []
+      replyMeta.value[item.id] = { page: 1, page_size: 10, total: 0, total_pages: 1 }
+    } finally {
+      repliesLoading.value[item.id] = false
+    }
+  }
+}
+
+const replyUserMap = {}
+
+const fetchReplies = async (item, page = 1) => {
+  repliesLoading.value[item.id] = true
+  try {
+    const res = await api.getCommentReplies(item.id, page)
+    let data = []
+    let meta = null
+
+    if (Array.isArray(res)) {
+      data = res
+      meta = null
+    } else if (res?.data && Array.isArray(res.data)) {
+      data = res.data
+      meta = res.meta || null
+    } else if (res?.data?.comments) {
+      data = res.data.comments
+      meta = res.data.meta || null
+    }
+
+    itemReplies.value[item.id] = data
+
+    const userMap = {}
+    data.forEach(r => {
+      if (r.user) {
+        userMap[r.id] = r.user.nickname || '用户'
+      }
+    })
+    replyUserMap[item.id] = userMap
+
+    if (meta) {
+      replyMeta.value[item.id] = meta
+    } else {
+      replyMeta.value[item.id] = { page: 1, page_size: 10, total: data.length, total_pages: 1 }
+    }
+  } catch (err) {
+    console.error('获取回复失败:', err)
+    itemReplies.value[item.id] = []
+  } finally {
+    repliesLoading.value[item.id] = false
+  }
+}
+
+const getReplyToWhom = (reply, item) => {
+  if (reply.parent_id === item.id) {
+    return item.user?.nickname || user.value?.nickname || '用户'
+  }
+  const map = replyUserMap[item.id]
+  return map ? (map[reply.parent_id] || '用户') : '用户'
+}
+
 const currentAvatar = computed(() => {
   const avatar = profileForm.avatar || user.value?.avatar || ''
   return avatar.trim().replace(/`/g, '')
@@ -449,6 +651,61 @@ const logsMeta = ref({
   total: 0,
   totalPages: 0
 })
+
+const myFeedback = ref([])
+const feedbackMeta = ref({
+  page: 1,
+  pageSize: 10,
+  total: 0,
+  totalPages: 0
+})
+const feedbackMetaForPagination = computed(() => ({
+  page: feedbackMeta.value.page,
+  page_size: feedbackMeta.value.pageSize,
+  total: feedbackMeta.value.total,
+  total_pages: feedbackMeta.value.totalPages
+}))
+const feedbackLoading = ref(false)
+
+const fetchMyFeedback = async (page = 1) => {
+  feedbackLoading.value = true
+  try {
+    const res = await api.getMyFeedback(page, feedbackMeta.value.pageSize)
+    let data = []
+    let meta = null
+
+    if (Array.isArray(res)) {
+      data = res
+      meta = null
+    } else if (res?.data && Array.isArray(res.data)) {
+      data = res.data
+      meta = res.meta || null
+    } else if (res?.data?.comments) {
+      data = res.data.comments
+      meta = res.data.meta || null
+    }
+
+    myFeedback.value = data
+
+    if (meta) {
+      feedbackMeta.value = {
+        page: meta.page || page,
+        pageSize: meta.page_size || 10,
+        total: meta.total || data.length,
+        totalPages: meta.total_pages || 1
+      }
+    } else {
+      const totalItems = data.length
+      const totalPages = Math.ceil(totalItems / feedbackMeta.value.pageSize) || 1
+      feedbackMeta.value = { ...feedbackMeta.value, page, pageSize: feedbackMeta.value.pageSize, total: totalItems, totalPages }
+    }
+  } catch (err) {
+    console.error('获取我的反馈失败:', err)
+    toast.error('获取反馈列表失败')
+  } finally {
+    feedbackLoading.value = false
+  }
+}
 
 const fetchOauthAccounts = async () => {
   try {
