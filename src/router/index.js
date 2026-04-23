@@ -33,6 +33,7 @@ const OnThisDayView = () => import('../views/OnThisDayView.vue')
 const MbtiView = () => import('../views/MbtiView.vue')
 const ColdKnowledgeView = () => import('../views/ColdKnowledgeView.vue')
 const CalculatorView = () => import('../views/CalculatorView.vue')
+const IpQueryView = () => import('../views/IpQueryView.vue')
 
 // 路由配置
 const routes = [
@@ -315,6 +316,16 @@ const routes = [
       title: 'Forxi - 应用 - 超级计算器',
       description: '免费在线超级计算器，支持数学计算、科学计算、金融计算、进制转换、字节换算、单位换算等多种计算功能。',
       keywords: '计算器，在线计算器，科学计算器，复利计算器，进制转换，单位换算'
+    }
+  },
+  {
+    path: '/hub/ip-query',
+    name: 'ip-query',
+    component: IpQueryView,
+    meta: {
+      title: 'Forxi - 应用 - IP查询',
+      description: '免费在线IP查询工具，查询IP地址的地理位置、网络信息和实时天气。',
+      keywords: 'IP查询，IP地址查询，地理位置查询，IP归属地查询'
     }
   },
   {

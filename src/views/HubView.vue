@@ -408,6 +408,60 @@
           </div>
         </div>
 
+        <div class="h-px bg-zinc-200"></div>
+
+        <!-- IP查询 -->
+        <div class="flex flex-col md:flex-row-reverse items-start gap-4 md:gap-10">
+          <div class="w-full md:w-1/3 flex-shrink-0">
+            <div class="flex md:hidden items-center gap-3 p-3.5 bg-blue-50 rounded-xl">
+              <div class="w-9 h-9 rounded-lg bg-blue-100 text-blue-500 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+              </div>
+              <span class="font-semibold text-zinc-700 text-sm flex-1">IP查询</span>
+              <router-link to="/hub/ip-query" class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-500 text-white text-xs font-medium rounded-lg whitespace-nowrap">
+                立即使用
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </router-link>
+            </div>
+            <div class="hidden md:flex bg-blue-50 rounded-2xl p-8 flex-col items-center text-center">
+              <div class="w-14 h-14 rounded-xl bg-blue-100 text-blue-500 flex items-center justify-center mb-4">
+                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+              </div>
+              <h3 class="text-lg font-semibold text-zinc-700 mb-2">IP查询</h3>
+              <router-link to="/hub/ip-query" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors">
+                立即使用
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </router-link>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">IP地理位置与天气查询</h3>
+            <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">输入任意IP地址，快速查询其地理位置信息，包括国家、城市、区域、经纬度、时区等。同时获取该IP所在位置的实时天气信息，包括温度、风速、风向、天气状况等。</p>
+            <div class="space-y-2 text-sm text-zinc-500">
+              <h4 class="font-medium text-zinc-600 mb-2">使用说明</h4>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">1</span>
+                <span>输入要查询的IP地址，或留空直接查询本机IP</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">2</span>
+                <span>点击查询按钮获取IP的地理和天气信息</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">3</span>
+                <span>信息以卡片形式展示，支持一键复制查询结果</span>
+              </div>
+            </div>
+            <div class="mt-3 sm:mt-4 flex flex-wrap gap-2">
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">地理位置</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">网络运营商</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">实时天气</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">经纬度</span>
+              <span class="px-2.5 py-1 text-xs rounded-md bg-zinc-100 text-zinc-500">时区信息</span>
+            </div>
+          </div>
+        </div>
+
       </section>
 
       <!-- Highlights -->

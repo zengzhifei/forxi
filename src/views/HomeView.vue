@@ -216,6 +216,14 @@ const CalculatorIcon = {
   }
 }
 
+const IpQueryIcon = {
+  render() {
+    return h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
+      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-width': '2', d: 'M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9' })
+    ])
+  }
+}
+
 const JetbrainsIcon = {
   render() {
     return h('svg', { xmlns: 'http://www.w3.org/2000/svg', width: '32', height: '32', fill: 'none', viewBox: '0 0 32 32' }, [
@@ -351,6 +359,19 @@ const tools = [
     iconActive: 'text-amber-600',
     buttonText: '全能计算',
     onClick: () => navigateTo('/hub/calculator')
+  },
+  {
+    title: 'IP查询',
+    description: '查询IP地址的地理位置、网络运营商和实时天气信息',
+    icon: IpQueryIcon,
+    bgDefault: 'bg-zinc-50',
+    bgHover: 'group-hover:bg-blue-100',
+    bgActive: 'bg-blue-100',
+    iconDefault: 'text-zinc-300',
+    iconHover: 'group-hover:text-blue-600',
+    iconActive: 'text-blue-600',
+    buttonText: 'IP定位',
+    onClick: () => navigateTo('/hub/ip-query')
   },
 ]
 

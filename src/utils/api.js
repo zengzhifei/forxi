@@ -368,6 +368,20 @@ export const api = {
     return res.data
   },
 
+  // ==================== IP 查询接口 ====================
+
+  /**
+   * 获取IP地理和天气信息
+   * 路由：GET /api/ip/info
+   * @param {string} ip - IP地址，不传则自动获取客户端IP
+   */
+  async getIpInfo(ip) {
+    const params = {}
+    if (ip) params.ip = ip
+    const res = await apiClient.get('/ip/info', { params })
+    return res.data
+  },
+
   // ==================== 评论接口 ====================
 
   /**
