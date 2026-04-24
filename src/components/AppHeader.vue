@@ -16,8 +16,7 @@
         </button>
 
         <router-link to="/" class="flex items-center">
-          <img src="/logo.svg" alt="Forxi Logo" class="h-8 w-8" />
-          <h1 class="ml-2 text-lg font-semibold text-gray-900">Forxi</h1>
+          <img src="/logo.jpg" alt="Forxi Logo" class="h-12" />
         </router-link>
 
         <UserMenu />
@@ -28,8 +27,7 @@
         <!-- Logo -->
         <div class="flex items-center">
           <router-link to="/" class="flex items-center">
-            <img src="/logo.svg" alt="Forxi Logo" class="h-8 w-8" />
-            <h1 class="ml-2 text-xl font-semibold text-gray-900">Forxi</h1>
+            <img src="/logo.jpg" alt="Forxi Logo" class="h-12" />
           </router-link>
         </div>
 
@@ -231,8 +229,7 @@
         <!-- 抽屉顶部 -->
         <div class="flex items-center justify-between px-5 h-16 border-b border-zinc-100 flex-shrink-0">
           <div class="flex items-center">
-            <img src="/logo.svg" alt="Forxi Logo" class="h-7 w-7" />
-            <span class="ml-2 text-base font-semibold text-zinc-700">Forxi</span>
+            <img src="/logo.jpg" alt="Forxi Logo" class="h-10" />
           </div>
           <button @click="menuOpen = false" class="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-600 hover:bg-zinc-50">
             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
