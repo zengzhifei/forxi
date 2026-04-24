@@ -362,7 +362,7 @@ const tools = [
   },
   {
     title: 'IP查询',
-    description: '查询IP地址的地理位置、网络运营商和实时天气信息',
+    description: '查询全球IP地址的地理位置、网络运营商和实时天气信息',
     icon: IpQueryIcon,
     bgDefault: 'bg-zinc-50',
     bgHover: 'group-hover:bg-blue-100',

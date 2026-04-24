@@ -324,8 +324,8 @@ const routes = [
     component: IpQueryView,
     meta: {
       title: 'Forxi - 应用 - IP查询',
-      description: '免费在线IP查询工具，查询IP地址的地理位置、网络信息和实时天气。',
-      keywords: 'IP查询，IP地址查询，地理位置查询，IP归属地查询'
+      description: '免费在线IP查询工具，查询全球IP地址的地理位置、网络信息和实时天气。',
+      keywords: '全球IP查询，全球IP地址查询，全球地理位置查询，全球IP归属地查询'
     }
   },
   {
