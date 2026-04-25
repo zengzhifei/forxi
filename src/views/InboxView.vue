@@ -35,7 +35,7 @@
                 <h3 class="text-lg font-semibold text-zinc-700">我的邮箱</h3>
                 <p class="text-sm text-zinc-500 mt-1">每个邮箱有效期30分钟，最多创建10个邮箱，每个邮箱最多接收20封邮件</p>
               </div>
-              <div class="flex gap-2">
+              <div class="flex sm:justify-end gap-2 self-start sm:self-auto ml-auto sm:ml-0">
                 <button
                   @click="createMailbox"
                   :disabled="loading.create || mailboxes.length >= 10"
@@ -331,7 +331,7 @@ const createMailbox = async () => {
   loading.value.create = true
   try {
     const data = await api.createMailbox()
-    mailboxes.value.push(data)
+    mailboxes.value.unshift(data)
     selectedMailbox.value = data
     emails.value = []
   } catch (e) {
