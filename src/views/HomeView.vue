@@ -259,6 +259,14 @@ const SnowflakeIcon = {
   }
 }
 
+const MailIcon = {
+  render() {
+    return h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
+      h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'stroke-width': '2', d: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' })
+    ])
+  }
+}
+
 const BookIcon = {
   render() {
     return h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' }, [
@@ -372,6 +380,19 @@ const tools = [
     iconActive: 'text-blue-600',
     buttonText: 'IP定位',
     onClick: () => navigateTo('/hub/ip-query')
+  },
+  {
+    title: '临时邮箱',
+    description: '创建临时邮箱接收邮件，保护您的真实邮箱隐私',
+    icon: MailIcon,
+    bgDefault: 'bg-zinc-50',
+    bgHover: 'group-hover:bg-amber-100',
+    bgActive: 'bg-amber-100',
+    iconDefault: 'text-zinc-300',
+    iconHover: 'group-hover:text-amber-600',
+    iconActive: 'text-amber-600',
+    buttonText: '匿名邮件',
+    onClick: () => navigateTo('/hub/inbox')
   },
 ]
 

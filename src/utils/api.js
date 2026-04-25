@@ -440,6 +440,48 @@ export const api = {
       images: options.images || []
     })
     return res.data
+  },
+
+  // ==================== 邮箱接口 ====================
+
+  /**
+   * 创建临时邮箱
+   * 路由：POST /api/mailbox/create
+   */
+  async createMailbox() {
+    const res = await apiClient.post('/mailbox/create')
+    return res.data
+  },
+
+  /**
+   * 获取邮箱列表
+   * 路由：GET /api/mailbox/list
+   */
+  async getMailboxList() {
+    const res = await apiClient.get('/mailbox/list')
+    return res.data
+  },
+
+  /**
+   * 获取邮件列表
+   * 路由：GET /api/mailbox/pool
+   * @param {string} address - 邮箱地址
+   */
+  async getMailboxPool(address) {
+    const res = await apiClient.get('/mailbox/pool', {
+      params: { address }
+    })
+    return res.data
+  },
+
+  /**
+   * 删除邮箱
+   * 路由：POST /api/mailbox/delete
+   * @param {string} address - 邮箱地址
+   */
+  async deleteMailbox(address) {
+    const res = await apiClient.post('/mailbox/delete', { address })
+    return res.data
   }
 }
 

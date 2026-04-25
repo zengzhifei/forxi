@@ -34,6 +34,7 @@ const MbtiView = () => import('../views/MbtiView.vue')
 const ColdKnowledgeView = () => import('../views/ColdKnowledgeView.vue')
 const CalculatorView = () => import('../views/CalculatorView.vue')
 const IpQueryView = () => import('../views/IpQueryView.vue')
+const InboxView = () => import('../views/InboxView.vue')
 
 // 路由配置
 const routes = [
@@ -326,6 +327,16 @@ const routes = [
       title: '福兮 Forxi - 应用 - IP查询',
       description: '免费在线IP查询工具，查询全球IP地址的地理位置、网络信息和实时天气。',
       keywords: '福兮,全球IP查询，全球IP地址查询，全球地理位置查询，全球IP归属地查询'
+    }
+  },
+  {
+    path: '/hub/inbox',
+    name: 'inbox',
+    component: InboxView,
+    meta: {
+      title: '福兮 Forxi - 应用 - 临时邮箱',
+      description: '免费在线临时邮箱服务，创建一次性邮箱接收邮件，保护您的真实邮箱隐私。',
+      keywords: '福兮,临时邮箱,一次性邮箱,匿名邮箱,邮件接收'
     }
   },
   {
