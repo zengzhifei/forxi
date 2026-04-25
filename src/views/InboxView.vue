@@ -136,7 +136,7 @@
                     邮件列表
                   </h3>
                 </div>
-                <div class="p-4">
+                <div class="p-4 min-h-[300px]">
                   <div v-if="!selectedMailbox" class="text-center py-12">
                     <svg class="w-16 h-16 text-zinc-200 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                     <p class="text-zinc-500">选择邮箱查看邮件</p>
@@ -188,37 +188,46 @@
     <AppFooter />
 
     <div v-if="showEmailDetail" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" @click.self="closeEmailDetail">
-      <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
-        <div class="bg-gradient-to-r from-violet-500 to-purple-500 px-6 py-4 flex items-center justify-between">
-          <h3 class="text-white font-semibold">邮件详情</h3>
-          <button @click="closeEmailDetail" class="p-1 text-white/80 hover:text-white transition-colors">
+      <div class="bg-white rounded-2xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+        <div class="px-6 py-3 border-b border-zinc-200 flex items-center justify-between flex-shrink-0 bg-white">
+          <h3 class="text-base font-semibold text-zinc-800">邮件详情</h3>
+          <button @click="closeEmailDetail" class="p-1.5 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
-        <div class="p-6 overflow-y-auto max-h-[calc(80vh-70px)]">
-          <div class="mb-4">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-10 h-10 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center font-medium text-sm">
-                {{ getAvatarText(emailDetail) }}
+
+        <div class="flex-1 overflow-y-auto bg-white">
+          <div class="p-6">
+            <h1 class="text-xl font-semibold text-zinc-900 mb-4">{{ emailDetail.subject || '(无主题)' }}</h1>
+
+            <div class="border border-zinc-200 rounded-lg overflow-hidden">
+              <div class="flex items-center px-4 py-3 bg-zinc-50 border-b border-zinc-200">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 text-white flex items-center justify-center font-semibold flex-shrink-0">
+                  {{ getAvatarText(emailDetail) }}
+                </div>
+                <div class="ml-3 flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="font-medium text-zinc-800">{{ emailDetail.from_name || emailDetail.from }}</p>
+                      <p class="text-sm text-zinc-500">&lt;{{ emailDetail.from }}&gt;</p>
+                    </div>
+                    <p class="text-sm text-zinc-400">{{ formatFullTime(emailDetail.received_at) }}</p>
+                  </div>
+                </div>
               </div>
-              <div>
-                <p class="font-medium text-zinc-700">{{ emailDetail.from_name || emailDetail.from }}</p>
-                <p class="text-sm text-zinc-500">{{ emailDetail.from }}</p>
+
+              <div class="px-4 py-3 border-b border-zinc-200 text-sm">
+                <div class="flex items-center text-zinc-600">
+                  <span class="text-zinc-500 w-12 flex-shrink-0">收件人:</span>
+                  <span class="text-zinc-800">{{ emailDetail.to }}</span>
+                </div>
               </div>
             </div>
-            <div class="text-xs text-zinc-400">
-              收件人: {{ emailDetail.to }} | 收件时间: {{ formatFullTime(emailDetail.received_at) }}
+
+            <div class="mt-6 p-6 bg-zinc-50 rounded-lg border border-zinc-200 text-zinc-700 leading-relaxed min-h-[200px]">
+              <div v-if="emailDetail.html_body && emailDetail.html_body !== emailDetail.body" class="prose prose-sm max-w-none" v-html="emailDetail.html_body"></div>
+              <pre v-else class="whitespace-pre-wrap text-base">{{ emailDetail.body || '(空)' }}</pre>
             </div>
-          </div>
-          <div class="h-px bg-zinc-100 my-4"></div>
-          <div class="mb-4">
-            <h4 class="text-sm font-medium text-zinc-700 mb-2">主题</h4>
-            <p class="text-zinc-600">{{ emailDetail.subject || '(无主题)' }}</p>
-          </div>
-          <div>
-            <h4 class="text-sm font-medium text-zinc-700 mb-2">正文</h4>
-            <div v-if="emailDetail.html_body && emailDetail.html_body !== emailDetail.body" class="text-zinc-600 prose prose-sm max-w-none" v-html="emailDetail.html_body"></div>
-            <pre v-else class="text-zinc-600 whitespace-pre-wrap text-sm bg-zinc-50 p-4 rounded-xl">{{ emailDetail.body || '(空)' }}</pre>
           </div>
         </div>
       </div>
@@ -251,7 +260,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, inject } from 'vue'
+import { ref, onMounted, onUnmounted, inject, watch } from 'vue'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
 import { api } from '../utils/api.js'
@@ -267,6 +276,10 @@ const emailDetail = ref(null)
 const showEmailDetail = ref(false)
 const showDeleteConfirm = ref(false)
 const deleteTarget = ref('')
+
+watch([showEmailDetail, showDeleteConfirm], ([detail, confirm]) => {
+  document.body.style.overflow = (detail || confirm) ? 'hidden' : ''
+})
 
 const loading = ref({
   create: false,
