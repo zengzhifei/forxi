@@ -50,7 +50,10 @@
               <p class="text-zinc-400 text-sm mb-6">如果觉得好用，可以请作者喝杯咖啡</p>
               <div class="flex justify-center gap-6 sm:gap-10">
                 <div class="text-center">
-                  <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-5 border border-gray-200 mb-3 transition-transform hover:scale-105">
+                  <div
+                    class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-5 border border-gray-200 mb-3 transition-transform hover:scale-105 cursor-zoom-in"
+                    @click="openViewer('/wx_tip.jpg', '微信打赏')"
+                  >
                     <img src="/wx_tip.jpg" alt="微信打赏" class="w-36 sm:w-44 h-auto rounded-lg" />
                   </div>
                   <div class="flex items-center justify-center gap-1.5 text-zinc-600">
@@ -61,7 +64,10 @@
                   </div>
                 </div>
                 <div class="text-center">
-                  <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-5 border border-gray-200 mb-3 transition-transform hover:scale-105">
+                  <div
+                    class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-5 border border-gray-200 mb-3 transition-transform hover:scale-105 cursor-zoom-in"
+                    @click="openViewer('/zfb_tip.jpg', '支付宝打赏')"
+                  >
                     <img src="/zfb_tip.jpg" alt="支付宝打赏" class="w-36 sm:w-44 h-auto rounded-lg" />
                   </div>
                   <div class="flex items-center justify-center gap-1.5 text-zinc-600">
@@ -81,7 +87,10 @@
               </h2>
               <p class="text-zinc-400 text-sm mb-6">扫码关注公众号，获取最新资讯</p>
               <div class="flex justify-center">
-                <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-5 border border-gray-200 transition-transform hover:scale-105">
+                <div
+                  class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-5 border border-gray-200 transition-transform hover:scale-105 cursor-zoom-in"
+                  @click="openViewer('/wx_open.png', '微信公众号')"
+                >
                   <img src="/wx_open.png" alt="微信公众号" class="w-48 h-auto rounded-lg" />
                 </div>
               </div>
@@ -116,10 +125,26 @@
     </div>
 
     <AppFooter />
+
+    <ImageViewer
+      :src="viewerSrc"
+      :visible="viewerVisible"
+      @update:visible="viewerVisible = $event"
+    />
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
+import ImageViewer from '../components/ImageViewer.vue'
+
+const viewerVisible = ref(false)
+const viewerSrc = ref('')
+
+const openViewer = (url) => {
+  viewerSrc.value = url
+  viewerVisible.value = true
+}
 </script>
