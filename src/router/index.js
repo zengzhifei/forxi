@@ -35,6 +35,7 @@ const ColdKnowledgeView = () => import('../views/ColdKnowledgeView.vue')
 const CalculatorView = () => import('../views/CalculatorView.vue')
 const IpQueryView = () => import('../views/IpQueryView.vue')
 const InboxView = () => import('../views/InboxView.vue')
+const AboutView = () => import('../views/AboutView.vue')
 
 // 路由配置
 const routes = [
@@ -97,6 +98,16 @@ const routes = [
       title: '福兮 Forxi - 隐私政策',
       description: '福兮 Forxi 隐私政策，说明我们如何收集、使用、保护您的个人信息。',
       keywords: '福兮,Forxi,隐私政策,个人信息保护'
+    }
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: AboutView,
+    meta: {
+      title: '福兮 Forxi - 关于',
+      description: '关于 福兮 Forxi，支持与关注作者的方式。',
+      keywords: '福兮,Forxi,关于,支持,打赏'
     }
   },
   {

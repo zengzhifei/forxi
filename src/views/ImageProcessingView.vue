@@ -96,6 +96,20 @@
                     <div class="absolute bottom-0 right-0 w-3 h-3 bg-white rounded-full pointer-events-auto cursor-se-resize" @mousedown.stop="startResize($event, 'se')" @touchstart.stop="startResize($event, 'se')"></div>
                   </div>
                 </div>
+                <!-- 颜色涂抹画布 -->
+                <canvas
+                  v-if="activeTab === 'mosaic'"
+                  ref="brushCanvas"
+                  class="absolute pointer-events-auto"
+                  :style="brushCanvasStyle"
+                  @mousedown="startBrushDrawing"
+                  @mousemove="handleBrushDrawing"
+                  @mouseup="stopBrushDrawing"
+                  @mouseleave="stopBrushDrawing"
+                  @touchstart.prevent="startBrushDrawing"
+                  @touchmove.prevent="handleBrushDrawing"
+                  @touchend.prevent="stopBrushDrawing"
+                ></canvas>
               </div>
             </div>
             <div class="px-4 py-2 bg-zinc-50 border-t border-zinc-100 flex justify-between text-sm text-zinc-400">
@@ -294,18 +308,92 @@
                 </button>
               </div>
 
-              <!-- 马赛克 -->
-              <div v-if="activeTab === 'mosaic'" class="space-y-4">
-                <div>
-                  <div class="flex justify-between items-center mb-2">
-                    <label class="text-sm font-medium text-zinc-600">马赛克强度</label>
-                    <span class="text-sm text-zinc-400">{{ mosaicLevel }}</span>
-                  </div>
-                  <input type="range" v-model.number="mosaicLevel" min="5" max="50" class="w-full h-2 bg-zinc-200 rounded-lg appearance-none cursor-pointer" @input="markModified('mosaic'); applyAllEffects()">
+              <!-- 颜色涂抹 -->
+              <div v-if="activeTab === 'mosaic'" class="space-y-3">
+                <!-- 模式切换 -->
+                <div class="flex items-center bg-zinc-100 rounded-xl p-1 gap-1">
+                  <button
+                    @click="brushMode = 'pick'"
+                    class="flex-1 py-2 text-sm font-medium rounded-lg transition-all flex items-center justify-center gap-1.5"
+                    :class="brushMode === 'pick' ? 'bg-white text-zinc-700 shadow-sm' : 'text-zinc-400 hover:text-zinc-500'"
+                  >
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+                    </svg>
+                    取色
+                  </button>
+                  <button
+                    @click="brushMode = 'paint'"
+                    class="flex-1 py-2 text-sm font-medium rounded-lg transition-all flex items-center justify-center gap-1.5"
+                    :class="brushMode === 'paint' ? 'bg-white text-zinc-700 shadow-sm' : 'text-zinc-400 hover:text-zinc-500'"
+                  >
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                    </svg>
+                    涂抹
+                  </button>
                 </div>
-                <button @click="resetMosaic" class="w-full py-2 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-sm transition-colors">
-                  恢复默认
-                </button>
+
+                <!-- 取色模式提示 -->
+                <div v-if="brushMode === 'pick'" class="flex items-center gap-2 px-3 py-2 bg-blue-50 border border-blue-100 rounded-xl text-xs text-blue-500">
+                  <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  点击图片任意位置吸取颜色
+                </div>
+
+                <!-- 颜色选择区 -->
+                <div class="p-3 bg-zinc-50 border border-zinc-100 rounded-xl space-y-2.5">
+                  <div class="flex items-center gap-3">
+                    <label class="text-xs font-medium text-zinc-500 w-12 flex-shrink-0">当前色</label>
+                    <div class="relative flex-shrink-0">
+                      <input type="color" v-model="brushColor" class="w-8 h-8 rounded-lg border-2 border-zinc-200 cursor-pointer appearance-none p-0.5 bg-white">
+                    </div>
+                    <span class="text-xs font-mono text-zinc-400 uppercase">{{ brushColor }}</span>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <label class="text-xs font-medium text-zinc-500 w-12 flex-shrink-0">预设色</label>
+                    <div class="flex flex-wrap gap-1.5">
+                      <button
+                        v-for="color in presetColors" :key="color"
+                        @click="brushColor = color"
+                        class="w-6 h-6 rounded-md transition-all flex-shrink-0"
+                        :style="{ backgroundColor: color }"
+                        :class="brushColor === color ? 'ring-2 ring-offset-1 ring-zinc-500 scale-110' : 'ring-1 ring-zinc-200 hover:scale-105'"
+                      ></button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 画笔大小 -->
+                <div class="p-3 bg-zinc-50 border border-zinc-100 rounded-xl">
+                  <div class="flex items-center justify-between mb-2">
+                    <label class="text-xs font-medium text-zinc-500">画笔大小</label>
+                    <div class="flex items-center gap-2">
+                      <div class="flex items-center justify-center" style="width:24px;height:24px">
+                        <div class="rounded-full flex-shrink-0" :style="{ width: Math.min(brushSize * 0.4, 20) + 'px', height: Math.min(brushSize * 0.4, 20) + 'px', backgroundColor: brushColor }"></div>
+                      </div>
+                      <span class="text-xs text-zinc-400 w-10 text-right">{{ brushSize }}px</span>
+                    </div>
+                  </div>
+                  <input type="range" v-model.number="brushSize" min="5" max="100" class="w-full h-1.5 bg-zinc-200 rounded-full appearance-none cursor-pointer accent-zinc-500">
+                </div>
+
+                <!-- 操作按钮 -->
+                <div class="flex gap-2">
+                  <button @click="undoBrushStroke" :disabled="brushHistory.length === 0" class="flex-1 py-2 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-xs transition-colors disabled:opacity-40 flex items-center justify-center gap-1">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" /></svg>
+                    撤销
+                  </button>
+                  <button @click="clearAllBrushStrokes" :disabled="brushStrokes.length === 0" class="flex-1 py-2 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-xs transition-colors disabled:opacity-40 flex items-center justify-center gap-1">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    清空
+                  </button>
+                  <button @click="resetMosaic" class="flex-1 py-2 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-xs transition-colors flex items-center justify-center gap-1">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                    重置
+                  </button>
+                </div>
               </div>
 
               <!-- AI抠图 -->
@@ -391,6 +479,28 @@
                     <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition transform" :class="{ 'translate-x-6': enableAICrop }"></div>
                   </div>
                   <span v-else class="text-sm text-zinc-400">已完成</span>
+                </div>
+                <div class="mt-3 p-3 bg-zinc-50 border border-zinc-100 rounded-xl">
+                  <div class="flex items-center mb-2">
+                    <svg class="w-4 h-4 text-zinc-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                    <span class="text-sm font-medium text-zinc-600">手动输入目标尺寸</span>
+                  </div>
+                  <div class="grid grid-cols-2 gap-3 mb-2">
+                    <div>
+                      <label class="block text-xs text-zinc-400 mb-1">目标宽度</label>
+                      <input type="number" v-model.number="manualCropWidth" min="1" :max="originalWidth" class="w-full px-3 py-2 border border-zinc-200 bg-white text-zinc-700 placeholder-zinc-300 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-200 rounded-xl outline-none transition-all text-sm" placeholder="自动" @input="applyManualCropSize">
+                    </div>
+                    <div>
+                      <label class="block text-xs text-zinc-400 mb-1">目标高度</label>
+                      <input type="number" v-model.number="manualCropHeight" min="1" :max="originalHeight" class="w-full px-3 py-2 border border-zinc-200 bg-white text-zinc-700 placeholder-zinc-300 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-200 rounded-xl outline-none transition-all text-sm" placeholder="自动" @input="applyManualCropSize">
+                    </div>
+                  </div>
+                  <div class="flex items-center">
+                    <input type="checkbox" id="maintainCropAspect" v-model="maintainCropAspectRatio" class="h-4 w-4">
+                    <label for="maintainCropAspect" class="ml-2 text-xs text-zinc-500">保持宽高比</label>
+                  </div>
                 </div>
                 <p class="text-sm text-zinc-600">
                   X: {{ Math.round(cropBox.x) }} Y: {{ Math.round(cropBox.y) }} 宽度: {{ Math.round(cropBox.width) }} 高度: {{ Math.round(cropBox.height) }}
@@ -548,7 +658,7 @@ const featureList = [
   { icon: '⬜', name: '九宫格', desc: '将图片分割成多宫格形式' },
   { icon: '⭕', name: '圆形裁剪', desc: '将图片裁剪为圆形形状' },
   { icon: '🎨', name: '图片滤镜', desc: '灰度、复古、提亮、对比、模糊' },
-  { icon: '🎯', name: '马赛克', desc: '调整马赛克强度，保护隐私' },
+  { icon: '🎯', name: '颜色涂抹', desc: '选择颜色手动涂抹覆盖指定区域' },
   { icon: '🔃', name: '格式转换', desc: '支持 JPG、PNG、WebP 格式互转' },
   { icon: '✨', name: 'AI 抠图', desc: 'AI 智能抠图，生成透明前景图与修复背景图' },
   { icon: '🔮', name: 'AI 背景透明', desc: 'AI 移除图片背景，输出透明前景图' },
@@ -595,7 +705,7 @@ const tabs = [
   { id: 'grid', name: '九宫格' },
   { id: 'circle', name: '圆形' },
   { id: 'filter', name: '滤镜' },
-  { id: 'mosaic', name: '马赛克' },
+  { id: 'mosaic', name: '涂抹' },
   { id: 'ai-remove-bg', name: '抠图', isAi: true },
   { id: 'ai-transparent', name: '背景透明', isAi: true },
   { id: 'ai-crop', name: '裁剪', isAi: true },
@@ -630,7 +740,15 @@ const gridCount = ref(1)
 const idPhotoSize = ref('35x25mm')
 const idPhotoBg = ref('white')
 const currentFilter = ref('none')
-const mosaicLevel = ref(20)
+const brushColor = ref('#000000')
+const brushSize = ref(80)
+const isBrushDrawing = ref(false)
+const brushMode = ref('paint')
+const brushStrokes = ref([])
+const brushHistory = ref([])
+const presetColors = ['#000000', '#ffffff', '#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#8b5cf6', '#ec4899', '#64748b', '#a16207', '#166534']
+const brushCanvas = ref(null)
+const brushCtx = ref(null)
 const enableCircleCrop = ref(false)
 const enableIdPhoto = ref(false)
 
@@ -644,6 +762,9 @@ const isResizing = ref(false)
 const resizeDir = ref('')
 const dragStart = ref({ x: 0, y: 0 })
 const cropStart = ref({ x: 0, y: 0, width: 0, height: 0 })
+const manualCropWidth = ref(0)
+const manualCropHeight = ref(0)
+const maintainCropAspectRatio = ref(true)
 
 const cropBoxStyle = computed(() => {
   if (!imageContainer.value) return {}
@@ -666,6 +787,21 @@ const cropBoxStyle = computed(() => {
     top: `${displayY + cropBox.value.y * scaleY}px`,
     width: `${cropBox.value.width * scaleX}px`,
     height: `${cropBox.value.height * scaleY}px`
+  }
+})
+
+const brushCanvasStyle = computed(() => {
+  if (!previewImage.value) return {}
+  const img = previewImage.value
+  const containerRect = imageContainer.value.getBoundingClientRect()
+  const imgRect = img.getBoundingClientRect()
+  
+  return {
+    left: `${imgRect.left - containerRect.left}px`,
+    top: `${imgRect.top - containerRect.top}px`,
+    width: `${imgRect.width}px`,
+    height: `${imgRect.height}px`,
+    cursor: brushMode.value === 'pick' ? 'crosshair' : 'cell'
   }
 })
 
@@ -711,7 +847,9 @@ const clearAllModified = () => {
 
 const switchTab = (tabId) => {
   activeTab.value = tabId
-  // 不再自动初始化裁剪器，等待用户点击"应用裁剪"按钮时再初始化
+  if (tabId === 'mosaic' && selectedImage.value) {
+    setTimeout(() => initBrushCanvas(), 100)
+  }
 }
 
 const triggerFileInput = () => fileInput.value.click()
@@ -766,6 +904,9 @@ const loadImage = (file) => {
     displayHeight.value = img.height
     resizeWidth.value = img.width
     resizeHeight.value = img.height
+    if (activeTab.value === 'mosaic') {
+      setTimeout(() => initBrushCanvas(), 100)
+    }
   }
   img.src = imagePreviewUrl.value
 }
@@ -784,7 +925,11 @@ const resetAllSettings = () => {
   idPhotoSize.value = '35x25mm'
   idPhotoBg.value = 'white'
   currentFilter.value = 'none'
-  mosaicLevel.value = 20
+  brushColor.value = '#000000'
+  brushSize.value = 80
+  brushMode.value = 'paint'
+  brushStrokes.value = []
+  brushHistory.value = []
   mergeDirection.value = 'horizontal'
   enableCircleCrop.value = false
   enableIdPhoto.value = false
@@ -793,6 +938,9 @@ const resetAllSettings = () => {
   enableAICrop.value = false
   isCropped.value = false
   cropBox.value = { x: 50, y: 50, width: 200, height: 200 }
+  manualCropWidth.value = 0
+  manualCropHeight.value = 0
+  maintainCropAspectRatio.value = true
   clearAllModified()
   previewUrl.value = imagePreviewUrl.value
   displayFileSize.value = originalFileSize.value
@@ -824,7 +972,7 @@ const applyAllEffects = async (forceMark = false) => {
   try {
     let currentImg = selectedImage.value
     
-    if (currentFilter.value !== 'none' || mosaicLevel.value !== 20 || gridCount.value !== 1 || 
+    if (currentFilter.value !== 'none' || brushStrokes.value.length > 0 || gridCount.value !== 1 || 
         watermarkText.value || mergeDirection.value !== 'horizontal' || secondImageUrl.value ||
         rotation.value !== 0 || flipH.value || flipV.value ||
         resizeWidth.value !== originalWidth.value || resizeHeight.value !== originalHeight.value ||
@@ -975,22 +1123,22 @@ const processWithEffects = async () => {
         ctx.restore()
       }
       
-      if (mosaicLevel.value !== 20) {
-        // 保存当前状态
+      if (brushStrokes.value.length > 0) {
         ctx.save()
-        // 重置坐标系到原始状态
         ctx.setTransform(1, 0, 0, 1, 0, 0)
         
-        const size = mosaicLevel.value
-        for (let y = 0; y < height; y += size) {
-          for (let x = 0; x < width; x += size) {
-            const pixel = ctx.getImageData(x, y, 1, 1).data
-            ctx.fillStyle = `rgb(${pixel[0]},${pixel[1]},${pixel[2]})`
-            ctx.fillRect(x, y, size, size)
-          }
-        }
+        const offsetX = width / 2
+        const offsetY = height / 2
         
-        // 恢复之前的状态
+        brushStrokes.value.forEach(stroke => {
+          ctx.fillStyle = stroke.color
+          stroke.points.forEach(point => {
+            ctx.beginPath()
+            ctx.arc(point.x + offsetX, point.y + offsetY, stroke.size / 2, 0, Math.PI * 2)
+            ctx.fill()
+          })
+        })
+        
         ctx.restore()
       }
       
@@ -1289,9 +1437,178 @@ const resetCompress = () => {
 }
 
 const resetMosaic = () => {
-  mosaicLevel.value = 20
+  brushColor.value = '#000000'
+  brushSize.value = 80
+  clearAllBrushStrokes()
   clearModified('mosaic')
-  applyAllEffects()
+}
+
+const undoBrushStroke = () => {
+  if (brushHistory.value.length > 0) {
+    brushStrokes.value = brushHistory.value.pop()
+    redrawBrushCanvas()
+  }
+}
+
+const clearAllBrushStrokes = () => {
+  brushStrokes.value = []
+  brushHistory.value = []
+  redrawBrushCanvas()
+}
+
+const redrawBrushCanvas = () => {
+  if (!brushCanvas.value || !previewImage.value) return
+  
+  const canvas = brushCanvas.value
+  canvas.width = originalWidth.value
+  canvas.height = originalHeight.value
+  
+  const ctx = canvas.getContext('2d')
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+  
+  brushStrokes.value.forEach(stroke => {
+    ctx.fillStyle = stroke.color
+    stroke.points.forEach(point => {
+      ctx.beginPath()
+      ctx.arc(point.x, point.y, stroke.size / 2, 0, Math.PI * 2)
+      ctx.fill()
+    })
+  })
+}
+
+const initBrushCanvas = () => {
+  if (!brushCanvas.value || !previewImage.value) return
+  
+  const canvas = brushCanvas.value
+  canvas.width = originalWidth.value
+  canvas.height = originalHeight.value
+  
+  brushCtx.value = canvas.getContext('2d')
+  redrawBrushCanvas()
+}
+
+const startBrushDrawing = (e) => {
+  if (activeTab.value !== 'mosaic') return
+  
+  const canvas = brushCanvas.value
+  if (!canvas) return
+  
+  const rect = canvas.getBoundingClientRect()
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY
+  
+  const scaleX = originalWidth.value / rect.width
+  const scaleY = originalHeight.value / rect.height
+  
+  const x = (clientX - rect.left) * scaleX
+  const y = (clientY - rect.top) * scaleY
+  
+  if (brushMode.value === 'pick') {
+    pickColorFromImage(x, y)
+    return
+  }
+  
+  isBrushDrawing.value = true
+  brushHistory.value.push([...brushStrokes.value.map(s => ({...s, points: [...s.points]}))])
+  
+  const currentStroke = {
+    color: brushColor.value,
+    size: brushSize.value,
+    points: [{ x, y }]
+  }
+  
+  brushStrokes.value.push(currentStroke)
+  
+  const ctx = canvas.getContext('2d')
+  ctx.fillStyle = brushColor.value
+  ctx.beginPath()
+  ctx.arc(x, y, brushSize.value / 2, 0, Math.PI * 2)
+  ctx.fill()
+}
+
+const pickColorFromImage = (x, y) => {
+  const img = previewImage.value
+  if (!img) return
+  
+  const tempCanvas = document.createElement('canvas')
+  tempCanvas.width = originalWidth.value
+  tempCanvas.height = originalHeight.value
+  const tempCtx = tempCanvas.getContext('2d')
+  
+  const imgRatio = img.naturalWidth / img.width
+  tempCtx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, originalWidth.value, originalHeight.value)
+  
+  const pixel = tempCtx.getImageData(Math.round(x), Math.round(y), 1, 1).data
+  const hex = '#' + [pixel[0], pixel[1], pixel[2]].map(v => v.toString(16).padStart(2, '0')).join('')
+  brushColor.value = hex
+}
+
+const handleBrushDrawing = (e) => {
+  if (!isBrushDrawing.value || activeTab.value !== 'mosaic') return
+  
+  const canvas = brushCanvas.value
+  if (!canvas) return
+  
+  const rect = canvas.getBoundingClientRect()
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY
+  
+  const scaleX = originalWidth.value / rect.width
+  const scaleY = originalHeight.value / rect.height
+  
+  const x = (clientX - rect.left) * scaleX
+  const y = (clientY - rect.top) * scaleY
+  
+  const currentStroke = brushStrokes.value[brushStrokes.value.length - 1]
+  if (currentStroke) {
+    currentStroke.points.push({ x, y })
+    
+    const ctx = canvas.getContext('2d')
+    ctx.fillStyle = brushColor.value
+    ctx.beginPath()
+    ctx.arc(x, y, brushSize.value / 2, 0, Math.PI * 2)
+    ctx.fill()
+  }
+}
+
+const stopBrushDrawing = () => {
+  if (isBrushDrawing.value) {
+    mergeBrushToPreview()
+  }
+  isBrushDrawing.value = false
+}
+
+const mergeBrushToPreview = async () => {
+  if (brushStrokes.value.length === 0) return
+  if (!previewImage.value) return
+  
+  const img = previewImage.value
+  const canvas = document.createElement('canvas')
+  canvas.width = originalWidth.value
+  canvas.height = originalHeight.value
+  const ctx = canvas.getContext('2d')
+  
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+
+  brushStrokes.value.forEach(stroke => {
+    ctx.fillStyle = stroke.color
+    stroke.points.forEach(point => {
+      ctx.beginPath()
+      ctx.arc(point.x, point.y, stroke.size / 2, 0, Math.PI * 2)
+      ctx.fill()
+    })
+  })
+  
+  const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'))
+  const url = URL.createObjectURL(blob)
+  
+  if (previewUrl.value && previewUrl.value !== imagePreviewUrl.value) {
+    URL.revokeObjectURL(previewUrl.value)
+  }
+  
+  previewUrl.value = url
+  displayFileSize.value = blob.size
+  markModified('mosaic')
 }
 
 const resetAICutout = async () => {
@@ -1492,6 +1809,37 @@ const handleAICrop = async () => {
   } finally {
     aiProcessing.value = false
   }
+}
+
+const applyManualCropSize = () => {
+  if (!manualCropWidth.value && !manualCropHeight.value) return
+  
+  const currentAspectRatio = cropBox.value.width / cropBox.value.height
+  let newWidth = manualCropWidth.value || cropBox.value.width
+  let newHeight = manualCropHeight.value || cropBox.value.height
+  
+  if (maintainCropAspectRatio.value) {
+    if (manualCropWidth.value && !manualCropHeight.value) {
+      newHeight = Math.round(manualCropWidth.value / currentAspectRatio)
+    } else if (!manualCropWidth.value && manualCropHeight.value) {
+      newWidth = Math.round(manualCropHeight.value * currentAspectRatio)
+    }
+  }
+  
+  newWidth = Math.min(newWidth, originalWidth.value)
+  newHeight = Math.min(newHeight, originalHeight.value)
+  
+  let newX = cropBox.value.x
+  let newY = cropBox.value.y
+  
+  if (newX + newWidth > originalWidth.value) {
+    newX = Math.max(0, originalWidth.value - newWidth)
+  }
+  if (newY + newHeight > originalHeight.value) {
+    newY = Math.max(0, originalHeight.value - newHeight)
+  }
+  
+  cropBox.value = { x: newX, y: newY, width: newWidth, height: newHeight }
 }
 
 const clearCropSelection = async () => {

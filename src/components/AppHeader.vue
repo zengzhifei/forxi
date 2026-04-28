@@ -202,6 +202,15 @@
               </div>
             </Transition>
           </div>
+
+          <!-- 关于 -->
+          <router-link
+            to="/about"
+            class="inline-flex items-center px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200"
+            :class="$route.path === '/about' ? 'bg-zinc-100 text-zinc-800' : 'text-gray-500 hover:bg-zinc-50 hover:text-gray-700'"
+          >
+            关于
+          </router-link>
         </nav>
 
         <!-- 用户菜单 -->
@@ -376,6 +385,21 @@
               >
                 <span class="flex-shrink-0 w-4 h-4 flex items-center justify-center opacity-70" v-html="item.icon"></span>
                 {{ item.name }}
+              </router-link>
+            </div>
+          </div>
+
+          <!-- 关于 -->
+          <div class="mt-1">
+            <div class="mx-3 h-px bg-zinc-100"></div>
+            <div class="px-3 pt-3 pb-1">
+              <router-link
+                to="/about"
+                @click="menuOpen = false"
+                class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-colors"
+                :class="$route.path === '/about' ? 'text-zinc-800' : 'text-zinc-500 hover:text-zinc-800'"
+              >
+                关于
               </router-link>
             </div>
           </div>

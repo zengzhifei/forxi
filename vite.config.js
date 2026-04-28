@@ -45,6 +45,7 @@ export default defineConfig(({ mode }) => {
           '/ai/', '/ai/chat', '/ai/text2image', '/ai/image2image',
           '/idea/','/idea/articles','/idea/coldknowledge',
           '/explore/', '/explore/jetbra', '/explore/onthisday', '/explore/mbti',
+          '/about/',
          ],
         renderer: new Renderer({
           maxConcurrentRoutes: 2,
