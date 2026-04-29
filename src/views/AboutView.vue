@@ -89,9 +89,9 @@
               <div class="flex justify-center">
                 <div
                   class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-5 border border-gray-200 transition-transform hover:scale-105 cursor-zoom-in"
-                  @click="openViewer('/wx_open.png', '微信公众号')"
+                  @click="openViewer('/wx_open.jpg', '微信公众号')"
                 >
-                  <img src="/wx_open.png" alt="微信公众号" class="w-48 h-auto rounded-lg" />
+                  <img src="/wx_open.jpg" alt="微信公众号" class="w-48 h-auto rounded-lg" />
                 </div>
               </div>
             </section>
