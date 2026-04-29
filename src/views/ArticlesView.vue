@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen bg-gray-100">
+  <div class="min-h-screen bg-gray-100 flex flex-col">
     <AppHeader />
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1">
       <div class="flex gap-6">
         <aside class="hidden lg:block w-64 flex-shrink-0">
           <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sticky top-24">
@@ -195,6 +195,7 @@
       </div>
     </div>
 
+    <AppFooter />
   </div>
 </template>
 
@@ -202,6 +203,7 @@
 import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
+import AppFooter from '../components/AppFooter.vue'
 import Pagination from '../components/Pagination.vue'
 import MarkdownIt from 'markdown-it'
 import hljs from 'highlight.js/lib/common'

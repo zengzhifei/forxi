@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen bg-gray-100">
+  <div class="min-h-screen bg-gray-100 flex flex-col">
     <AppHeader />
 
-    <div class="max-w-4xl mx-auto py-8 px-4">
+    <div class="max-w-4xl w-full mx-auto py-8 px-4 flex-1">
       <h1 class="text-2xl font-semibold text-zinc-700 mb-8">个人中心</h1>
 
       <!-- 用户信息卡片 -->
