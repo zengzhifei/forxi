@@ -10,7 +10,7 @@
             <p class="mt-1 text-sm text-zinc-400">最后更新：2026年3月26日</p>
           </div>
 
-          <div class="px-6 sm:px-8 py-6 sm:py-8 prose prose-zinc max-w-none text-sm sm:text-base">
+          <div class="px-6 sm:px-8 py-6 sm:py-8 prose prose-zinc max-w-none text-sm sm:text-base" data-snippet>
             <section class="mb-8">
               <h2 class="text-lg font-semibold text-zinc-700 mb-3">一、接受条款</h2>
               <p class="text-zinc-500 leading-relaxed">

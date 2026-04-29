@@ -22,7 +22,7 @@
             </div>
           </div>
 
-          <div class="px-8 py-8">
+          <div class="px-8 py-8" data-snippet>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
               <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-4 text-center">
                 <div class="text-2xl font-bold text-emerald-600">40+</div>

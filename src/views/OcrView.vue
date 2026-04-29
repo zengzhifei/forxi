@@ -4,7 +4,8 @@
 
     <main class="flex-1">
       <div class="max-w-7xl mx-auto py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-6">
+        <h1 class="sr-only">免费在线图片OCR文字识别 - 图片转文字</h1>
+        <div class="text-center mb-6" data-snippet>
           <h2 class="text-2xl font-semibold text-zinc-700 mb-2">图片OCR</h2>
           <p class="text-sm text-zinc-400">上传图片自动识别文字</p>
         </div>

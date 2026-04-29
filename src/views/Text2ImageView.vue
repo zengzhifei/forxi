@@ -6,7 +6,8 @@
       <div class="max-w-5xl mx-auto py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
         <div class="space-y-6">
           <div class="bg-white rounded-2xl shadow-sm border border-zinc-100 p-6 sm:p-8">
-            <div class="hidden lg:flex items-center gap-3 mb-6">
+            <h1 class="sr-only">免费在线AI文生图 - 文字描述生成精美图片</h1>
+          <div class="hidden lg:flex items-center gap-3 mb-6">
               <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-zinc-100">
                 <svg class="w-5 h-5 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -114,7 +115,7 @@
               <div class="p-6">
                 <div class="flex justify-center">
                   <div class="relative group">
-                    <img :src="generatedImage" class="max-w-full max-h-[600px] rounded-xl shadow-md" />
+                    <img :src="generatedImage" class="max-w-full max-h-[600px] rounded-xl shadow-md" alt="AI文生图生成结果" />
                     <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center gap-4">
                       <a
                         :href="generatedImage"

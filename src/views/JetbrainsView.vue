@@ -2,6 +2,7 @@
   <div class="jetbrains-page">
     <AppHeader />
     <div class="jetbrains-container">
+      <h1 class="sr-only">JetBrains IDE 激活 - IntelliJ IDEA、PyCharm、WebStorm 等全系激活</h1>
       <iframe 
         src="/jetbrains/index.html" 
         frameborder="0" 

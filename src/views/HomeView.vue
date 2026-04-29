@@ -47,7 +47,7 @@
       </div>
     </section>
 
-    <section id="tools" class="pt-16 pb-24 bg-white">
+    <section id="tools" class="pt-16 pb-24 bg-white" data-snippet>
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
           <h2 class="text-xl sm:text-2xl font-bold text-zinc-600 mb-4">此中有真意</h2>

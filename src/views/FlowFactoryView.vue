@@ -2,6 +2,7 @@
   <div class="ffc">
     <AppHeader />
     <div class="ffc-body" :class="{ 'is-mobile': isMobile }">
+      <h1 class="sr-only">免费在线流程图制作工具 - 拖拽式流程设计</h1>
 
       <!-- 移动端全屏提示 -->
       <div v-if="isMobile" class="mobile-overlay">

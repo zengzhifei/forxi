@@ -38,7 +38,7 @@
               <div class="w-14 h-14 rounded-xl bg-emerald-100 text-emerald-500 flex items-center justify-center mb-4">
                 <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
               </div>
-              <h3 class="text-lg font-semibold text-zinc-700 mb-2">文章</h3>
+              <h2 class="text-lg font-semibold text-zinc-700 mb-2">文章</h2>
               <router-link to="/idea/articles/" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-emerald-500 text-white text-sm font-medium rounded-lg hover:bg-emerald-600 transition-colors">
                 开始阅读
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
@@ -46,7 +46,7 @@
             </div>
           </div>
           <div class="flex-1">
-            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">技术文章与随笔杂谈</h3>
+            <h2 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">技术文章与随笔杂谈</h2>
             <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">涵盖前端开发、后端技术、DevOps 等技术领域的实战经验和学习心得。同时也有日常思考与生活感悟，记录成长路上的点滴收获。文章支持按分类浏览和关键词搜索，方便快速找到感兴趣的内容。</p>
             <div class="space-y-2 text-sm text-zinc-500">
               <h4 class="font-medium text-zinc-600 mb-2">内容涵盖</h4>
@@ -95,7 +95,7 @@
               <div class="w-14 h-14 rounded-xl bg-cyan-100 text-cyan-500 flex items-center justify-center mb-4">
                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
               </div>
-              <h3 class="text-lg font-semibold text-zinc-700 mb-2">冷知识</h3>
+              <h2 class="text-lg font-semibold text-zinc-700 mb-2">冷知识</h2>
               <router-link to="/idea/coldknowledge" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-cyan-500 text-white text-sm font-medium rounded-lg hover:bg-cyan-600 transition-colors">
                 探索发现
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
@@ -103,7 +103,7 @@
             </div>
           </div>
           <div class="flex-1">
-            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">有趣的小知识</h3>
+            <h2 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">有趣的小知识</h2>
             <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">探索生活中那些你可能不知道的有趣事实，从动物习性到科学原理，从历史趣闻到自然奥秘。每一条冷知识都能让你对这个世界多一份好奇，发现平凡生活中隐藏的惊喜与乐趣。</p>
             <div class="space-y-2 text-sm text-zinc-500">
               <h4 class="font-medium text-zinc-600 mb-2">内容涵盖</h4>

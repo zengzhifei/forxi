@@ -71,7 +71,7 @@
                 <div class="border-2 border-dashed border-zinc-200 rounded-xl p-4">
                   <div v-if="previewImages.length > 0" class="grid grid-cols-4 gap-2 mb-3">
                     <div v-for="(preview, index) in previewImages" :key="index" class="relative aspect-square rounded-lg overflow-hidden bg-zinc-100">
-                      <img :src="preview" class="w-full h-full object-cover" />
+                      <img :src="preview" class="w-full h-full object-cover" alt="反馈附件图片预览" />
                       <button
                         @click="removeImage(index)"
                         class="absolute top-1 right-1 w-5 h-5 bg-black/50 rounded-full flex items-center justify-center hover:bg-black/70 transition-colors"

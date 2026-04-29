@@ -9,6 +9,7 @@
           :class="{ 'fixed inset-0 z-50 rounded-none': isFullscreen }"
           :style="{ height: isFullscreen ? '100dvh' : 'auto', minHeight: isMobile ? '60vh' : '500px' }"
         >
+          <h1 class="sr-only">AI 智能对话聊天 - 解答问题、编写代码、创作文案</h1>
           <div class="hidden lg:flex items-center gap-3 mb-6">
             <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-zinc-100">
               <svg class="w-5 h-5 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">

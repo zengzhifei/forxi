@@ -6,7 +6,8 @@
       <div class="max-w-5xl mx-auto py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
         <div class="space-y-6">
           <div class="bg-white rounded-2xl shadow-sm border border-zinc-100 p-6 sm:p-8">
-            <div class="hidden lg:flex items-center gap-3 mb-6">
+            <h1 class="sr-only">免费在线AI图生图 - 上传图片AI改造风格转换</h1>
+          <div class="hidden lg:flex items-center gap-3 mb-6">
               <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-zinc-100">
                 <svg class="w-5 h-5 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -47,7 +48,7 @@
                     <p class="text-xs text-zinc-400 mt-1">支持 JPG、PNG 格式，最大 5MB</p>
                   </div>
                   <div v-else class="flex items-center justify-center gap-4">
-                    <img :src="previewInputImage" class="max-w-[200px] max-h-[150px] rounded-lg object-contain" />
+                    <img :src="previewInputImage" class="max-w-[200px] max-h-[150px] rounded-lg object-contain" alt="输入图片预览" />
                     <button
                       @click.stop="clearInputImage"
                       class="p-2 text-zinc-400 hover:text-red-500 transition-colors"
@@ -157,7 +158,7 @@
                 <div class="flex flex-col md:flex-row gap-6 items-center justify-center">
                   <div v-if="previewInputImage" class="text-center">
                     <p class="text-sm font-medium text-zinc-500 mb-2">原图</p>
-                    <img :src="previewInputImage" class="max-w-[250px] max-h-[250px] rounded-lg shadow-md object-contain" />
+                    <img :src="previewInputImage" class="max-w-[250px] max-h-[250px] rounded-lg shadow-md object-contain" alt="原图" />
                   </div>
                   <div v-if="previewInputImage" class="hidden md:block text-zinc-300">
                     <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -165,7 +166,7 @@
                     </svg>
                   </div>
                   <div class="relative group">
-                    <img :src="generatedImage" class="max-w-full max-h-[400px] rounded-xl shadow-md" />
+                    <img :src="generatedImage" class="max-w-full max-h-[400px] rounded-xl shadow-md" alt="AI图生图生成结果" />
                     <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center gap-4">
                       <a
                         :href="generatedImage"

@@ -1,31 +1,46 @@
-# robots.txt for Forxi
+# robots.txt for Forxi - https://forxi.cn
 
+# 通用规则：允许所有爬虫访问，禁止无意义页面
 User-agent: *
 Allow: /
-
-# 允许所有爬虫访问所有页面
+Disallow: /oauth/
+Disallow: /profile
+Disallow: /reset-password
+Disallow: /auth
 
 # Sitemap 位置
 Sitemap: https://forxi.cn/sitemap.xml
 
-# 禁止访问的路径（根据需要添加）
-# Disallow: /admin/
-# Disallow: /private/
-
-# 百度爬虫特殊配置
+# 百度爬虫配置
 User-agent: Baiduspider
 Allow: /
+Disallow: /oauth/
+Disallow: /profile
+Disallow: /reset-password
+Disallow: /auth
+Crawl-delay: 1
 
-# Google 爬虫特殊配置
+# Google 爬虫配置
 User-agent: Googlebot
 Allow: /
+Disallow: /oauth/
+Disallow: /profile
+Disallow: /reset-password
+Disallow: /auth
 
-# 其他搜索引擎爬虫
+# Bing 爬虫配置
 User-agent: Bingbot
 Allow: /
+Disallow: /oauth/
+Disallow: /profile
+Disallow: /reset-password
+Disallow: /auth
+Crawl-delay: 1
 
+# 搜狗爬虫
 User-agent: Sogou
 Allow: /
 
+# 360 爬虫
 User-agent: 360Spider
 Allow: /

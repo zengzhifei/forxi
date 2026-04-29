@@ -17,7 +17,7 @@
       </section>
 
       <!-- Feature Sections -->
-      <section class="max-w-5xl mx-auto px-5 sm:px-6 lg:px-8 py-8 sm:py-16 space-y-8 sm:space-y-20">
+      <section class="max-w-5xl mx-auto px-5 sm:px-6 lg:px-8 py-8 sm:py-16 space-y-8 sm:space-y-20" data-snippet>
 
         <!-- 文件预览 -->
         <div class="flex flex-col md:flex-row items-start gap-4 md:gap-10">
@@ -38,7 +38,7 @@
               <div class="w-14 h-14 rounded-xl bg-blue-100 text-blue-500 flex items-center justify-center mb-4">
                 <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
               </div>
-              <h3 class="text-lg font-semibold text-zinc-700 mb-2">文件预览</h3>
+              <h2 class="text-lg font-semibold text-zinc-700 mb-2">文件预览</h2>
               <router-link to="/hub/file-preview" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors">
                 立即使用
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
@@ -46,7 +46,7 @@
             </div>
           </div>
           <div class="flex-1">
-            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">在线预览多种文件格式</h3>
+            <h2 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">在线预览多种文件格式</h2>
             <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">支持 PDF、Word、Excel、PPT、图片、视频等多种常见文件格式的在线预览。无需在本地安装对应软件，直接在浏览器中查看文件内容，适合快速审阅文档或分享文件给他人。</p>
             <div class="space-y-2 text-sm text-zinc-500">
               <h4 class="font-medium text-zinc-600 mb-2">使用说明</h4>
@@ -95,7 +95,7 @@
               <div class="w-14 h-14 rounded-xl bg-emerald-100 text-emerald-500 flex items-center justify-center mb-4">
                 <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
               </div>
-              <h3 class="text-lg font-semibold text-zinc-700 mb-2">图片处理</h3>
+              <h2 class="text-lg font-semibold text-zinc-700 mb-2">图片处理</h2>
               <router-link to="/hub/image-processing" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-emerald-500 text-white text-sm font-medium rounded-lg hover:bg-emerald-600 transition-colors">
                 立即使用
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
@@ -103,7 +103,7 @@
             </div>
           </div>
           <div class="flex-1">
-            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">一站式图片编辑工具</h3>
+            <h2 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">一站式图片编辑工具</h2>
             <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">集成图片压缩、裁剪、旋转、加水印、格式转换、滤镜调整等常用功能。适合日常工作中的图片处理需求，告别繁重的专业软件，轻松完成图片编辑。</p>
             <div class="space-y-2 text-sm text-zinc-500">
               <h4 class="font-medium text-zinc-600 mb-2">使用说明</h4>
@@ -151,7 +151,7 @@
               <div class="w-14 h-14 rounded-xl bg-teal-100 text-teal-500 flex items-center justify-center mb-4">
                 <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2zM9 4h6v6H9V4z"/></svg>
               </div>
-              <h3 class="text-lg font-semibold text-zinc-700 mb-2">图片 OCR</h3>
+              <h2 class="text-lg font-semibold text-zinc-700 mb-2">图片 OCR</h2>
               <router-link to="/hub/ocr" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-teal-500 text-white text-sm font-medium rounded-lg hover:bg-teal-600 transition-colors">
                 立即使用
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
@@ -159,7 +159,7 @@
             </div>
           </div>
           <div class="flex-1">
-            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">图片文字智能识别</h3>
+            <h2 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">图片文字智能识别</h2>
             <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">一键提取图片中的文字内容，支持中文、英文等多种语言的自动识别。可用于截图文字提取、扫描件电子化、证件信息录入等场景，识别结果支持一键复制。</p>
             <div class="space-y-2 text-sm text-zinc-500">
               <h4 class="font-medium text-zinc-600 mb-2">使用说明</h4>
@@ -206,7 +206,7 @@
               <div class="w-14 h-14 rounded-xl bg-orange-100 text-orange-500 flex items-center justify-center mb-4">
                 <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
               </div>
-              <h3 class="text-lg font-semibold text-zinc-700 mb-2">IT 工具箱</h3>
+              <h2 class="text-lg font-semibold text-zinc-700 mb-2">IT 工具箱</h2>
               <router-link to="/hub/it-tools" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-lg hover:bg-orange-600 transition-colors">
                 立即使用
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
@@ -214,7 +214,7 @@
             </div>
           </div>
           <div class="flex-1">
-            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">开发者常用工具集</h3>
+            <h2 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">开发者常用工具集</h2>
             <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">汇集 40+ 款开发者日常工具，涵盖编解码、格式化、转换、加密、生成器等多个类别。从 Base64 编码到 JSON 格式化，从 UUID 生成到正则测试，一站式解决开发中的各种小需求。</p>
             <div class="space-y-2 text-sm text-zinc-500">
               <h4 class="font-medium text-zinc-600 mb-2">使用说明</h4>
@@ -263,7 +263,7 @@
               <div class="w-14 h-14 rounded-xl bg-violet-100 text-violet-500 flex items-center justify-center mb-4">
                 <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" /></svg>
               </div>
-              <h3 class="text-lg font-semibold text-zinc-700 mb-2">流程工厂</h3>
+              <h2 class="text-lg font-semibold text-zinc-700 mb-2">流程工厂</h2>
               <router-link to="/hub/flow-factory" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-violet-500 text-white text-sm font-medium rounded-lg hover:bg-violet-600 transition-colors">
                 立即使用
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
@@ -271,7 +271,7 @@
             </div>
           </div>
           <div class="flex-1">
-            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">可视化流程图制作</h3>
+            <h2 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">可视化流程图制作</h2>
             <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">在线制作流程图，支持开始、结束、流程、判断、输入、输出等多种节点类型。拖拽连接即可完成流程设计，支持导出 PNG、JPEG 等图片格式，方便嵌入文档或演示文稿。</p>
             <div class="space-y-2 text-sm text-zinc-500">
               <h4 class="font-medium text-zinc-600 mb-2">使用说明</h4>
@@ -318,7 +318,7 @@
               <div class="w-14 h-14 rounded-xl bg-pink-100 text-pink-500 flex items-center justify-center mb-4">
                 <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
               </div>
-              <h3 class="text-lg font-semibold text-zinc-700 mb-2">文件转换</h3>
+              <h2 class="text-lg font-semibold text-zinc-700 mb-2">文件转换</h2>
               <router-link to="/hub/file-converter#image2pdf" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-pink-500 text-white text-sm font-medium rounded-lg hover:bg-pink-600 transition-colors">
                 立即使用
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
@@ -326,7 +326,7 @@
             </div>
           </div>
           <div class="flex-1">
-            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">多格式文件转换</h3>
+            <h2 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">多格式文件转换</h2>
             <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">支持将图片、文本、Word、表格数据等多种格式转换为 PDF 文档。适合制作报告、归档资料等场景，无需安装软件，纯浏览器端处理。</p>
             <div class="space-y-2 text-sm text-zinc-500">
               <h4 class="font-medium text-zinc-600 mb-2">使用说明</h4>
@@ -373,7 +373,7 @@
               <div class="w-14 h-14 rounded-xl bg-amber-100 text-amber-500 flex items-center justify-center mb-4">
                 <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
               </div>
-              <h3 class="text-lg font-semibold text-zinc-700 mb-2">超级计算器</h3>
+              <h2 class="text-lg font-semibold text-zinc-700 mb-2">超级计算器</h2>
               <router-link to="/hub/calculator" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-amber-500 text-white text-sm font-medium rounded-lg hover:bg-amber-600 transition-colors">
                 立即使用
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
@@ -381,7 +381,7 @@
             </div>
           </div>
           <div class="flex-1">
-            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">一站式多功能计算平台</h3>
+            <h2 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">一站式多功能计算平台</h2>
             <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">集成数学计算、科学计算、金融计算、进制转换、字节换算、单位换算、亲戚称呼、星座生肖、血型计算等十余种计算功能，满足学习、工作、生活中的各种计算需求。</p>
             <div class="space-y-2 text-sm text-zinc-500">
               <h4 class="font-medium text-zinc-600 mb-2">功能列表</h4>
@@ -427,7 +427,7 @@
               <div class="w-14 h-14 rounded-xl bg-blue-100 text-blue-500 flex items-center justify-center mb-4">
                 <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
               </div>
-              <h3 class="text-lg font-semibold text-zinc-700 mb-2">IP查询</h3>
+              <h2 class="text-lg font-semibold text-zinc-700 mb-2">IP查询</h2>
               <router-link to="/hub/ip-query" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors">
                 立即使用
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
@@ -435,7 +435,7 @@
             </div>
           </div>
           <div class="flex-1">
-            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">IP地理位置与天气查询</h3>
+            <h2 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">IP地理位置与天气查询</h2>
             <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">输入任意IP地址，快速查询其地理位置信息，包括国家、城市、区域、经纬度、时区等。同时获取该IP所在位置的实时天气信息，包括温度、风速、风向、天气状况等。</p>
             <div class="space-y-2 text-sm text-zinc-500">
               <h4 class="font-medium text-zinc-600 mb-2">使用说明</h4>
@@ -481,7 +481,7 @@
               <div class="w-14 h-14 rounded-xl bg-amber-100 text-amber-500 flex items-center justify-center mb-4">
                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
               </div>
-              <h3 class="text-lg font-semibold text-zinc-700 mb-2">临时邮箱</h3>
+              <h2 class="text-lg font-semibold text-zinc-700 mb-2">临时邮箱</h2>
               <router-link to="/hub/inbox" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-amber-500 text-white text-sm font-medium rounded-lg hover:bg-amber-600 transition-colors">
                 立即使用
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
@@ -489,7 +489,7 @@
             </div>
           </div>
           <div class="flex-1">
-            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">临时邮箱保护隐私</h3>
+            <h2 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">临时邮箱保护隐私</h2>
             <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">创建临时邮箱接收邮件，无需注册真实邮箱。适合注册网站、接收验证码等场景，保护您的真实邮箱不被泄露。邮箱有效期30分钟，到期自动销毁。</p>
             <div class="space-y-2 text-sm text-zinc-500">
               <h4 class="font-medium text-zinc-600 mb-2">使用说明</h4>

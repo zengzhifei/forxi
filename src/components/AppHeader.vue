@@ -5,6 +5,8 @@
       <div v-if="isMobile" class="flex justify-between h-16 items-center">
         <button
           @click="toggleMenu"
+          :aria-label="menuOpen ? '关闭菜单' : '打开菜单'"
+          :aria-expanded="menuOpen"
           class="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
         >
           <svg v-if="!menuOpen" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

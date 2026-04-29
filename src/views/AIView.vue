@@ -38,7 +38,7 @@
               <div class="w-14 h-14 rounded-xl bg-blue-100 text-blue-500 flex items-center justify-center mb-4">
                 <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
               </div>
-              <h3 class="text-lg font-semibold text-zinc-700 mb-2">聊一聊</h3>
+              <h2 class="text-lg font-semibold text-zinc-700 mb-2">聊一聊</h2>
               <router-link to="/ai/chat" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors">
                 开始对话
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
@@ -46,7 +46,7 @@
             </div>
           </div>
           <div class="flex-1">
-            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">与 AI 智能对话</h3>
+            <h2 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">与 AI 智能对话</h2>
             <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">与 AI 进行自然语言对话，获取各类问题的解答和创意灵感。无论是知识问答、文案创作、代码编写还是头脑风暴，AI 都能为你提供高质量的回复。</p>
             <div class="space-y-2 text-sm text-zinc-500">
               <h4 class="font-medium text-zinc-600 mb-2">使用说明</h4>
@@ -93,7 +93,7 @@
               <div class="w-14 h-14 rounded-xl bg-violet-100 text-violet-500 flex items-center justify-center mb-4">
                 <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
               </div>
-              <h3 class="text-lg font-semibold text-zinc-700 mb-2">文生图</h3>
+              <h2 class="text-lg font-semibold text-zinc-700 mb-2">文生图</h2>
               <router-link to="/ai/text2image" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-violet-500 text-white text-sm font-medium rounded-lg hover:bg-violet-600 transition-colors">
                 开始创作
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
@@ -101,7 +101,7 @@
             </div>
           </div>
           <div class="flex-1">
-            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">用文字描绘画面</h3>
+            <h2 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">用文字描绘画面</h2>
             <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">输入一段文字描述，AI 将根据你的描述生成精美的图片。支持各种风格，从写实摄影到动漫插画，从水彩画到油画，满足你的多样化创作需求。</p>
             <div class="space-y-2 text-sm text-zinc-500">
               <h4 class="font-medium text-zinc-600 mb-2">使用说明</h4>
@@ -148,7 +148,7 @@
               <div class="w-14 h-14 rounded-xl bg-emerald-100 text-emerald-500 flex items-center justify-center mb-4">
                 <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
               </div>
-              <h3 class="text-lg font-semibold text-zinc-700 mb-2">图生图</h3>
+              <h2 class="text-lg font-semibold text-zinc-700 mb-2">图生图</h2>
               <router-link to="/ai/image2image" class="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-emerald-500 text-white text-sm font-medium rounded-lg hover:bg-emerald-600 transition-colors">
                 开始改造
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
@@ -156,7 +156,7 @@
             </div>
           </div>
           <div class="flex-1">
-            <h3 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">以图改图，创造新视觉</h3>
+            <h2 class="text-lg sm:text-2xl font-bold text-zinc-800 mb-2 sm:mb-3">以图改图，创造新视觉</h2>
             <p class="text-zinc-500 text-sm leading-relaxed mb-3 sm:mb-4">上传一张图片并描述你希望的变化，AI 会在保留原图结构的基础上进行创意改造。可用于风格转换、场景重绘、元素替换等多种图片编辑场景。</p>
             <div class="space-y-2 text-sm text-zinc-500">
               <h4 class="font-medium text-zinc-600 mb-2">使用说明</h4>

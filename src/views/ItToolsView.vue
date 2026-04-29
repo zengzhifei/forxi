@@ -198,7 +198,7 @@
       <main class="flex-1 p-4 lg:p-8" :class="!isMobile ? 'ml-56' : ''">
         <div class="max-w-4xl mx-auto">
           <div v-if="selectedTool" class="space-y-4 lg:space-y-6">
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 lg:p-6">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 lg:p-6" data-snippet>
               <div class="flex items-center justify-between gap-3 lg:gap-4">
                 <div class="flex items-center gap-3 lg:gap-4 min-w-0 flex-1">
                   <div class="w-10 lg:w-12 rounded-lg lg:rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30 text-xl lg:text-2xl flex-shrink-0">

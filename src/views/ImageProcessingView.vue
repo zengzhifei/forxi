@@ -4,7 +4,8 @@
 
     <main class="flex-1">
       <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-8">
+        <h1 class="sr-only">免费在线图片处理 - 图片压缩、裁剪、旋转、水印、格式转换</h1>
+        <div class="text-center mb-8" data-snippet>
           <h2 class="text-2xl font-semibold text-zinc-700 mb-2">图片处理</h2>
           <p class="text-sm text-zinc-400">支持在线图片压缩、裁剪、滤镜、拼接等多种处理功能</p>
         </div>
@@ -53,13 +54,13 @@
               <div v-if="activeTab === 'ai-remove-bg' && cutoutBgUrl" class="w-full grid grid-cols-2 gap-3">
                 <div class="flex flex-col items-center gap-2">
                   <div class="bg-[url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAH0lEQVQ4T2NkYGD4z8BQDwAAAQ8AAXwkMp8AAAAASUVORK5CYII=')] rounded-lg overflow-hidden">
-                    <img :src="previewUrl" class="max-w-full max-h-[320px] object-contain block" />
+                    <img :src="previewUrl" class="max-w-full max-h-[320px] object-contain block" alt="前景图（透明背景）" />
                   </div>
                   <span class="text-xs text-zinc-400">前景图（透明）</span>
                 </div>
                 <div class="flex flex-col items-center gap-2">
                   <div class="rounded-lg overflow-hidden">
-                    <img :src="cutoutBgUrl" class="max-w-full max-h-[320px] object-contain block" />
+                    <img :src="cutoutBgUrl" class="max-w-full max-h-[320px] object-contain block" alt="修复背景图" />
                   </div>
                   <span class="text-xs text-zinc-400">修复背景图</span>
                 </div>
@@ -71,6 +72,7 @@
                   :src="previewUrl || imagePreviewUrl"
                   class="max-w-full max-h-[400px] object-contain select-none block"
                   :class="{ 'cursor-move': activeTab === 'ai-crop' && enableAICrop }"
+                  alt="图片处理预览"
                   @mousedown="handleCropMouseDown"
                 >
                 <div
@@ -253,7 +255,7 @@
                 </div>
                 <div v-else class="space-y-2">
                   <p class="text-sm text-zinc-600">已选择第二张图片</p>
-                  <img :src="secondImageUrl" class="w-full h-20 object-contain border border-zinc-100 rounded-xl">
+                  <img :src="secondImageUrl" class="w-full h-20 object-contain border border-zinc-100 rounded-xl" alt="第二张图片预览">
                 </div>
                 <button @click="resetMerge" class="w-full py-2 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-500 rounded-xl text-sm transition-colors">
                   恢复默认
